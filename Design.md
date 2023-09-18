@@ -42,3 +42,6 @@ SortDB()
   - Called by DisplayInOrder()
   - May also be called by self
   - Sorts all the orders within the database. Orders will be sorted based on their estimated completion time which is based off general time constraints given to all items of a particular order category. For example: food could take between 15-20 minutes per item, drinks could take between 5-10 minutes, etc. These general time constraints can also be changed by the user themselves through other functions.
+
+GenerateReport()
+  - Prints restaurant statistics, such as total orders, average time to complete orders, failed orders, etc.
