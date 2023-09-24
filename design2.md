@@ -9,7 +9,7 @@ InitializeDB()
 - outputs nothing
 
 InitializeDB() { <br>
-  database->DeleteDB(); <br>
+&emsp;database->DeleteDB(); <br>
 } 
 
 DeleteDB()
