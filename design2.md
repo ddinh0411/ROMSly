@@ -7,6 +7,7 @@ BLOCKLY PSUEDOCODE
 InitializeDB()
 - creates a default database with columns for item ID, name
 - outputs nothing
+
 InitializeDB() {
   database->DeleteDB();
 }
@@ -14,6 +15,7 @@ InitializeDB() {
 DeleteDB()
 - clears custom database back to default settings when database was first initialized
 - outputs nothing
+
 DeleteDB() {
   while orderQueue not empty:
     toDelete = orderQueue->Pop();
