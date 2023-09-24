@@ -17,9 +17,9 @@ DeleteDB()
 - outputs nothing
 
 DeleteDB() { <br>
-  while orderQueue not empty: <br>
-    toDelete = orderQueue->Pop(); <br>
-    toDelete->Delete(); <br>
+&emsp;while orderQueue not empty: <br>
+&emsp;&emsp;toDelete = orderQueue->Pop(); <br>
+&emsp;&emsp;toDelete->Delete(); <br>
 }
 
 AddOrder(int orderID, string name, int cost, queue<Food> contents) 
