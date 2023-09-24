@@ -8,18 +8,18 @@ InitializeDB()
 - creates a default database with columns for item ID, name
 - outputs nothing
 
-InitializeDB() {
-  database->DeleteDB();
-}
+InitializeDB() { <br>
+  database->DeleteDB(); <br>
+} 
 
 DeleteDB()
 - clears custom database back to default settings when database was first initialized
 - outputs nothing
 
-DeleteDB() {
-  while orderQueue not empty:
-    toDelete = orderQueue->Pop();
-    toDelete->Delete();
+DeleteDB() { <br>
+  while orderQueue not empty: <br>
+    toDelete = orderQueue->Pop(); <br>
+    toDelete->Delete(); <br>
 }
 
 AddOrder(int orderID, string name, int cost, queue<Food> contents) 
