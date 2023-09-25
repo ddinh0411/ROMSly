@@ -38,7 +38,7 @@ UpdateOrderStatus(int orderID, bool isDone)
 
 UpdateOrderStatus(int orderID, bool isDone) { <br>
 &emsp;if(isDone):
-&emsp;&emsp;orderReference = orderQueue->get(orderID); <br>
+&emsp;&emsp;orderReference = orderQueue->Get(orderID); <br>
 &emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
 &emsp;&emsp;RemoveOrder(orderID); <br>
 &emsp;else: <br>
@@ -50,7 +50,7 @@ ChangeOrder(int orderID)
 - Changes a order's internal details via smaller blockly blocks.
 
 ChangeOrder(int orderID) { <br>
-&emsp;orderReference = orderQueue->get(orderID); <br>
+&emsp;orderReference = orderQueue->Get(orderID); <br>
 &emsp;orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
 }
 
@@ -75,8 +75,8 @@ CombineOrders(int firstOrderID, int secondOrderID)
 - Returns the ID number of the new combined order.
 
 CombineOrders(int firstOrderID, int secondOrderID) { <br>
-&emsp;firstOrder = orderQueue->get(firstOrderID); <br>
-&emsp;secondOrder = orderQueue->get(secondOrderID); <br>
+&emsp;firstOrder = orderQueue->Get(firstOrderID); <br>
+&emsp;secondOrder = orderQueue->Get(secondOrderID); <br>
 &emsp;newOrderID = randInt(); <br>
 &emsp;Order combinedOrder = new Order();
 &emsp;combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
@@ -92,7 +92,7 @@ PrintOrder(int orderID)
 - returns string name of ordered item
 
 PrintOrder(int orderID) { <br>
-&emsp;Print(orderQueue->get(orderID)); <br>
+&emsp;Print(orderQueue->Get(orderID)->ToString()); <br>
 }
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
@@ -106,7 +106,16 @@ DisplayInOrder()
 - returns a list of string of names.
 
 DisplayInOrder() { <br>
-&emsp;if 
+&emsp;SortDB(); <br>
+&emsp;firstOrder = orderQueue->Pop();
+&emsp;str result = DisplayInOrderHelper(firstOrder); <br>
+}
+
+DisplayInOrderHelper(order toCheck) { <br>
+&emsp;if toCheck == NULL: <br>
+&emsp;&emsp;return ""; <br>
+&emsp;else: <br>
+&emsp;&emsp;return toCheck->ToString() + DisplayInOrderHelper(toCheck->Next()); <br>
 }
 
 SortDB()
