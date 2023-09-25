@@ -35,14 +35,14 @@ AddOrder(int orderID) { <br>
 }
 
 UpdateOrderStatus(int orderID, bool isDone)
-- Used to removed completed orders from the database. 
+- Used to update orders from the database. 
 - Calls helper functions to log data about order.
 
 UpdateOrderStatus(int orderID, bool isDone) { <br>
 &emsp;if(isDone):
 &emsp;&emsp;orderReference = database->get(orderID); <br>
 &emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
-&emsp;RemoveOrder(orderID); <br>
+&emsp;&emsp;RemoveOrder(orderID); <br>
 &emsp;else: <br>
 &emsp;&emsp;// Do Nothing. <br>
 
@@ -67,14 +67,31 @@ RemoveOrder(int orderID) { <br>
 }
 
 CompleteOrder(int orderID)
+- Completes an order and removes it from the database.
 
+CompleteOrder(int orderID) { <br>
+&emsp;UpdateOrderStatus(orderID, true); <br>
+}
 
-CombineOrders(int firstOrderID, int secondOrderID)
-
+CombineOrders(int firstOrderID, int secondOrderID) { <br>
+&emsp;firstOrder = database->get(firstOrderID); <br>
+&emsp;secondOrder = database->get(secondOrderID); <br>
+&emsp;newOrderID = randInt(); <br>
+&emsp;Order combinedOrder = new Order();
+&emsp;combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
+&emsp;combinedOrder->Modify(secondOrder->GetAttributes()); // Modify's behaviour here needs to be culmulative. <br>
+&emsp;RemoveOrder(firstOrderID); <br>
+&emsp;RemoveOrder(secondOrderID); <br>
+&emsp;AddOrder(newOrderID); <br>
+}
 
 PrintOrder(int orderID)
 - given the primary key orderID will print out the name of the ordered item
 - returns string name of ordered item
+
+PrintOrder(int orderID) { <br>
+&emsp;Print(database->get(orderID)); <br>
+}
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
 
