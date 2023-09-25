@@ -95,10 +95,18 @@ PrintOrder(int orderID) { <br>
 }
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
+- Change the expected preparation time for edible food types.
 
+ChangeFoodTimeConstraints(int minSeconds, int maxSeconds) { <br>
+&emsp;Telemetry->SetEatableTime(minSeconds, maxSeconds);
+}
 
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds)
+- Change the expected preparation time for drinkable food types.
 
+ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds) { <br>
+&emsp;Telemetry->SetDrinkTime(minSeconds, maxSeconds);
+}
 
 DisplayInOrder()
 - recursively goes through the queue list and returns the names of items ordered in the order they are in the queue.
