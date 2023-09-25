@@ -131,15 +131,11 @@ GenerateReport() { <br>
 &emsp;Print(Telemetrics->Print()); <br>
 }
 
-===============================
-RECURSIVE USE CASE
-===============================
+<h2>RECURSIVE USE CASE</h2>
 
 - a recursive use case would be the display in order function as to be able to print out all of the orders the singular function print order would be called for the entire length of the queue. So the recursive defintion would be printing out a single order in a queue of length 0 which is nothing. The recursive normal case would take a temp backup of the queue, print out the first order in  the queue, pop the first order, and then recall the print order function with the new first order in the queue until you reach the empty queue.
 - Another recursive case would be adding orders. The idea would be to allow adding and sorting as several smaller blocks, which may be linked together to recursively create an infinite number and permutation of orders.
 
-===============================
-DATA MAINTAINED & INTERACTIONS
-===============================
+<h2>DATA MAINTAINED & INTERACTIONS</h2>
 
 ROMSly will maintain a Priority Queue behind the scenes to keep track of orders. The queue is able to to expand/contract based on need, and is able to keep things organized.
