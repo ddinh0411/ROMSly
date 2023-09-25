@@ -98,14 +98,14 @@ ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
 - Change the expected preparation time for edible food types.
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetEatableTime(minSeconds, maxSeconds);
+&emsp;Telemetry->SetEatableTime(minSeconds, maxSeconds); <br>
 }
 
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds)
 - Change the expected preparation time for drinkable food types.
 
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetDrinkTime(minSeconds, maxSeconds);
+&emsp;Telemetry->SetDrinkTime(minSeconds, maxSeconds); <br>
 }
 
 DisplayInOrder()
