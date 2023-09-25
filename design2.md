@@ -27,7 +27,7 @@ AddOrder(int orderID)
 - takes the number of the order (int), the name of the ordered item, the cost of the item (to be used for the cheque at the end), and the ordered item list which is a queue. Items added in will be placed at the back of the queue.
 - outputs nothing
 
-AddOrder(int orderID) {
+AddOrder(int orderID) { <br>
 &emsp;Order newOrder = new Order(); <br>
 &emsp;newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
 &emsp;database->add(orderID, newOrder); <br>
@@ -35,13 +35,36 @@ AddOrder(int orderID) {
 }
 
 UpdateOrderStatus(int orderID, bool isDone)
+- Used to removed completed orders from the database. 
+- Calls helper functions to log data about order.
 
+UpdateOrderStatus(int orderID, bool isDone) { <br>
+&emsp;if(isDone):
+&emsp;&emsp;orderReference = database->get(orderID); <br>
+&emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
+&emsp;RemoveOrder(orderID); <br>
+&emsp;else: <br>
+&emsp;&emsp;// Do Nothing. <br>
+
+}
 
 ChangeOrder(int orderID)
+- Changes a order's internal details via smaller blockly blocks.
+
+ChangeOrder(int orderID) { <br>
+&emsp;orderReference = database->get(orderID); <br>
+&emsp;orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
+}
 
 
 RemoveOrder(int orderID)
+- Takes orders out of the database.
+- Does not log any details about orders.
 
+RemoveOrder(int orderID) { <br>
+&emsp;&emsp;orderQueue->remove(orderID); <br>
+&emsp;&emsp;database->remove(orderID); <br>
+}
 
 CompleteOrder(int orderID)
 
