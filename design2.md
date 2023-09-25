@@ -1,8 +1,6 @@
-Design2.md
+<h1>Design2.md</h1>
 
-===============================
-BLOCKLY PSUEDOCODE
-===============================
+<h2>BLOCKLY PSUEDOCODE</h2>
 
 InitializeDB()
 - creates a default database with columns for item ID, name
