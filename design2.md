@@ -9,7 +9,7 @@ InitializeDB()
 - outputs nothing
 
 InitializeDB() { <br>
-&emsp;database->DeleteDB(); <br>
+&emsp;orderQueue->Delete(); <br>
 } 
 
 DeleteDB()
@@ -19,7 +19,6 @@ DeleteDB()
 DeleteDB() { <br>
 &emsp;while orderQueue not empty: <br>
 &emsp;&emsp;toDelete = orderQueue->Pop(); <br>
-&emsp;&emsp;database->get(toDelete)->Delete(); <br>
 &emsp;&emsp;orderQueue->Remove(toDelete); <br>
 }
 
@@ -30,8 +29,7 @@ AddOrder(int orderID)
 AddOrder(int orderID) { <br>
 &emsp;Order newOrder = new Order(); <br>
 &emsp;newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
-&emsp;database->add(orderID, newOrder); <br>
-&emsp;orderQueue->add(orderID); <br>
+&emsp;orderQueue->add(newOrder); // orderQueue adds and sorts recursively. <br>
 }
 
 UpdateOrderStatus(int orderID, bool isDone)
@@ -40,7 +38,7 @@ UpdateOrderStatus(int orderID, bool isDone)
 
 UpdateOrderStatus(int orderID, bool isDone) { <br>
 &emsp;if(isDone):
-&emsp;&emsp;orderReference = database->get(orderID); <br>
+&emsp;&emsp;orderReference = orderQueue->get(orderID); <br>
 &emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
 &emsp;&emsp;RemoveOrder(orderID); <br>
 &emsp;else: <br>
@@ -52,7 +50,7 @@ ChangeOrder(int orderID)
 - Changes a order's internal details via smaller blockly blocks.
 
 ChangeOrder(int orderID) { <br>
-&emsp;orderReference = database->get(orderID); <br>
+&emsp;orderReference = orderQueue->get(orderID); <br>
 &emsp;orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
 }
 
@@ -63,7 +61,6 @@ RemoveOrder(int orderID)
 
 RemoveOrder(int orderID) { <br>
 &emsp;&emsp;orderQueue->remove(orderID); <br>
-&emsp;&emsp;database->remove(orderID); <br>
 }
 
 CompleteOrder(int orderID)
@@ -73,9 +70,13 @@ CompleteOrder(int orderID) { <br>
 &emsp;UpdateOrderStatus(orderID, true); <br>
 }
 
+CombineOrders(int firstOrderID, int secondOrderID)
+- Takes the ID's of two orders, combines them, and adds them to the database.
+- Returns the ID number of the new combined order.
+
 CombineOrders(int firstOrderID, int secondOrderID) { <br>
-&emsp;firstOrder = database->get(firstOrderID); <br>
-&emsp;secondOrder = database->get(secondOrderID); <br>
+&emsp;firstOrder = orderQueue->get(firstOrderID); <br>
+&emsp;secondOrder = orderQueue->get(secondOrderID); <br>
 &emsp;newOrderID = randInt(); <br>
 &emsp;Order combinedOrder = new Order();
 &emsp;combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
@@ -83,6 +84,7 @@ CombineOrders(int firstOrderID, int secondOrderID) { <br>
 &emsp;RemoveOrder(firstOrderID); <br>
 &emsp;RemoveOrder(secondOrderID); <br>
 &emsp;AddOrder(newOrderID); <br>
+&emsp;return newOrderID;
 }
 
 PrintOrder(int orderID)
@@ -90,7 +92,7 @@ PrintOrder(int orderID)
 - returns string name of ordered item
 
 PrintOrder(int orderID) { <br>
-&emsp;Print(database->get(orderID)); <br>
+&emsp;Print(orderQueue->get(orderID)); <br>
 }
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
@@ -103,11 +105,23 @@ DisplayInOrder()
 - recursively goes through the queue list and returns the names of items ordered in the order they are in the queue.
 - returns a list of string of names.
 
-SortDB()
+DisplayInOrder() { <br>
+&emsp;if 
+}
 
+SortDB()
+- In case something might not be right, try to sort the database again.
+
+SortDB() { <br>
+&emsp;orderQueue->Sort(); // Recursively sorts through orderqueue, ensuring all elements are sorted by intended metric (order wait time). <br>
+}
 
 GenerateReport()
+- Prints telemetrics about the restaurant, such as how long it took to complete an order.
 
+GenerateReport() { <br>
+&emsp;Print(Telemetrics->Print()); <br>
+}
 
 ===============================
 RECURSIVE USE CASE
@@ -120,4 +134,4 @@ RECURSIVE USE CASE
 DATA MAINTAINED & INTERACTIONS
 ===============================
 
-ROMSly will maintain a Priority Queue and Hash Map/Dictionary behind the scenes to keep track of orders. While the PQueue will be used to keep track of the order of orders, the Hash Map will be used for quick lookup of an order once we have it. 
+ROMSly will maintain a Priority Queue behind the scenes to keep track of orders. The queue is able to to expand/contract based on need, and is able to keep things organized.
