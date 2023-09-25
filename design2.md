@@ -19,12 +19,20 @@ DeleteDB()
 DeleteDB() { <br>
 &emsp;while orderQueue not empty: <br>
 &emsp;&emsp;toDelete = orderQueue->Pop(); <br>
-&emsp;&emsp;toDelete->Delete(); <br>
+&emsp;&emsp;database->get(toDelete)->Delete(); <br>
+&emsp;&emsp;orderQueue->Remove(toDelete); <br>
 }
 
-AddOrder(int orderID, string name, int cost, queue<Food> contents) 
+AddOrder(int orderID) 
 - takes the number of the order (int), the name of the ordered item, the cost of the item (to be used for the cheque at the end), and the ordered item list which is a queue. Items added in will be placed at the back of the queue.
 - outputs nothing
+
+AddOrder(int orderID) {
+&emsp;Order newOrder = new Order(); <br>
+&emsp;newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
+&emsp;database->add(orderID, newOrder); <br>
+&emsp;orderQueue->add(orderID); <br>
+}
 
 UpdateOrderStatus(int orderID, bool isDone)
 
@@ -72,4 +80,4 @@ RECURSIVE USE CASE
 DATA MAINTAINED & INTERACTIONS
 ===============================
 
-
+ROMSly will maintain a Priority Queue and Hash Map/Dictionary behind the scenes to keep track of orders. While the PQueue will be used to keep track of the order of orders, the Hash Map will be used for quick lookup of an order once we have it. 
