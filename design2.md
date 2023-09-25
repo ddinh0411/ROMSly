@@ -9,7 +9,7 @@ InitializeDB()
 - outputs nothing
 
 InitializeDB() { <br>
-&emsp;orderQueue->Delete(); <br>
+&emsp;orderQueue = new OrderQueue(); <br>
 } 
 
 DeleteDB()
@@ -20,6 +20,7 @@ DeleteDB() { <br>
 &emsp;while orderQueue not empty: <br>
 &emsp;&emsp;toDelete = orderQueue->Pop(); <br>
 &emsp;&emsp;orderQueue->Remove(toDelete); <br>
+&emsp;delete orderQueue; <br>
 }
 
 AddOrder(int orderID) 
