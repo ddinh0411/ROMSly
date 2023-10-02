@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "blockly": "^10.2.0"
+  }
+}
