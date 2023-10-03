@@ -8,7 +8,7 @@ InitializeDB()
 
 ```
 InitializeDB() { <br>
-&emsp;orderQueue = new OrderQueue(); <br>
+    orderQueue = new OrderQueue(); <br>
 } 
 ```
 
@@ -18,10 +18,10 @@ DeleteDB()
 
 ```
 DeleteDB() { <br>
-&emsp;while orderQueue not empty: <br>
-&emsp;&emsp;toDelete = orderQueue->Pop(); <br>
-&emsp;&emsp;orderQueue->Remove(toDelete); <br>
-&emsp;delete orderQueue; <br>
+    while orderQueue not empty: <br>
+      toDelete = orderQueue->Pop(); <br>
+      orderQueue->Remove(toDelete); <br>
+    delete orderQueue; <br>
 }
 ```
 
@@ -31,9 +31,9 @@ AddOrder(int orderID)
 
 ```
 AddOrder(int orderID) { <br>
-&emsp;Order newOrder = new Order(); <br>
-&emsp;newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
-&emsp;orderQueue->add(newOrder); // orderQueue adds and sorts recursively. <br>
+    Order newOrder = new Order(); <br>
+    newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
+    orderQueue->add(newOrder); // orderQueue adds and sorts recursively. <br>
 }
 ```
 
@@ -43,12 +43,12 @@ UpdateOrderStatus(int orderID, bool isDone)
 
 ```
 UpdateOrderStatus(int orderID, bool isDone) { <br>
-&emsp;if(isDone):
-&emsp;&emsp;orderReference = orderQueue->Get(orderID); <br>
-&emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
-&emsp;&emsp;RemoveOrder(orderID); <br>
-&emsp;else: <br>
-&emsp;&emsp;// Do Nothing. <br>
+    if(isDone):
+      orderReference = orderQueue->Get(orderID); <br>
+      Telemetrics.log(); // Note details about order, such as time to completion. <br>
+      RemoveOrder(orderID); <br>
+    else: <br>
+      // Do Nothing. <br>
 }
 ```
 
@@ -57,8 +57,8 @@ ChangeOrder(int orderID)
 
 ```
 ChangeOrder(int orderID) { <br>
-&emsp;orderReference = orderQueue->Get(orderID); <br>
-&emsp;orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
+    orderReference = orderQueue->Get(orderID); <br>
+    orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
 }
 ```
 
@@ -68,7 +68,7 @@ RemoveOrder(int orderID)
 
 ```
 RemoveOrder(int orderID) { <br>
-&emsp;&emsp;orderQueue->remove(orderID); <br>
+      orderQueue->remove(orderID); <br>
 }
 ```
 
@@ -77,7 +77,7 @@ CompleteOrder(int orderID)
 
 ```
 CompleteOrder(int orderID) { <br>
-&emsp;UpdateOrderStatus(orderID, true); <br>
+    UpdateOrderStatus(orderID, true); <br>
 }
 ```
 
@@ -87,16 +87,16 @@ CombineOrders(int firstOrderID, int secondOrderID)
 
 ```
 CombineOrders(int firstOrderID, int secondOrderID) { <br>
-&emsp;firstOrder = orderQueue->Get(firstOrderID); <br>
-&emsp;secondOrder = orderQueue->Get(secondOrderID); <br>
-&emsp;newOrderID = randInt(); <br>
-&emsp;Order combinedOrder = new Order();
-&emsp;combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
-&emsp;combinedOrder->Modify(secondOrder->GetAttributes()); // Modify's behaviour here needs to be culmulative. <br>
-&emsp;RemoveOrder(firstOrderID); <br>
-&emsp;RemoveOrder(secondOrderID); <br>
-&emsp;AddOrder(newOrderID); <br>
-&emsp;return newOrderID;
+    firstOrder = orderQueue->Get(firstOrderID); <br>
+    secondOrder = orderQueue->Get(secondOrderID); <br>
+    newOrderID = randInt(); <br>
+    Order combinedOrder = new Order();
+    combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
+    combinedOrder->Modify(secondOrder->GetAttributes()); // Modify's behaviour here needs to be culmulative. <br>
+    RemoveOrder(firstOrderID); <br>
+    RemoveOrder(secondOrderID); <br>
+    AddOrder(newOrderID); <br>
+    return newOrderID;
 }
 ```
 
@@ -106,7 +106,7 @@ PrintOrder(int orderID)
 
 ```
 PrintOrder(int orderID) { <br>
-&emsp;Print(orderQueue->Get(orderID)->ToString()); <br>
+    Print(orderQueue->Get(orderID)->ToString()); <br>
 }
 ```
 
@@ -115,7 +115,7 @@ ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
 
 ```
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetEatableTime(minSeconds, maxSeconds); <br>
+    Telemetry->SetEatableTime(minSeconds, maxSeconds); <br>
 }
 ```
 
@@ -124,7 +124,7 @@ ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds)
 
 ```
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetDrinkTime(minSeconds, maxSeconds); <br>
+    Telemetry->SetDrinkTime(minSeconds, maxSeconds); <br>
 }
 ```
 
@@ -133,16 +133,16 @@ DisplayInOrder()
 - returns a list of string of names.
 ```
 DisplayInOrder() { <br>
-&emsp;SortDB(); <br>
-&emsp;firstOrder = orderQueue->Pop();
-&emsp;str result = DisplayInOrderHelper(firstOrder); <br>
+    SortDB(); <br>
+    firstOrder = orderQueue->Pop();
+    str result = DisplayInOrderHelper(firstOrder); <br>
 }
 
 DisplayInOrderHelper(order toCheck) { <br>
-&emsp;if toCheck == NULL: <br>
-&emsp;&emsp;return ""; <br>
-&emsp;else: <br>
-&emsp;&emsp;return toCheck->ToString() + DisplayInOrderHelper(toCheck->Next()); <br>
+    if toCheck == NULL: <br>
+      return ""; <br>
+    else: <br>
+      return toCheck->ToString() + DisplayInOrderHelper(toCheck->Next()); <br>
 }
 ```
 
@@ -151,7 +151,7 @@ SortDB()
 
 ```
 SortDB() { <br>
-&emsp;orderQueue->Sort(); // Recursively sorts through orderqueue, ensuring all elements are sorted by intended metric (order wait time). <br>
+    orderQueue->Sort(); // Recursively sorts through orderqueue, ensuring all elements are sorted by intended metric (order wait time). <br>
 }
 ```
 
@@ -160,7 +160,7 @@ GenerateReport()
 
 ```
 GenerateReport() { <br>
-&emsp;Print(Telemetrics->Print()); <br>
+    Print(Telemetrics->Print()); <br>
 }
 ```
 
