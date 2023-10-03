@@ -6,138 +6,163 @@ InitializeDB()
 - creates a default database with columns for item ID, name
 - outputs nothing
 
+```
 InitializeDB() { <br>
-&emsp;orderQueue = new OrderQueue(); <br>
+    orderQueue = new OrderQueue(); <br>
 } 
+```
 
 DeleteDB()
 - clears custom database back to default settings when database was first initialized
 - outputs nothing
 
+```
 DeleteDB() { <br>
-&emsp;while orderQueue not empty: <br>
-&emsp;&emsp;toDelete = orderQueue->Pop(); <br>
-&emsp;&emsp;orderQueue->Remove(toDelete); <br>
-&emsp;delete orderQueue; <br>
+    while orderQueue not empty: <br>
+      toDelete = orderQueue->Pop(); <br>
+      orderQueue->Remove(toDelete); <br>
+    delete orderQueue; <br>
 }
+```
 
 AddOrder(int orderID) 
 - takes the number of the order (int), the name of the ordered item, the cost of the item (to be used for the cheque at the end), and the ordered item list which is a queue. Items added in will be placed at the back of the queue.
 - outputs nothing
 
+```
 AddOrder(int orderID) { <br>
-&emsp;Order newOrder = new Order(); <br>
-&emsp;newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
-&emsp;orderQueue->add(newOrder); // orderQueue adds and sorts recursively. <br>
+    Order newOrder = new Order(); <br>
+    newOrder->Modify(); // Modify is a stand in for our smaller blockly blocks, which will contain order attributes. <br>
+    orderQueue->add(newOrder); // orderQueue adds and sorts recursively. <br>
 }
+```
 
 UpdateOrderStatus(int orderID, bool isDone)
 - Used to update orders from the database. 
 - Calls helper functions to log data about order.
 
+```
 UpdateOrderStatus(int orderID, bool isDone) { <br>
-&emsp;if(isDone):
-&emsp;&emsp;orderReference = orderQueue->Get(orderID); <br>
-&emsp;&emsp;Telemetrics.log(); // Note details about order, such as time to completion. <br>
-&emsp;&emsp;RemoveOrder(orderID); <br>
-&emsp;else: <br>
-&emsp;&emsp;// Do Nothing. <br>
-
+    if(isDone):
+      orderReference = orderQueue->Get(orderID); <br>
+      Telemetrics.log(); // Note details about order, such as time to completion. <br>
+      RemoveOrder(orderID); <br>
+    else: <br>
+      // Do Nothing. <br>
 }
+```
 
 ChangeOrder(int orderID)
 - Changes a order's internal details via smaller blockly blocks.
 
+```
 ChangeOrder(int orderID) { <br>
-&emsp;orderReference = orderQueue->Get(orderID); <br>
-&emsp;orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
+    orderReference = orderQueue->Get(orderID); <br>
+    orderReference->Modify(); // Attributes may be modified with smaller blockly blocks. <br>
 }
-
+```
 
 RemoveOrder(int orderID)
 - Takes orders out of the database.
 - Does not log any details about orders.
 
+```
 RemoveOrder(int orderID) { <br>
-&emsp;&emsp;orderQueue->remove(orderID); <br>
+      orderQueue->remove(orderID); <br>
 }
+```
 
 CompleteOrder(int orderID)
 - Completes an order and removes it from the database.
 
+```
 CompleteOrder(int orderID) { <br>
-&emsp;UpdateOrderStatus(orderID, true); <br>
+    UpdateOrderStatus(orderID, true); <br>
 }
+```
 
 CombineOrders(int firstOrderID, int secondOrderID)
 - Takes the ID's of two orders, combines them, and adds them to the database.
 - Returns the ID number of the new combined order.
 
+```
 CombineOrders(int firstOrderID, int secondOrderID) { <br>
-&emsp;firstOrder = orderQueue->Get(firstOrderID); <br>
-&emsp;secondOrder = orderQueue->Get(secondOrderID); <br>
-&emsp;newOrderID = randInt(); <br>
-&emsp;Order combinedOrder = new Order();
-&emsp;combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
-&emsp;combinedOrder->Modify(secondOrder->GetAttributes()); // Modify's behaviour here needs to be culmulative. <br>
-&emsp;RemoveOrder(firstOrderID); <br>
-&emsp;RemoveOrder(secondOrderID); <br>
-&emsp;AddOrder(newOrderID); <br>
-&emsp;return newOrderID;
+    firstOrder = orderQueue->Get(firstOrderID); <br>
+    secondOrder = orderQueue->Get(secondOrderID); <br>
+    newOrderID = randInt(); <br>
+    Order combinedOrder = new Order();
+    combinedOrder->Modify(firstOrder->GetAtttributes()); <br>
+    combinedOrder->Modify(secondOrder->GetAttributes()); // Modify's behaviour here needs to be culmulative. <br>
+    RemoveOrder(firstOrderID); <br>
+    RemoveOrder(secondOrderID); <br>
+    AddOrder(newOrderID); <br>
+    return newOrderID;
 }
+```
 
 PrintOrder(int orderID)
 - given the primary key orderID will print out the name of the ordered item
 - returns string name of ordered item
 
+```
 PrintOrder(int orderID) { <br>
-&emsp;Print(orderQueue->Get(orderID)->ToString()); <br>
+    Print(orderQueue->Get(orderID)->ToString()); <br>
 }
+```
 
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds)
 - Change the expected preparation time for edible food types.
 
+```
 ChangeFoodTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetEatableTime(minSeconds, maxSeconds); <br>
+    Telemetry->SetEatableTime(minSeconds, maxSeconds); <br>
 }
+```
 
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds)
 - Change the expected preparation time for drinkable food types.
 
+```
 ChangeDrinkTimeConstraints(int minSeconds, int maxSeconds) { <br>
-&emsp;Telemetry->SetDrinkTime(minSeconds, maxSeconds); <br>
+    Telemetry->SetDrinkTime(minSeconds, maxSeconds); <br>
 }
+```
 
 DisplayInOrder()
 - recursively goes through the queue list and returns the names of items ordered in the order they are in the queue.
 - returns a list of string of names.
-
+```
 DisplayInOrder() { <br>
-&emsp;SortDB(); <br>
-&emsp;firstOrder = orderQueue->Pop();
-&emsp;str result = DisplayInOrderHelper(firstOrder); <br>
+    SortDB(); <br>
+    firstOrder = orderQueue->Pop();
+    str result = DisplayInOrderHelper(firstOrder); <br>
 }
 
 DisplayInOrderHelper(order toCheck) { <br>
-&emsp;if toCheck == NULL: <br>
-&emsp;&emsp;return ""; <br>
-&emsp;else: <br>
-&emsp;&emsp;return toCheck->ToString() + DisplayInOrderHelper(toCheck->Next()); <br>
+    if toCheck == NULL: <br>
+      return ""; <br>
+    else: <br>
+      return toCheck->ToString() + DisplayInOrderHelper(toCheck->Next()); <br>
 }
+```
 
 SortDB()
 - In case something might not be right, try to sort the database again.
 
+```
 SortDB() { <br>
-&emsp;orderQueue->Sort(); // Recursively sorts through orderqueue, ensuring all elements are sorted by intended metric (order wait time). <br>
+    orderQueue->Sort(); // Recursively sorts through orderqueue, ensuring all elements are sorted by intended metric (order wait time). <br>
 }
+```
 
 GenerateReport()
 - Prints telemetrics about the restaurant, such as how long it took to complete an order.
 
+```
 GenerateReport() { <br>
-&emsp;Print(Telemetrics->Print()); <br>
+    Print(Telemetrics->Print()); <br>
 }
+```
 
 <h2>RECURSIVE USE CASE</h2>
 
