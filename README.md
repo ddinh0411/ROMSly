@@ -5,4 +5,4 @@ About: ROMSly stands for Restaurant Order Management System and is implemented u
 
 This project involves the topic of parsing as we are taking syntax from the user and parsing them into syntax that will be stored into the database to store and organize. The inputs would be start as simple clicks representing both the menu item and where the item was ordered from and need to be parsed into what needs to be cooked by the kitchen staff in the back. The DSL will also abstract complex tasks away from users, allowing users to chain together simple blocks to execute multi-layered, recursive based operations on the database. ROMSly will also perform work unseen to end users to ensure the system runs as smoothly as possible at all times.
 
-Link to Design-Block HTML: https://github.com/ddinh0411/ROMSly/blob/main/design-blocks:index.html
+Link to Design-Block HTML: https://github.com/ddinh0411/ROMSly/blob/main/src/design-blocks/index.html
