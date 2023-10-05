@@ -30,7 +30,7 @@ Blockly.Blocks['combo_item'] = {
     this.appendValueInput("ITEM2")
         .setCheck(["food_item", "drink_item", "combo_item"])
     this.setInputsInline(true);
-    this.setOutput(true, "exp");
+    this.setOutput(true, "combo_item");
     this.setColour(42);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -52,7 +52,7 @@ Blockly.Blocks['identifier'] = {
 Blockly.Blocks['single_order'] = {
   init: function() {
     this.appendValueInput("ORDER_ITEM")
-        .setCheck(["food_item", "drink_item", "combo_item", "exp"])
+        .setCheck(["food_item", "drink_item", "combo_item"])
         .appendField("single_order");
     this.appendValueInput("ID")
         .setCheck(["identifier"])
