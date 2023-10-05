@@ -20,8 +20,8 @@
         </xml>
     </div>
     <div class="row button-row">
-        <button onclick="generateCode()">Generate JavaScript</button>
-        <button onclick="runCode()">Run JavaScript</button>
+        <button onclick="generateCode()">Generate Python</button>
+        <button onclick="runCode()">Run Python</button>
         <button onclick="saveBlocks()">Save Blocks</button>
         <button onclick="loadBlocks()">Load Blocks</button>
         <input type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
@@ -51,12 +51,12 @@
             }
         }
 
-        function saveBlocks() {
+        function saveBlocks() { //TODO: CHange from XML to anything else (probs TXT)
             var xml = Blockly.Xml.workspaceToDom(workspace);
             var xmlText = Blockly.Xml.domToPrettyText(xml);
             var blob = new Blob([xmlText], {type: 'text/xml'});
             var a = document.createElement('a');
-            a.download = 'blocks.xml';
+            a.download = 'blocks.txt';
             a.href = URL.createObjectURL(blob);
             a.click();
         }
