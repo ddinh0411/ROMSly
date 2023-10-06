@@ -30,7 +30,7 @@ Blockly.Blocks['combo_item'] = {
     this.appendValueInput("ITEM2")
         .setCheck(["food_item", "drink_item", "combo_item"])
     this.setInputsInline(true);
-    this.setOutput(true, "exp");
+    this.setOutput(true, "combo_item");
     this.setColour(42);
     this.setTooltip("");
     this.setHelpUrl("");
@@ -52,7 +52,7 @@ Blockly.Blocks['identifier'] = {
 Blockly.Blocks['single_order'] = {
   init: function() {
     this.appendValueInput("ORDER_ITEM")
-        .setCheck(["food_item", "drink_item", "combo_item", "exp"])
+        .setCheck(["food_item", "drink_item", "combo_item"])
         .appendField("single_order");
     this.appendValueInput("ID")
         .setCheck(["identifier"])
@@ -81,7 +81,7 @@ Blockly.Blocks['math_number'] = {
 
 Blockly.JavaScript.forBlock['food_item'] = function(block) {
   var var_name = block.getFieldValue('item_name');
-  var code = var_name;
+  var code = 'class FoodItem:\n \t def __init__(self, name):\n \t \t self.name = "' + var_name + '"';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
