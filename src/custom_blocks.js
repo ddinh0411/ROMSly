@@ -79,23 +79,24 @@ Blockly.Blocks['math_number'] = {
     }
 };
 
-javascript.javascriptGenerator.forBlock['food_item'] = function(block, javascriptGenerator) {
+python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
   var var_name = block.getFieldValue('item_name');
   var code = 'class FoodItem:\n \u00a0 def __init__(self, name):\n \u00a0 \u00a0 self.name = "' + var_name + '"';
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code];
+  // return [code, Blockly.python.ORDER_ATOMIC];
 };
 
-javascript.javascriptGenerator.forBlock['drink_item'] = function(block) {
+python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator) {
   var var_name = block.getFieldValue('drink_name');
-  var code = var_name;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  var code = 'class DrinkItem:\n \u00a0 def __init__(self, name):\n \u00a0 \u00a0 self.name = "' + var_name + '"';
+  return [code];
 };
 
-javascript.javascriptGenerator.forBlock['combo_item'] = function(block) {
-  var expr1_code = Blockly.JavaScript.valueToCode(block, 'ITEM1', Blockly.JavaScript.ORDER_NONE);
-  var expr2_code = Blockly.JavaScript.valueToCode(block, 'ITEM2', Blockly.JavaScript.ORDER_NONE);
+python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator) {
+  var expr1_code = javascript.javascriptGenerator.valueToCode(block, 'ITEM1', javascript.javascriptGenerator.Order.ATOMIC);
+  var expr2_code = javascript.javascriptGenerator.valueToCode(block, 'ITEM2', javascript.javascriptGenerator.Order.ATOMIC);
   var code = expr1_code + ' + ' + expr2_code + ' Combo';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code];
 };
 
 javascript.javascriptGenerator.forBlock['identifier'] = function(block) {
