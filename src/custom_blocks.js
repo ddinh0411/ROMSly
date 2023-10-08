@@ -1,3 +1,18 @@
+/* DEFINITIONS FOR BLOCKS */
+
+// Custom block to define FoodItem class
+Blockly.Blocks['define_food_item_class'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Define FoodItem class");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['food_item'] = {
   init: function() {
     this.appendDummyInput()
@@ -79,11 +94,18 @@ Blockly.Blocks['math_number'] = {
     }
 };
 
+/* GENERATORS FOR BLOCKS */
+python.pythonGenerator.forBlock['define_food_item_class'] = function(block, pythonGenerator) {
+  var code = 'class FoodItem:\n';
+  code += '    def __init__(self):\n';
+  code += '        self.name = "food_item"\n'; // Hardcoded class name
+  return code;
+};
+
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
   var var_name = block.getFieldValue('item_name');
-  var code = 'class FoodItem:\n \u00a0 def __init__(self, name):\n \u00a0 \u00a0 self.name = "' + var_name + '"';
+  var code = 'food_item = FoodItem("' + var_name + '")';
   return [code];
-  // return [code, Blockly.python.ORDER_ATOMIC];
 };
 
 python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator) {
@@ -93,16 +115,16 @@ python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator)
 };
 
 python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator) {
-  var expr1_code = javascript.javascriptGenerator.valueToCode(block, 'ITEM1', javascript.javascriptGenerator.Order.ATOMIC);
-  var expr2_code = javascript.javascriptGenerator.valueToCode(block, 'ITEM2', javascript.javascriptGenerator.Order.ATOMIC);
-  var code = expr1_code + ' + ' + expr2_code + ' Combo';
+  var expr1_code = pythonGenerator.valueToCode(block, 'ITEM1', python.Order.ATOMIC);
+  var expr2_code = pythonGenerator.valueToCode(block, 'ITEM2', python.Order.ATOMIC);
+  var code = 'combo_item = [' + expr1_code + ', ' + expr2_code + ']';
   return [code];
 };
 
-javascript.javascriptGenerator.forBlock['identifier'] = function(block) {
+python.pythonGenerator.forBlock['identifier'] = function(block) {
   var var_name = block.getFieldValue('customer_id');
-  var code = var_name;
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  var code = 'customer_id = "' + var_name + '"';
+  return [code];
 };
 
 javascript.javascriptGenerator.forBlock['single_order'] = function(block) {
