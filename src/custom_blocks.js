@@ -79,39 +79,39 @@ Blockly.Blocks['math_number'] = {
     }
 };
 
-Blockly.JavaScript.forBlock['food_item'] = function(block) {
+javascript.javascriptGenerator.forBlock['food_item'] = function(block, javascriptGenerator) {
   var var_name = block.getFieldValue('item_name');
   var code = 'class FoodItem:\n \u00a0 def __init__(self, name):\n \u00a0 \u00a0 self.name = "' + var_name + '"';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript.forBlock['drink_item'] = function(block) {
+javascript.javascriptGenerator.forBlock['drink_item'] = function(block) {
   var var_name = block.getFieldValue('drink_name');
   var code = var_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript.forBlock['combo_item'] = function(block) {
+javascript.javascriptGenerator.forBlock['combo_item'] = function(block) {
   var expr1_code = Blockly.JavaScript.valueToCode(block, 'ITEM1', Blockly.JavaScript.ORDER_NONE);
   var expr2_code = Blockly.JavaScript.valueToCode(block, 'ITEM2', Blockly.JavaScript.ORDER_NONE);
   var code = expr1_code + ' + ' + expr2_code + ' Combo';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript.forBlock['identifier'] = function(block) {
+javascript.javascriptGenerator.forBlock['identifier'] = function(block) {
   var var_name = block.getFieldValue('customer_id');
   var code = var_name;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript.forBlock['single_order'] = function(block) {
+javascript.javascriptGenerator.forBlock['single_order'] = function(block) {
   var expr1_code = Blockly.JavaScript.valueToCode(block, 'ORDER_ITEM', Blockly.JavaScript.ORDER_NONE);
   var expr2_code = Blockly.JavaScript.valueToCode(block, 'ID', Blockly.JavaScript.ORDER_NONE);
   var code = '(' + expr1_code + ')(' + expr2_code + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.Blocks['math_arithmetic'] = {
+javascript.javascriptGenerator.forBlock['math_arithmetic'] = {
     /**
      * Block for arithmetic operations.
      * @this {Blockly.Block}
