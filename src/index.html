@@ -30,7 +30,7 @@
             <p>
                 <button onclick="showCode()" class="compile_button">Show Python</button>
                 <button onclick="runCode()" class="compile_button">Run Python</button>
-                <button onclick="" class="compile_button">Save Python</button>
+                <button onclick="saveBlocks()" class="compile_button">Save Python</button>
             </p>
         </td>
         </tr>
@@ -43,6 +43,7 @@
     
     <div id="blocklyDiv" style="position: absolute"></div>
     <xml id="toolbox" style="display: none">
+        <block type="define_food_item_class"></block>
         <block type="food_item"></block>
         <block type="drink_item"></block>
         <block type="combo_item"></block>
@@ -110,6 +111,16 @@
             alert(e);
         }
         }
+
+        function saveBlocks() {
+        var workspaceText = python.pythonGenerator.workspaceToCode(workspace);
+        var blob = new Blob([workspaceText], {type: 'text/plain'});
+        var a = document.createElement('a');
+        a.download = 'ROMSLY.txt';
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        }
+
 
     </script>
 </body>
