@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ROMSly</title>
+    <!-- <script src="https://unpkg.com/blockly/blockly.min.js"></script> -->
+    <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/python_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/msg/en.js"></script>
+
+    <script src="./custom_blocks.js"></script>
+
+    <style>
+        html, body {
+        background-color: #ECEFF1;
+        font-family: sans-serif;
+        height: 100%;
+        margin: 0;
+        }
+        h1 {
+        font-weight: normal;
+        font-size: 140%;
+        }
+        table {
+        height: 100%;
+        width: 100%;
+        }
+        #blocklyArea {
+        height: 99%;
+        /* background: #fc9;
+        text-align: center; */
+        }
+    </style>
+</head>
+<body>
+    <!-- NAV BAR -->
+    <nav id="toolbar">
+        <!-- <a href="/blockly-samples" id="arrow-back">
+        <i class="material-icons">close</i>
+        <img src="https://blocklycodelabs.dev/images/logo_knockout.png" class="logo-devs"
+            alt="Blockly sample" />
+        </a> -->
+
+        <div class="title-grow">
+        <div class="title">ROMSly</div>
+        <div class="subtitle">Restaurant Order Management System.</div>
+        </div>
+        
+        <a href="https://github.com/ddinh0411/ROMSly" class="button" target="_blank">View Code</a>
+    </nav>
+    <!-- END NAV BAR -->
+
+    <table>
+        <tr>
+        <td>
+            <p>
+                <button onclick="showCode()">Show JavaScript</button>
+                <button onclick="runCode()">Run JavaScript</button>
+            </p>
+        </td>
+        </tr>
+        <tr>
+            <td id="blocklyArea">
+                Blockly will be positioned here.
+            </td>
+        </tr>
+    </table>
+    
+    <div id="blocklyDiv" style="position: absolute"></div>
+    <xml id="toolbox" style="display: none">
+        <block type="food_item"></block>
+        <block type="drink_item"></block>
+        <block type="combo_item"></block>
+        <block type="identifier"></block>
+        <block type="single_order"></block>
+        <block type="math_arithmetic"></block>
+    </xml>
+      
+    <script>
+        // var toolbox = document.getElementById('toolbox')
+
+        // var workspace = Blockly.inject('blocklyDiv',
+        //     {media: 'https://unpkg.com/blockly/media/',
+        //     toolbox: document.getElementById('toolbox')});
+
+        var blocklyArea = document.getElementById('blocklyArea');
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var workspace = Blockly.inject(blocklyDiv,
+            {media: 'https://unpkg.com/blockly/media/',
+            toolbox: document.getElementById('toolbox')});
+        var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            Blockly.svgResize(workspace);
+
+            // console.log('resize');
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+
+        // Blockly.serialization.workspaces.load(startBlocks, workspace);
+
+        function showCode() {
+        // Generate JavaScript code and display it.
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
+        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+        alert(code);
+        }
+
+        function runCode() {
+        // Generate JavaScript code and run it.
+        window.LoopTrap = 1000;
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP =
+            'if (--window.LoopTrap < 0) throw "Infinite loop.";\n';
+        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
+        try {
+            eval(code);
+        } catch (e) {
+            alert(e);
+        }
+        }
+
+    </script>
+</body>
+</html>
