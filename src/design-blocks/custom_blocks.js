@@ -81,7 +81,7 @@ Blockly.Blocks['math_number'] = {
 
 Blockly.JavaScript.forBlock['food_item'] = function(block) {
   var var_name = block.getFieldValue('item_name');
-  var code = 'class FoodItem:\n \t def __init__(self, name):\n \t \t self.name = "' + var_name + '"';
+  var code = 'class FoodItem:\n \u00a0 def __init__(self, name):\n \u00a0 \u00a0 self.name = "' + var_name + '"';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
