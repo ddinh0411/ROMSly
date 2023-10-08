@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>ROMSly</title>
-    <!-- <script src="https://unpkg.com/blockly/blockly.min.js"></script> -->
     <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
     <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
     <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
@@ -16,12 +15,6 @@
 <body>
     <!-- NAV BAR -->
     <nav id="toolbar">
-        <!-- <a href="/blockly-samples" id="arrow-back">
-        <i class="material-icons">close</i>
-        <img src="https://blocklycodelabs.dev/images/logo_knockout.png" class="logo-devs"
-            alt="Blockly sample" />
-        </a> -->
-
         <div class="title-grow">
         <div class="title">ROMSly</div>
         <div class="subtitle">Restaurant Order Management System.</div>
@@ -58,12 +51,6 @@
     </xml>
       
     <script>
-        // var toolbox = document.getElementById('toolbox')
-
-        // var workspace = Blockly.inject('blocklyDiv',
-        //     {media: 'https://unpkg.com/blockly/media/',
-        //     toolbox: document.getElementById('toolbox')});
-
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
         var workspace = Blockly.inject(blocklyDiv,
