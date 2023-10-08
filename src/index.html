@@ -32,6 +32,40 @@
         /* background: #fc9;
         text-align: center; */
         }
+        /* Eventually these items need to be moved into their own styles.css */
+        /* These navigation toolbar styles are modified from Google. */
+        nav#toolbar {
+        width: 100%;
+        height: 64px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        background: #2BB4CA;
+        }
+        nav#toolbar .title {
+        text-decoration: none;
+        font-weight: bold;
+        color: #fff;
+        margin-right: 8px;
+        }
+        nav#toolbar .subtitle {
+        color: #fff;
+        }
+        .nav_button {
+        border: #fff;
+        background-color: white;
+        font-weight: bold;
+        color: #2BB4CA;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-left: auto;
+        margin-right: 0;
+        cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +82,7 @@
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
-        <a href="https://github.com/ddinh0411/ROMSly" class="button" target="_blank">View Code</a>
+        <a href="https://github.com/ddinh0411/ROMSly" class="nav_button" target="_blank">View Code</a>
     </nav>
     <!-- END NAV BAR -->
 
@@ -56,14 +90,14 @@
         <tr>
         <td>
             <p>
-                <button onclick="showCode()">Show JavaScript</button>
-                <button onclick="runCode()">Run JavaScript</button>
+                <button onclick="showCode()">Show Python</button>
+                <button onclick="runCode()">Run Python</button>
             </p>
         </td>
         </tr>
         <tr>
             <td id="blocklyArea">
-                Blockly will be positioned here.
+                
             </td>
         </tr>
     </table>
