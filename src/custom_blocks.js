@@ -147,14 +147,14 @@ python.pythonGenerator.forBlock['identifier'] = function(block) {
   return [code];
 };
 
-javascript.javascriptGenerator.forBlock['single_order'] = function(block) {
-  var expr1_code = Blockly.JavaScript.valueToCode(block, 'ORDER_ITEM', Blockly.JavaScript.ORDER_NONE);
-  var expr2_code = Blockly.JavaScript.valueToCode(block, 'ID', Blockly.JavaScript.ORDER_NONE);
+python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerator) {
+  var expr1_code = python.pythonGenerator.valueToCode(block, 'ORDER_ITEM', pythonGenerator.ORDER_NONE);
+  var expr2_code = python.pythonGenerator.valueToCode(block, 'ID', pythonGenerator.ORDER_NONE);
   var code = '(' + expr1_code + ')(' + expr2_code + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code];
 };
 
-javascript.javascriptGenerator.forBlock['math_arithmetic'] = {
+python.pythonGenerator.forBlock['math_arithmetic'] = {
     /**
      * Block for arithmetic operations.
      * @this {Blockly.Block}
