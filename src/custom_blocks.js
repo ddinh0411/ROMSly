@@ -52,9 +52,10 @@ Blockly.Blocks['drink_item'] = {
 Blockly.Blocks['combo_item'] = {
   init: function() {
     this.appendValueInput("ITEM1")
+        .setCheck(["food_item", "drink_item", "combo_item"])
         .appendField("combo item");
     this.appendValueInput("ITEM2")
-        .setAlign(Blockly.ALIGN_RIGHT)
+        .setCheck(["food_item", "drink_item", "combo_item"])
     this.setInputsInline(true);
     this.setOutput(true, "combo_item");
     this.setColour(42);
@@ -135,19 +136,8 @@ python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator)
 python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator) {
   var item1Code = pythonGenerator.valueToCode(block, 'ITEM1', pythonGenerator.ORDER_NONE);
   var item2Code = pythonGenerator.valueToCode(block, 'ITEM2', pythonGenerator.ORDER_NONE);
-
-  console.log('ITEM1 Code:', item1Code);
-  console.log('ITEM2 Code:', item2Code);
-  // Check if the connected blocks are valid and generate code accordingly
-  if (item1Code && item2Code) {
-    // Both ITEM1 and ITEM2 are connected, generate code for a combo as a list
-    var code = '[' + item1Code + ', ' + item2Code + ']';
-    return [code];
-  } else {
-    // Handle cases where one or both inputs are not connected
-    // You can add error handling code or default behavior here
-    return ['combo_item = []']; // Return an empty string or handle it as needed
-  }
+  var code = '[' + item1Code + ', ' + item2Code + ']';
+  return [code];
 };
 
 
