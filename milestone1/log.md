@@ -9,6 +9,11 @@
 - Max Starreveld: 
 - Ethan Clunie: log.md file, README.md for milestone1 instructions
 - Mason Li: 
+  - Refactored base for index.html to better match Google Documentation and make Blockly resizable.  
+  - Designed styles.css to create styles for index.html--based off Google's design for their Blockly examples.
+  - Helped write framework and pseudocode for Design.md and Design2.md.
+  - Refactored file structure for project to better match Google Documentations/Examples.
+  - Assisted in peer coding.
 
 ## Usage of AI:
 - Used ChatGPT for:
