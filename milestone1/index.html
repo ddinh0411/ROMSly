@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ROMSly</title>
+    <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/python_compressed.js"></script>
+    <script src="https://unpkg.com/blockly/msg/en.js"></script>
+    <script src="./custom_blocks.js"></script>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+
+</head>
+<body>
+    <!-- NAV BAR -->
+    <nav id="toolbar">
+        <div class="title-grow">
+        <div class="title">ROMSly</div>
+        <div class="subtitle">Restaurant Order Management System.</div>
+        </div>
+        
+        <a href="https://github.com/ddinh0411/ROMSly/src" class="nav_button" target="_blank">View Code</a>
+    </nav>
+    <!-- END NAV BAR -->
+
+    <table>
+        <tr>
+        <td>
+            <p>
+                <button onclick="showCode()" class="compile_button">Show Python</button>
+                <button onclick="runCode()" class="compile_button">Run Python</button>
+                <button onclick="saveBlocks()" class="compile_button">Save Python</button>
+            </p>
+        </td>
+        </tr>
+        <tr>
+            <td id="blocklyArea">
+                
+            </td>
+        </tr>
+    </table>
+    
+    <div id="blocklyDiv" style="position: absolute"></div>
+    <xml id="toolbox" style="display: none">
+        <block type="define_food_item_class"></block>
+        <block type="define_drink_item_class"></block>
+        <block type="food_item"></block>
+        <block type="drink_item"></block>
+        <block type="combo_item"></block>
+        <block type="identifier"></block>
+        <block type="single_order"></block>
+        <block type="math_arithmetic"></block>
+    </xml>
+      
+    <script>
+        var blocklyArea = document.getElementById('blocklyArea');
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var workspace = Blockly.inject(blocklyDiv,
+            {media: 'https://unpkg.com/blockly/media/',
+            toolbox: document.getElementById('toolbox')});
+        var onresize = function(e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            Blockly.svgResize(workspace);
+
+            // console.log('resize');
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+
+        // Blockly.serialization.workspaces.load(startBlocks, workspace);
+
+        function showCode() {
+        // Generate JavaScript code and display it.
+        python.pythonGenerator.INFINITE_LOOP_TRAP = null;
+        var code = python.pythonGenerator.workspaceToCode(workspace);
+        alert(code);
+        }
+
+        // README: Old JavaScript showCode method, please remove it when no longer needed.
+        // function showCode() {
+        // // Generate JavaScript code and display it.
+        // javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
+        // var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+        // alert(code);
+        // }
+
+        // FIXME: runCode needs to be converted to use PyScript.
+        function runCode() {
+        // Generate JavaScript code and run it.
+        window.LoopTrap = 1000;
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP =
+            'if (--window.LoopTrap < 0) throw "Infinite loop.";\n';
+        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
+        try {
+            eval(code);
+        } catch (e) {
+            alert(e);
+        }
+        }
+
+        function saveBlocks() {
+        var workspaceText = python.pythonGenerator.workspaceToCode(workspace);
+        var blob = new Blob([workspaceText], {type: 'text/plain'});
+        var a = document.createElement('a');
+        a.download = 'ROMSLY.txt';
+        a.href = URL.createObjectURL(blob);
+        a.click();
+        }
+
+
+    </script>
+</body>
+</html>
