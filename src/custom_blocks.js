@@ -29,7 +29,7 @@ Blockly.Blocks['food_item'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("item name")
-        .appendField(new Blockly.FieldTextInput("raw potato"), "food_item");
+        .appendField(new Blockly.FieldTextInput("raw potato"), "food_name");
     this.setOutput(true, "food_item");
     this.setColour(270);
     this.setTooltip("");
@@ -91,21 +91,6 @@ Blockly.Blocks['single_order'] = {
   }
 };
 
-Blockly.Blocks['math_number'] = {
-    /**
-     * Block for numeric value.
-     * @this {Blockly.Block}
-     */
-    init: function() {
-      this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
-      this.setColour(Blockly.Msg.MATH_HUE);
-      this.appendDummyInput()
-          .appendField(new Blockly.FieldNumber('3'), 'NUM');
-      this.setOutput(true, 'Number');
-      this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP);
-    }
-};
-
 /* GENERATORS FOR BLOCKS */
 python.pythonGenerator.forBlock['define_food_item_class'] = function(block, pythonGenerator) {
   var code = 'class FoodItem:\n';
@@ -122,24 +107,33 @@ python.pythonGenerator.forBlock['define_drink_item_class'] = function(block, pyt
 };
 
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
-  var var_name = block.getFieldValue('food_item');
+  var var_name = block.getFieldValue('food_name');
+  block.setFieldValue(var_name, 'food_name');
   var code = 'food_item = FoodItem("' + var_name + '")';
   return [code];
 };
 
 python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator) {
   var var_name = block.getFieldValue('drink_name');
+  block.setFieldValue(var_name, 'drink_name');
   var code = 'drink_item = DrinkItem("' + var_name + '")';
   return [code];
 };
 
 python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator) {
-  var item1Code = pythonGenerator.valueToCode(block, 'ITEM1', pythonGenerator.ORDER_NONE);
-  var item2Code = pythonGenerator.valueToCode(block, 'ITEM2', pythonGenerator.ORDER_NONE);
-  var code = '[' + item1Code + ', ' + item2Code + ']';
-  return [code];
-};
+  var item1Block = block.getInputTargetBlock('ITEM1');
+  var item2Block = block.getInputTargetBlock('ITEM2');
 
+  if (item1Block && item2Block) {
+    var item1Value = getItemNameFromBlock(item1Block);
+    var item2Value = getItemNameFromBlock(item2Block);
+
+    var code = 'Combo_item = [' + item1Value + ', ' + item2Value + ']';
+    return [code];
+  }
+  // Handle cases where one or both inputs are not connected
+  return ['[ , ]'];
+};
 
 python.pythonGenerator.forBlock['identifier'] = function(block) {
   var var_name = block.getFieldValue('customer_id');
@@ -148,33 +142,39 @@ python.pythonGenerator.forBlock['identifier'] = function(block) {
 };
 
 python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerator) {
-  var expr1_code = python.pythonGenerator.valueToCode(block, 'ORDER_ITEM', pythonGenerator.ORDER_NONE);
-  var expr2_code = python.pythonGenerator.valueToCode(block, 'ID', pythonGenerator.ORDER_NONE);
-  var code = '(' + expr1_code + ')(' + expr2_code + ')';
-  return [code];
+  var Order_Block = block.getInputTargetBlock('ORDER_ITEM');
+  var CustomerID_Block = block.getInputTargetBlock('ID');
+
+  if (Order_Block && CustomerID_Block) {
+    var Order_name = getItemNameFromBlock(Order_Block);
+    var Customer_ID = getItemNameFromBlock(CustomerID_Block);
+
+    var code = 'Order = [ [' + Order_name + '], ' + Customer_ID + ']';
+    return [code];
+  }
+  // Handle cases where one or both inputs are not connected
+  return ['[ nothing , nobody ]'];
 };
 
-python.pythonGenerator.forBlock['math_arithmetic'] = {
-    /**
-     * Block for arithmetic operations.
-     * @this {Blockly.Block}
-     */
-    init: function() {
-      this.setHelpUrl(Blockly.Msg.MATH_ARITHMETIC_HELPURL);
-      this.setColour(Blockly.Msg.MATH_HUE);
-      this.setOutput(true, 'Number');
-      this.appendValueInput('A')
-          .setCheck(['Number', 'var', 'exp']);
-      this.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown([
-              ['+', 'ADD'],
-              ['-', 'MINUS'],
-              ['\u00D7', 'MULTIPLY'],
-              ['\u00F7', 'DIVIDE'],
-              ['^', 'POWER']]), 'OP');
-      this.appendValueInput('B')
-          .setCheck(['Number', 'var', 'exp']);
-      this.setInputsInline(true);
-      this.setTooltip(Blockly.Msg.MATH_ARITHMETIC_TOOLTIP);
-    }
+/* AUX FUNCTIONS */
+
+function getItemNameFromBlock(block) {
+  if (block.type === 'food_item') {
+    return block.getFieldValue('food_name');
+  } else if (block.type === 'drink_item') {
+    return block.getFieldValue('drink_name');
+  } else if (block.type === 'identifier') {
+    return block.getFieldValue('customer_id');
+  } else if (block.type === 'combo_item') {
+    // You may need to adapt this part depending on how you want to handle combo items
+    // For simplicity, it returns a string indicating it's a combo_item
+    var item1Block = block.getInputTargetBlock('ITEM1');
+    var item2Block = block.getInputTargetBlock('ITEM2');
+    var itemName1 = getItemNameFromBlock(item1Block);
+    var itemName2 = getItemNameFromBlock(item2Block);
+    return [itemName1, itemName2];
+  }
+
+  // Default case (e.g., if block type is unknown)
+  return '';
 };
