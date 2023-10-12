@@ -155,43 +155,37 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
   var CustomerID_Block = block.getInputTargetBlock('ID');
 
   var code = ''; // Initialize code as an empty string
-  var orderedItems = [];
+  var orderedItems = '';
+  var customerID_Code = ''; // Variable for the full line of code for customer ID
+  var customerID = ''; // Variable for just the name of the customer
+
+  if (CustomerID_Block) {
+    // Check if the customer ID block is an identifier
+    if (CustomerID_Block.type === 'identifier') {
+      // Generate code for the customer ID block
+      customerID_Code = pythonGenerator.blockToCode(CustomerID_Block)[0];
+      customerID = getItemNameFromBlock(CustomerID_Block);
+    }
+  }
 
   if (Order_Block) {
     // Check if the ordered item is a food_item, drink_item, or combo_item
     if (Order_Block.type === 'food_item' || Order_Block.type === 'drink_item' || Order_Block.type === 'combo_item') {
       // Generate code for the ordered item
-      orderedItems.push(pythonGenerator.blockToCode(Order_Block)[0]);
-      orderedItems.push(getItemNameFromBlock(Order_Block));
+      orderedItems = pythonGenerator.blockToCode(Order_Block)[0];
     }
 
-    if (Array.isArray(orderedItems[1])) {
-      orderedItems[1] = orderedItems[1].join(', ');
-    }
-
-    var customerID = '';
-
-    if (CustomerID_Block) {
-      // Check if the customer ID block is an identifier
-      if (CustomerID_Block.type === 'identifier') {
-        // Generate code for the customer ID block
-        customerID = getItemNameFromBlock(CustomerID_Block);
-      }
-    }
-
-    code += orderedItems[0] + '\n'; // Add the generated code for the ordered item
-    code += 'Order = [[' + orderedItems[1] + '], ' + customerID + ']'; // Construct the order list
-
-    if (customerID) {
-      code += '\n' + customerID + ' = ' + 'Identifier("' + customerID + '")'; // Add the code for the customer ID
-    }
+    code += customerID_Code + '\n'; // Add the full line of code for the customer ID
+    code += orderedItems + '\n'; // Add the generated code for the ordered item
+    code += 'Order = [[' + getItemNameFromBlock(Order_Block) + '], ' + customerID + ']'; // Construct the order list
   } else {
     // Handle cases where the ordered item is not connected
-    code = '[nothing, nobody]'; // Empty list for ordered items and empty string for customer ID
+    code = customerID_Code + '\nOrder = [[nothing], ' + customerID + ']'; // Empty list for ordered items and customer ID
   }
 
   return [code];
 };
+
 
 
 /* AUX FUNCTIONS */
