@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ROMSly Python Execution</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
+<body>
+    <!-- NAV BAR -->
+    <nav id="toolbar">
+        <div class="title-grow">
+        <div class="title">ROMSly Python Execution</div>
+        <div class="subtitle">Restaurant Order Management System.</div>
+        </div>
+        
+        <a href="https://github.com/ddinh0411/ROMSly/tree/main" class="nav_button" target="_blank">View Code</a>
+    </nav>
+    <!-- END NAV BAR -->
+
+    <py-config>
+        plugins = [
+          "https://pyscript.net/latest/plugins/python/py_tutor.py"
+        ]
+    </py-config>
+
+    <section class="pyscript">
+        Hello world! <br>
+        This is the current date and time, as computed by Python:
+        <py-script>
+            from datetime import datetime
+            now = datetime.now()
+            display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+        </py-script>
+    </section>
+      
+    <script>
+        
+    </script>
+</body>
+</html>
