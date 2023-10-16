@@ -113,7 +113,7 @@ python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) 
   var var_name = block.getFieldValue('food_name');
   var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
   block.setFieldValue(var_name, 'food_name');
-  var code = var_name + ' = FoodItem("' + var_name + '")';
+  var code = var_name + ' = FoodItem("' + var_name + '")\n';
   return [code];
 };
 
@@ -121,7 +121,7 @@ python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator)
   var var_name = block.getFieldValue('drink_name');
   var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
   block.setFieldValue(var_name, 'drink_name');
-  var code = 'drink_item = DrinkItem("' + var_name + '")';
+  var code = 'drink_item = DrinkItem("' + var_name + '")\n';
   return [code];
 };
 
@@ -146,7 +146,7 @@ python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator)
 
 python.pythonGenerator.forBlock['identifier'] = function(block) {
   var var_name = block.getFieldValue('customer_id');
-  var code = 'customer_id = "' + var_name + '"';
+  var code = 'customer_id = "' + var_name + '"\n';
   return [code];
 };
 
