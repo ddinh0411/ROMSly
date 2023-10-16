@@ -11,6 +11,8 @@
     <script src="./custom_blocks.js"></script>
     <link rel="stylesheet" type="text/css" href="./styles.css">
 
+    <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
 </head>
 <body>
     <!-- NAV BAR -->
@@ -20,7 +22,7 @@
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
-        <a href="https://github.com/ddinh0411/ROMSly/tree/main/src" class="nav_button" target="_blank">View Code</a>
+        <a href="https://github.com/ddinh0411/ROMSly/tree/main" class="nav_button" target="_blank">View Code</a>
     </nav>
     <!-- END NAV BAR -->
 
@@ -29,7 +31,9 @@
         <td>
             <p>
                 <button onclick="showCode()" class="compile_button">Show Python</button>
-                <button onclick="runCode()" class="compile_button">Run Python</button>
+                <!-- <button onclick="runCode()" class="compile_button">Run Python</button> -->
+                <button onclick="window.open('python.html','_blank')" class="compile_button">Run Python</button>
+                
                 <button onclick="saveBlocks()" class="compile_button">Save Python</button>
             </p>
         </td>
@@ -50,7 +54,6 @@
         <block type="combo_item"></block>
         <block type="identifier"></block>
         <block type="single_order"></block>
-        <block type="math_arithmetic"></block>
     </xml>
       
     <script>
@@ -100,17 +103,19 @@
 
         // FIXME: runCode needs to be converted to use PyScript.
         function runCode() {
-        // Generate JavaScript code and run it.
+        // Generate Python code and run it.
         window.LoopTrap = 1000;
-        javascript.javascriptGenerator.INFINITE_LOOP_TRAP =
+        python.pythonGenerator.INFINITE_LOOP_TRAP =
             'if (--window.LoopTrap < 0) throw "Infinite loop.";\n';
-        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
-        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
-        try {
-            eval(code);
-        } catch (e) {
-            alert(e);
-        }
+        var code = python.pythonGenerator.workspaceToCode(workspace);
+        python.pythonGenerator.INFINITE_LOOP_TRAP = null;
+        
+        alert(code);
+        // try {
+        //     eval(code);
+        // } catch (e) {
+        //     alert(e);
+        // }
         }
 
         function saveBlocks() {
