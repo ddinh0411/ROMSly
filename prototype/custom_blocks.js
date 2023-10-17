@@ -25,6 +25,29 @@ Blockly.Blocks['define_drink_item_class'] = {
   }
 };
 
+Blockly.Blocks['initializeDB'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Initializes DB & Classes");
+    this.setColour("#1D1D1D");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['addOrder'] = {
+  init: function() {
+    this.appendValueInput("addOrder")
+        .setCheck("single_order")
+        .appendField("Add Order");
+    this.setPreviousStatement(true, "addOrder");
+    this.setNextStatement(true, "addOrder");
+    this.setColour("#1865FF");
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['food_item'] = {
   init: function() {
     this.appendDummyInput()
@@ -58,8 +81,6 @@ Blockly.Blocks['combo_item'] = {
     this.appendStatementInput("NAME")
         .setCheck("food_item, drink_item, combo_item")
         .appendField("combo_item");
-    this.setPreviousStatement(true, "combo_item");
-    this.setNextStatement(true, "combo_item");
     this.setOutput(true, "combo_item");
     this.setColour("#3CC022");
  this.setTooltip("");
@@ -106,6 +127,16 @@ python.pythonGenerator.forBlock['define_drink_item_class'] = function(block, pyt
   var code = 'class DrinkItem:\n';
   code += '    def __init__(self):\n';
   code += '        self.name = "drink_item"\n'; // Hardcoded class name
+  return code;
+};
+
+python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerator) {
+  var code = 'class FoodItem:\n';
+  code += '    def __init__(self):\n';
+  code += '        self.name = "food_item"\n\n';
+  code += 'class DrinkItem:\n';
+  code += '    def __init__(self):\n';
+  code += '        self.name = "drink_item"\n';
   return code;
 };
 
