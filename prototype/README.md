@@ -1,7 +1,7 @@
 # ROMSly prototype
 
 ## Presentation Link
-- TODO
+- https://docs.google.com/presentation/d/1cJXJWrvYVBOJTxGdVR5SCSJakYhOnneIc36ZofjPJVU/edit#slide=id.p
 
 ## Demo Instructions
 Link to Prototype: https://ddinh0411.github.io/ROMSly/prototype/index.html
