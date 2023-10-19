@@ -99,8 +99,8 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += 'db_file_path = os.path.join(user_home_dir, "ROMSly.db")\n\n';
   code += 'connection = sqlite3.connect(db_file_path)\n';
   code += 'cursor = connection.cursor()\n';
-
-  code += 'cursor.execute(\'\'\'\n';
+  
+  code += 'query = \'\'\'';
   code += 'CREATE TABLE IF NOT EXISTS orderList\(\n';
   code += '    id INTEGER AUTOINCREMENT PRIMARY KEY,\n';
   code += '    customerID VARCHAR\(60\)\n';
@@ -114,7 +114,8 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += 'CREATE TABLE IF NOT EXISTS drinkOrders\(\n';
   code += '    FOREIGN KEY (id) REFERENCES orderList(id)\n';
   code += '    item VARCHAR\(255\)\n';
-  code += '\)\;\'\'\'\)\n';
+  code += '\)\;\'\'\'\n';
+  code += 'cursor.execute(query)\n';
 
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
