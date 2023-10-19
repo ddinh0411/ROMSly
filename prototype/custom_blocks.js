@@ -1,30 +1,6 @@
 /* DEFINITIONS FOR BLOCKS */
 
 // Custom block to define FoodItem class
-Blockly.Blocks['define_food_item_class'] = {
-  init: function () {
-    this.appendDummyInput()
-      .appendField("Define FoodItem class");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-Blockly.Blocks['define_drink_item_class'] = {
-  init: function () {
-    this.appendDummyInput()
-      .appendField("Define DrinkItem class");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(230);
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['initializeDB'] = {
   init: function () {
     this.appendDummyInput()
@@ -108,7 +84,7 @@ Blockly.Blocks['single_order'] = {
     this.appendValueInput("ID")
         .setCheck(["identifier"])
     this.setInputsInline(true);
-    this.setOutput(true, "exp");
+    this.setOutput(true, "single_order");
     this.setColour("#D92AF9");
     this.setTooltip("");
     this.setHelpUrl("");
@@ -116,28 +92,68 @@ Blockly.Blocks['single_order'] = {
 };
 
 /* GENERATORS FOR BLOCKS */
-python.pythonGenerator.forBlock['define_food_item_class'] = function(block, pythonGenerator) {
-  var code = 'class FoodItem:\n';
-  code += '    def __init__(self):\n';
-  code += '        self.name = "food_item"\n'; // Hardcoded class name
-  return code;
-};
-
-python.pythonGenerator.forBlock['define_drink_item_class'] = function(block, pythonGenerator) {
-  var code = 'class DrinkItem:\n';
-  code += '    def __init__(self):\n';
-  code += '        self.name = "drink_item"\n'; // Hardcoded class name
-  return code;
-};
-
 python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerator) {
-  var code = 'class FoodItem:\n';
+  var code = 'import sqlite3 \n';
+  code += 'import os \n\n';
+  code += 'user_home_dir = os.path.expanduser("~")\n';
+  code += 'db_file_path = os.path.join(user_home_dir, "ROMSly.db")\n\n';
+  code += 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS orderList\(\n';
+  code += '    id INTEGER AUTOINCREMENT PRIMARY KEY,\n';
+  code += '    customerID VARCHAR\(60\)\n';
+  code += '\)\;\n';
+
+  code += 'CREATE TABLE IF NOT EXISTS foodOrders\(\n';
+  code += '    FOREIGN KEY (id) REFERENCES orderList(id)\n';
+  code += '    item VARCHAR\(255\)\n';
+  code += '\)\;\n';
+
+  code += 'CREATE TABLE IF NOT EXISTS drinkOrders\(\n';
+  code += '    FOREIGN KEY (id) REFERENCES orderList(id)\n';
+  code += '    item VARCHAR\(255\)\n';
+  code += '\)\;\'\'\'\)\n';
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+
+  code += 'class FoodItem:\n';
   code += '    def __init__(self):\n';
   code += '        self.name = "food_item"\n\n';
   code += 'class DrinkItem:\n';
   code += '    def __init__(self):\n';
   code += '        self.name = "drink_item"\n';
   return code;
+};
+
+Blockly.Python['addOrder'] = function(block) {
+// SQL connection setup
+var code = 'connection = sqlite3.connect(db_file_path)\n';
+code += 'cursor = connection.cursor()\n\n';
+
+// Get the code from the 'single_order' block
+var orderItemBlock = block.getInputTargetBlock("addOrder");
+var orderCode = Blockly.Python.blockToCode(orderItemBlock)[0];
+
+code += orderCode + '\n';
+code += 'ordered_item = order[0]\n';
+code += 'customerID = order[1]\n';
+
+code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
+code += 'order_id = cursor.lastrowid\n';
+
+code += 'for item in ordered_item:\n';
+code += '    if hasattr(item, "name"):\n';
+code += '        if item.name == "food_item":\n';
+code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
+code += '        elif item.name == "drink_item":\n';
+code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
+code += 'connection.commit()\n';
+code += 'connection.close()\n\n';
+
+return code;
 };
 
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
