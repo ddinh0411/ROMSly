@@ -129,31 +129,35 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
 };
 
 Blockly.Python['addOrder'] = function(block) {
-// SQL connection setup
-var code = 'connection = sqlite3.connect(db_file_path)\n';
-code += 'cursor = connection.cursor()\n\n';
+  // SQL connection setup
+  var code = 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n\n';
 
-// Get the code from the 'single_order' block
-var orderItemBlock = block.getInputTargetBlock("addOrder");
-var orderCode = Blockly.Python.blockToCode(orderItemBlock)[0];
+  // Get the code from the 'single_order' block
+  var orderItemBlock = block.getInputTargetBlock("addOrder");
+  var orderCode = Blockly.Python.blockToCode(orderItemBlock)[0];
 
-code += orderCode + '\n';
-code += 'ordered_item = order[0]\n';
-code += 'customerID = order[1]\n';
+  code += orderCode + '\n';
 
-code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
-code += 'order_id = cursor.lastrowid\n';
+  // Your additional 'addOrder' specific code here
 
-code += 'for item in ordered_item:\n';
-code += '    if hasattr(item, "name"):\n';
-code += '        if item.name == "food_item":\n';
-code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
-code += '        elif item.name == "drink_item":\n';
-code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
-code += 'connection.commit()\n';
-code += 'connection.close()\n\n';
+  code += 'ordered_item = order[0]\n';
+  code += 'customerID = order[1]\n';
 
-return code;
+  code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
+  code += 'order_id = cursor.lastrowid\n';
+
+  code += 'for item in ordered_item:\n';
+  code += '    if hasattr(item, "name"):\n';
+  code += '        if item.name == "food_item":\n';
+  code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
+  code += '        elif item.name == "drink_item":\n';
+  code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+
+  return code;
 };
 
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
