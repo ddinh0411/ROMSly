@@ -11,8 +11,6 @@
     <script src="./custom_blocks.js"></script>
     <link rel="stylesheet" type="text/css" href="./styles.css">
 
-    <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script> -->
 </head>
 <body>
     <!-- NAV BAR -->
@@ -22,7 +20,7 @@
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
-        <a href="https://github.com/ddinh0411/ROMSly/tree/main" class="nav_button" target="_blank">View Code</a>
+        <a href="https://github.com/ddinh0411/ROMSly/tree/main/milestone1" class="nav_button" target="_blank">View Code</a>
     </nav>
     <!-- END NAV BAR -->
 
@@ -31,9 +29,7 @@
         <td>
             <p>
                 <button onclick="showCode()" class="compile_button">Show Python</button>
-                <!-- <button onclick="runCode()" class="compile_button">Run Python</button> -->
-                <button onclick="window.open('./python.html','_blank')" class="compile_button">Run Python</button>
-                
+                <button onclick="runCode()" class="compile_button">Run Python</button>
                 <button onclick="saveBlocks()" class="compile_button">Save Python</button>
             </p>
         </td>
@@ -47,8 +43,8 @@
     
     <div id="blocklyDiv" style="position: absolute"></div>
     <xml id="toolbox" style="display: none">
-        <block type="define_food_item_class"></block>
-        <block type="define_drink_item_class"></block>
+        <block type="initializeDB"></block>
+        <block type="addOrder"></block>
         <block type="food_item"></block>
         <block type="drink_item"></block>
         <block type="combo_item"></block>
@@ -103,26 +99,24 @@
 
         // FIXME: runCode needs to be converted to use PyScript.
         function runCode() {
-        // Generate Python code and run it.
+        // Generate JavaScript code and run it.
         window.LoopTrap = 1000;
-        python.pythonGenerator.INFINITE_LOOP_TRAP =
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP =
             'if (--window.LoopTrap < 0) throw "Infinite loop.";\n';
-        var code = python.pythonGenerator.workspaceToCode(workspace);
-        python.pythonGenerator.INFINITE_LOOP_TRAP = null;
-        
-        alert(code);
-        // try {
-        //     eval(code);
-        // } catch (e) {
-        //     alert(e);
-        // }
+        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
+        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
+        try {
+            eval(code);
+        } catch (e) {
+            alert(e);
+        }
         }
 
         function saveBlocks() {
         var workspaceText = python.pythonGenerator.workspaceToCode(workspace);
         var blob = new Blob([workspaceText], {type: 'text/plain'});
         var a = document.createElement('a');
-        a.download = 'ROMSLY.txt';
+        a.download = 'ROMSLY.py';
         a.href = URL.createObjectURL(blob);
         a.click();
         }
