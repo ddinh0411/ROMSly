@@ -100,33 +100,36 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += 'connection = sqlite3.connect(db_file_path)\n';
   code += 'cursor = connection.cursor()\n';
   
-  code += 'cursor.execute(\'\'\')\n';
+  code += 'cursor.execute(\'\'\'\n';
   code += 'CREATE TABLE IF NOT EXISTS orderList\(\n';
   code += '    id INTEGER PRIMARY KEY,\n';
   code += '    customerID VARCHAR\(60\)\n';
-  code += '\)\;\'\'\'\n';
+  code += '\)\;\'\'\')\n';
 
-  code += 'cursor.execute(\'\'\')\n';
+  code += 'cursor.execute(\'\'\'\n';
   code += 'CREATE TABLE IF NOT EXISTS foodOrders\(\n';
   code += '    id INTEGER KEY REFERENCES orderList(id),\n';
   code += '    item VARCHAR\(255\)\n';
-  code += '\)\;\'\'\'\n';
+  code += '\)\;\'\'\')\n';
 
-  code += 'cursor.execute(\'\'\')\n';
+  code += 'cursor.execute(\'\'\'\n';
   code += 'CREATE TABLE IF NOT EXISTS drinkOrders\(\n';
   code += '    id INTEGER KEY REFERENCES orderList(id),\n';
   code += '    item VARCHAR\(255\)\n';
-  code += '\)\;\'\'\'\n';
+  code += '\)\;\'\'\')\n';
 
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
 
   code += 'class FoodItem:\n';
-  code += '    def __init__(self):\n';
-  code += '        self.name = "food_item"\n\n';
+  code += '    def __init__(self,name):\n';
+  code += '        self.type = "food_item"\n\n';
+  code += '        self.name = name\n\n';
+
   code += 'class DrinkItem:\n';
-  code += '    def __init__(self):\n';
-  code += '        self.name = "drink_item"\n';
+  code += '    def __init__(self, name):\n';
+  code += '        self.type = "drink_item"\n';
+  code += '        self.name = name\n\n';
   return code;
 };
 
@@ -143,17 +146,18 @@ Blockly.Python['addOrder'] = function(block) {
 
   // Your additional 'addOrder' specific code here
 
-  code += 'ordered_item = order[0]\n';
-  code += 'customerID = order[1]\n';
+  code += 'ordered_item = Order[0]\n';
+  code += 'customerID = Order[1]\n';
 
   code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
   code += 'order_id = cursor.lastrowid\n';
 
   code += 'for item in ordered_item:\n';
-  code += '    if hasattr(item, "name"):\n';
-  code += '        if item.name == "food_item":\n';
+  code += '    if hasattr(item, "type"):\n';
+  code += '        if item.type == "food_item":\n';
   code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
-  code += '        elif item.name == "drink_item":\n';
+  code += '            cursor.execute("INSERT INTO")'
+  code += '        elif item.type == "drink_item":\n';
   code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
 
   code += 'connection.commit()\n';
@@ -209,17 +213,7 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
 
   var code = ''; // Initialize code as an empty string
   var orderedItems = '';
-  var customerID_Code = ''; // Variable for the full line of code for customer ID
-  var customerID = ''; // Variable for just the name of the customer
-
-  if (CustomerID_Block) {
-    // Check if the customer ID block is an identifier
-    if (CustomerID_Block.type === 'identifier') {
-      // Generate code for the customer ID block
-      customerID_Code = pythonGenerator.blockToCode(CustomerID_Block)[0];
-      customerID = getItemNameFromBlock(CustomerID_Block);
-    }
-  }
+  var customerID = ''; // Variable for the name of the customer ID variable
 
   if (Order_Block) {
     // Check if the ordered item is a food_item, drink_item, or combo_item
@@ -228,20 +222,18 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
       orderedItems = pythonGenerator.blockToCode(Order_Block)[0];
     }
 
-    code += customerID_Code + '\n'; // Add the full line of code for the customer ID
-    code += orderedItems + '\n'; // Add the generated code for the ordered item
-    code += 'Order = [[' + getItemNameFromBlock(Order_Block) + '], ' + customerID + ']'; // Construct the order list
+    code += 'Order = [[' + getItemNameFromBlock(Order_Block) + '], customerID]'; // Construct the order list
   } else {
     // Handle cases where the ordered item is not connected
-    code = customerID_Code + '\nOrder = [[nothing], ' + customerID + ']'; // Empty list for ordered items and customer ID
+    code = 'Order = [[nothing], nobody]'; // Empty list for ordered items and customer ID
   }
 
   return [code];
 };
 
 
-
 /* AUX FUNCTIONS */
+
 
 function getItemNameFromBlock(block) {
   if (block.type === 'food_item') {
