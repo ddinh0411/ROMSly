@@ -84,10 +84,10 @@
         // Blockly.serialization.workspaces.load(startBlocks, workspace);
 
         function showCode() {
-        // Generate JavaScript code and display it.
-        python.pythonGenerator.INFINITE_LOOP_TRAP = null;
-        var code = python.pythonGenerator.workspaceToCode(workspace);
-        alert(code);
+            // Generate JavaScript code and display it.
+            python.pythonGenerator.INFINITE_LOOP_TRAP = null;
+            var code = python.pythonGenerator.workspaceToCode(workspace);
+            alert(code);
         }
 
         // README: Old JavaScript showCode method, please remove it when no longer needed.
@@ -100,17 +100,11 @@
 
         // FIXME: runCode needs to be converted to use PyScript.
         function runCode() {
-        // Generate JavaScript code and run it.
-        window.LoopTrap = 1000;
-        javascript.javascriptGenerator.INFINITE_LOOP_TRAP =
-            'if (--window.LoopTrap < 0) throw "Infinite loop.";\n';
-        var code = javascript.javascriptGenerator.workspaceToCode(workspace);
-        javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
-        try {
-            eval(code);
-        } catch (e) {
-            alert(e);
-        }
+            // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
+            // Save code to localStorage, and launch PyScript for execution.
+            var code = python.pythonGenerator.workspaceToCode(workspace);
+            localStorage.setItem("pythonCode", code);
+            window.open('./python.html','_blank')
         }
 
         function saveBlocks() {
