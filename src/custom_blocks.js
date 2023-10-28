@@ -125,9 +125,8 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += '    def __init__(self,name):\n';
   code += '        self.type = "food_item"\n\n';
   code += '        self.name = name\n\n';
-
   code += 'class DrinkItem:\n';
-  code += '    def __init__(self, name):\n';
+  code += '    def __init__(self,name):\n';
   code += '        self.type = "drink_item"\n';
   code += '        self.name = name\n\n';
   return code;
@@ -146,17 +145,16 @@ Blockly.Python['addOrder'] = function(block) {
 
   // Your additional 'addOrder' specific code here
 
-  code += 'ordered_item = Order[0]\n';
-  code += 'customerID = Order[1]\n';
+  code += 'ordered_item = order[0]\n';
+  code += 'customerID = order[1]\n';
 
   code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
   code += 'order_id = cursor.lastrowid\n';
 
   code += 'for item in ordered_item:\n';
-  code += '    if hasattr(item, "type"):\n';
+  code += '    if hasattr(item, "name"):\n';
   code += '        if item.type == "food_item":\n';
   code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
-  code += '            cursor.execute("INSERT INTO")'
   code += '        elif item.type == "drink_item":\n';
   code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
 
@@ -178,7 +176,7 @@ python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator)
   var var_name = block.getFieldValue('drink_name');
   var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
   block.setFieldValue(var_name, 'drink_name');
-  var code = 'drink_item = DrinkItem("' + var_name + '")\n';
+  var code = var_name + ' = DrinkItem("' + var_name + '")\n';
   return [code];
 };
 
@@ -186,20 +184,29 @@ python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator)
   var items = [];
   var itemBlock = block.getInputTargetBlock('NAME'); // Get the first item
 
-    while (itemBlock) {
-      var itemName = getItemNameFromBlock(itemBlock);
-      if (itemName) {
-        var sanitizedName = itemName.replace(/\s+/g, '_'); // Replace spaces with underscores
-        var itemCode = sanitizedName + ' = FoodItem("' + sanitizedName + '")'; // Generate code for the individual item
-        items.push(itemCode);
-      }
-      itemBlock = itemBlock.getNextBlock(); // Move to the next item
-    }
-    var listCode = 'Combo_item = [' + items.map(function(item) { return "'" + item.split(" = ")[0] + "'"; }).join(', ') + ']';
+  while (itemBlock) {
+    var itemName = getItemNameFromBlock(itemBlock);
+    if (itemName) {
+      var sanitizedName = itemName.replace(/\s+/g, '_'); // Replace spaces with underscores
 
-    var fullCode = items.join('\n') + '\n' + listCode;
-    return [fullCode];
+      var itemCode;
+      if (itemBlock.type === 'food_item') {
+        itemCode = sanitizedName + ' = FoodItem("' + sanitizedName + '")'; // Generate code for food_item
+      } else if (itemBlock.type === 'drink_item') {
+        itemCode = sanitizedName + ' = DrinkItem("' + sanitizedName + '")'; // Generate code for drink_item
+      }
+
+      items.push(itemCode);
+    }
+    itemBlock = itemBlock.getNextBlock(); // Move to the next item
+  }
+
+  var listCode = 'Combo_item = [' + items.map(function(item) { return "'" + item.split(" = ")[0] + "'"; }).join(', ') + ']';
+
+  var fullCode = items.join('\n') + '\n' + listCode;
+  return [fullCode];
 };
+
 
 python.pythonGenerator.forBlock['identifier'] = function(block) {
   var var_name = block.getFieldValue('customer_id');
@@ -213,7 +220,17 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
 
   var code = ''; // Initialize code as an empty string
   var orderedItems = '';
-  var customerID = ''; // Variable for the name of the customer ID variable
+  var customerID_Code = ''; // Variable for the full line of code for customer ID
+  var customerID = ''; // Variable for just the name of the customer
+
+  if (CustomerID_Block) {
+    // Check if the customer ID block is an identifier
+    if (CustomerID_Block.type === 'identifier') {
+      // Generate code for the customer ID block
+      customerID_Code = pythonGenerator.blockToCode(CustomerID_Block)[0];
+      customerID = getItemNameFromBlock(CustomerID_Block);
+    }
+  }
 
   if (Order_Block) {
     // Check if the ordered item is a food_item, drink_item, or combo_item
@@ -222,18 +239,20 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
       orderedItems = pythonGenerator.blockToCode(Order_Block)[0];
     }
 
-    code += 'Order = [[' + getItemNameFromBlock(Order_Block) + '], customerID]'; // Construct the order list
+    code += customerID_Code + '\n'; // Add the full line of code for the customer ID
+    code += orderedItems + '\n'; // Add the generated code for the ordered item
+    code += 'order = [[' + getItemNameFromBlock(Order_Block) + '], customer_id]'; // Construct the order list
   } else {
     // Handle cases where the ordered item is not connected
-    code = 'Order = [[nothing], nobody]'; // Empty list for ordered items and customer ID
+    code = customerID_Code + '\norder = [[nothing], nobody]'; // Empty list for ordered items and customer ID
   }
 
   return [code];
 };
 
 
-/* AUX FUNCTIONS */
 
+/* AUX FUNCTIONS */
 
 function getItemNameFromBlock(block) {
   if (block.type === 'food_item') {
