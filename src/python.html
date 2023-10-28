@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ROMSly Python Execution</title>
+    <title>ROMSly Order Viewer</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
     
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
@@ -12,7 +12,7 @@
     <!-- NAV BAR -->
     <nav id="toolbar">
         <div class="title-grow">
-        <div class="title">ROMSly Python Execution</div>
+        <div class="title">ROMSly Order Viewer</div>
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
@@ -20,7 +20,11 @@
     </nav>
     <!-- END NAV BAR -->
 
+    <!-- https://www.blanchardjulien.com/posts/sql_pyscript/ -->
     <py-config>
+        packages = [
+            "sqlite3"
+        ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
         ]
