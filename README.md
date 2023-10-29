@@ -15,6 +15,15 @@ ROMSly (Restaurant Order Management System) is a way for restaurants to easily c
 This project involves the topic of parsing as we are taking syntax from the user and parsing them into syntax that will be stored into the database to store and organize. The inputs would be start as simple clicks representing both the menu item and where the item was ordered from and need to be parsed into what needs to be cooked by the kitchen staff in the back. The DSL will also abstract complex tasks away from users, allowing users to chain together simple blocks to execute multi-layered, recursive based operations on the database. ROMSly will also perform work unseen to end users to ensure the system runs as smoothly as possible at all times.
 
 ---
+## Contributing to ROMSly
+
+If you want to help us develop this project, or you're a peer reviewer looking for ideas on what to add, we're happy to accept any and all help! Within ROMSly we have some general ideas for suggestions of new features / tweaks that could be made to our current project. Just go on over to the issues tab and if you see an issue by one of us you're more than welcome to take it. Please just leave a comment on one of these issues and it's all yours. Features and issues are on a first-come first-serve basis so if you see somethng that you'd love to add then feel free to grab it before it's too late!
+
+First time contributing to a Open Source Project? No worries! We've also found some resources to help you contribute to this project. Just follow these steps and you should be fine.
+
+[Steps for How to Contribute to Open Source Projects](https://dev.to/codesphere/how-to-start-contributing-to-open-source-projects-on-github-534n)
+
+---
 
 ## Installation & Set Up of ROMSly
 
