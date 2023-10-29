@@ -8,3 +8,7 @@ The Demo by Google to help build custom Blockly blocks. Using this tool this wil
 
 - https://github.com/google/blockly-samples/tree/master
 This is a link to the github used by Google's step by step tutorials for different things that can be created with Blockly. This can provide us examples for how to do some of the more specific things with Blockly, such as hooking it with an interface.
+
+- https://dev.to/codesphere/how-to-start-contributing-to-open-source-projects-on-github-534n
+This was used for the repository specifically within contribute.md to allow for new users/peer reviewers to more easily understand what might they do to help and the steps for how to do so
+
