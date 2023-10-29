@@ -59,12 +59,20 @@ First time contributing to a Open Source Project? No worries! We've also found s
     - Hit the Run Button at the upper right
 
 ### Viewing your Database
-- Within Pycharm
-    - Click the button on the right hand side that looks like 3 disks on top of each other. This should open the Database tab
-    - Hit the plus button in the upper left of this tab, select Data Source then select SQLite
-    - In the area for the file name, change to /Users/***YourUSERNAMEHERE***/ROMSly.db, then press Ok
-    - Within the new ROMSly.db that pops ups, expand the dropdown to view main, then expand main to see your tables
-    - Click on a table such as orderList to view the names of the customers who've placed an order and then either foodOrders or drinkOrders to see what they ordered
+- Open Up Pycharm
+- Click the button on the right hand side that looks like 3 disks on top of each other. This should open the Database tab
+- Hit the plus button in the upper left of this tab, select Data Source then select SQLite
+- Click on the small triple dots next to file to Open up your Finder
 
+<div align="center">
+<img width="400" alt="ROMSly_Tutorial_1" src="https://github.com/ddinh0411/ROMSly/assets/70035939/4ad7eabe-b5c7-41bb-af79-f6b8135df161">
+</div>
 
+- After opening up your Finder, move to your home directory and select the ROMSly.db file
 
+<div align="center">
+<img width="400" alt="ROMSly_Tutorial_2" src="https://github.com/ddinh0411/ROMSly/assets/70035939/aab82bba-7d50-4e45-8dec-f3ecdefe5869">
+</div>
+
+- Within the new ROMSly.db that pops ups, expand the dropdown to view main, then expand main to see your tables
+- Click on a table such as orderList to view the names of the customers who've placed an order and then either foodOrders or drinkOrders to see what they ordered
