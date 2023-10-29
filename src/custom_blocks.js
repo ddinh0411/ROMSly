@@ -1,6 +1,6 @@
 /* DEFINITIONS FOR BLOCKS */
 
-// Custom block to define FoodItem class
+// Block definition to initialize DB. There is inputs as this block will just generate the necessary code.
 Blockly.Blocks['initializeDB'] = {
   init: function () {
     this.appendDummyInput()
