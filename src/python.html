@@ -37,7 +37,18 @@
     </section>
       
     <script>
-        
+        window.onload = function(){loadCode};
+        var codeToRun = localStorage.getItem("pythonCode");
+        // alert(codeToRun);
+        // https://jeff.glass/post/pyscript-js-functions/
+        // Getting generated Python code, and passing it into PyScript.
+
+        function loadCode() {
+            // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
+            // Save code to localStorage, and launch PyScript for execution.
+            code = localStorage.getItem("pythonCode");
+            return code
+        }
     </script>
 </body>
 </html>
