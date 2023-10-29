@@ -187,11 +187,12 @@ Blockly.Python['addOrder'] = function(block) {
   return code;
 };
 
+
 // Generator block for food_item. Makes a new instance of the foodItem class
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
-  var var_name = block.getFieldValue('food_name');
+  var var_name = block.getFieldValue('DAY');
   var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
-  block.setFieldValue(var_name, 'food_name');
+  block.setFieldValue(var_name, 'DAY');
   var code = var_name + ' = FoodItem("' + var_name + '")\n';
   return [code];
 };
