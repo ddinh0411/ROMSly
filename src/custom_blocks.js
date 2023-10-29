@@ -25,18 +25,32 @@ Blockly.Blocks['addOrder'] = {
   }
 };
 
+
 // Block definition for food item block. Takes in only input for text of the name of the food item
 Blockly.Blocks['food_item'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField("food name")
-        .appendField(new Blockly.FieldTextInput("raw potato"), "food_name");
-    this.setPreviousStatement(true, "food_item, drink_item, combo_item");
-    this.setNextStatement(true, "food_item, drink_item, combo_item");
-    this.setOutput(true, "food_item");
-    this.setColour("#3B94EC");
-    this.setTooltip("");
-    this.setHelpUrl("");
+    var input = this.appendDummyInput()
+      this.appendDummyInput()
+      .appendField('food name')
+      .appendField(new Blockly.FieldDropdown(
+        this.generateOptions), 'DAY');
+      this.setPreviousStatement(true, "food_item, drink_item, combo_item");
+      this.setNextStatement(true, "food_item, drink_item, combo_item");
+      this.setOutput(true, "food_item");
+      this.setColour("#3B94EC");
+      this.setTooltip("");
+      this.setHelpUrl("");
+  },
+
+  generateOptions: function() {
+    var options = [];
+    var now = Date.now();
+    for(var i = 0; i < 7; i++) {
+      var dateString = String(new Date(now)).substring(0, 3);
+      options.push([dateString, dateString.toUpperCase()]);
+      now += 24 * 60 * 60 * 1000;
+    }
+    return options;
   }
 };
 
