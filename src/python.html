@@ -30,9 +30,29 @@
         Hello world! <br>
         This is the current date and time, as computed by Python:
         <py-script>
-            from datetime import datetime
-            now = datetime.now()
-            display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+            from js import codeToRun
+
+            exec(codeToRun)
+
+            user_home_dir = os.path.expanduser("~")
+            db_file_path = os.path.join(user_home_dir, "ROMSly.db")
+
+            connection = sqlite3.connect(db_file_path)
+            cursor = connection.cursor()
+
+            cursor.execute("SELECT * FROM orderList")  
+            for row in cursor:
+                print(row)
+
+            cursor.execute("SELECT * FROM foodOrders")  
+            for row in cursor:
+                print(row)
+
+            cursor.execute("SELECT * FROM drinkOrders")  
+            for row in cursor:
+                print(row)
+
+            connection.close()
         </py-script>
     </section>
       
