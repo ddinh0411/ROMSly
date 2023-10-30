@@ -37,10 +37,12 @@ nav#toolbar .title {
     font-weight: bold;
     color: #fff;
     margin-right: 8px;
+    line-height: 1.17;
 }
 
 nav#toolbar .subtitle {
     color: #fff;
+    line-height: 1.17;
 }
 
 .nav_button {
@@ -56,6 +58,7 @@ nav#toolbar .subtitle {
     margin-left: auto;
     margin-right: 0;
     cursor: pointer;
+    line-height: 1.17;
 }
 
 .compile_button {

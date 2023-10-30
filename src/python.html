@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ROMSly Python Execution</title>
+    <title>ROMSly Order Viewer</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
     
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
@@ -12,32 +12,65 @@
     <!-- NAV BAR -->
     <nav id="toolbar">
         <div class="title-grow">
-        <div class="title">ROMSly Python Execution</div>
+        <div class="title">ROMSly Order Viewer</div>
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
-        <a href="https://github.com/ddinh0411/ROMSly/tree/main" class="nav_button" target="_blank">View Code</a>
+        <a href="https://github.com/ddinh0411/ROMSly/tree/main/src" class="nav_button" target="_blank">View Code</a>
     </nav>
     <!-- END NAV BAR -->
 
+    <!-- https://www.blanchardjulien.com/posts/sql_pyscript/ -->
     <py-config>
+        packages = [
+            "sqlite3"
+        ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
         ]
     </py-config>
 
     <section class="pyscript">
-        Hello world! <br>
-        This is the current date and time, as computed by Python:
         <py-script>
-            from datetime import datetime
-            now = datetime.now()
-            display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+            from js import codeToRun
+
+            exec(codeToRun)
+
+            user_home_dir = os.path.expanduser("~")
+            db_file_path = os.path.join(user_home_dir, "ROMSly.db")
+
+            connection = sqlite3.connect(db_file_path)
+            cursor = connection.cursor()
+
+            cursor.execute("SELECT * FROM orderList")  
+            for row in cursor:
+                print(row)
+
+            cursor.execute("SELECT * FROM foodOrders")  
+            for row in cursor:
+                print(row)
+
+            cursor.execute("SELECT * FROM drinkOrders")  
+            for row in cursor:
+                print(row)
+
+            connection.close()
         </py-script>
     </section>
       
     <script>
-        
+        window.onload = function(){loadCode};
+        var codeToRun = localStorage.getItem("pythonCode");
+        // alert(codeToRun);
+        // https://jeff.glass/post/pyscript-js-functions/
+        // Getting generated Python code, and passing it into PyScript.
+
+        function loadCode() {
+            // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
+            // Save code to localStorage, and launch PyScript for execution.
+            code = localStorage.getItem("pythonCode");
+            return code
+        }
     </script>
 </body>
 </html>
