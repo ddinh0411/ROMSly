@@ -144,6 +144,13 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += '    item VARCHAR\(255\)\n';
   code += '\)\;\'\'\')\n';
 
+//Code to create new table for drinkList, this is a table where the admin of the business can set the predetermined list of drinks on the Menu
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '\)\;\'\'\')\n';
+
 //Closes the SQL connection after commiting
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
