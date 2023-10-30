@@ -50,7 +50,6 @@
         <block type="combo_item"></block>
         <block type="identifier"></block>
         <block type="single_order"></block>
-        <!-- <block type=""></block> -->
     </xml>
       
     <script>
@@ -84,19 +83,11 @@
         // Blockly.serialization.workspaces.load(startBlocks, workspace);
 
         function showCode() {
-            // Generate JavaScript code and display it.
+            // Generate Python code and display it.
             python.pythonGenerator.INFINITE_LOOP_TRAP = null;
             var code = python.pythonGenerator.workspaceToCode(workspace);
             alert(code);
         }
-
-        // README: Old JavaScript showCode method, please remove it when no longer needed.
-        // function showCode() {
-        // // Generate JavaScript code and display it.
-        // javascript.javascriptGenerator.INFINITE_LOOP_TRAP = null;
-        // var code = javascript.javascriptGenerator.workspaceToCode(workspace);
-        // alert(code);
-        // }
 
         // FIXME: runCode needs to be converted to use PyScript.
         function runCode() {
