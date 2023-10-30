@@ -25,6 +25,17 @@ Blockly.Blocks['addOrder'] = {
   }
 };
 
+/* TODO: Define the block definition for restartDB block. Use initializeDB block as inspiration */
+Blockly.Blocks['restartDB'] = {
+  init: function () {
+
+
+    this.setColour("#3CD0D5"); //Color for block is already set
+
+    
+  }
+};
+
 // Block definition for food item block. Takes in only input for text of the name of the food item
 Blockly.Blocks['food_item'] = {
   init: function() {
@@ -186,6 +197,18 @@ Blockly.Python['addOrder'] = function(block) {
   code += 'connection.close()\n\n';
   return code;
 };
+
+
+
+/* TODO: Finish the generator for the restartDB Block */
+
+python.pythonGenerator.forBlock['restartDB'] = function(block) {
+  // Follow the general formatting of initializeDB to write the code to delete every entry within the three tables ordersList, foodOrders, & drinkOrders
+
+  return [code]
+}
+
+
 
 // Generator block for food_item. Makes a new instance of the foodItem class
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
