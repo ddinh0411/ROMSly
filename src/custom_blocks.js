@@ -25,6 +25,24 @@ Blockly.Blocks['addOrder'] = {
   }
 };
 
+/* ISSUE #1 PART 1, Take the definition block code for initializeDB and pretty much copy & paste the code (minus the color which is already given) */
+
+Blockly.Blocks['restartDB'] = {
+  init: function () {
+
+
+    this.setColour("#3CD0D5"); //Color for block is already set
+
+    
+  }
+};
+
+
+
+
+
+/* END OF ISSUE #1 */
+
 // Block definition for food item block. Takes in only input for text of the name of the food item
 Blockly.Blocks['food_item'] = {
   init: function() {
@@ -133,6 +151,19 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += '    item VARCHAR\(255\)\n';
   code += '\)\;\'\'\')\n';
 
+/* ISSUE #3: Create the 4 remaining tables following the template from drinkList */
+
+//Code to create new table for drinkList, this is a table where the admin of the business can set the predetermined list of drinks on the Menu
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '\)\;\'\'\')\n';
+
+
+
+/* END OF ISSUE #3 */
+
 //Closes the SQL connection after commiting
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
@@ -186,6 +217,20 @@ Blockly.Python['addOrder'] = function(block) {
   code += 'connection.close()\n\n';
   return code;
 };
+
+/* ISSUE #1 PART 2, Take the general SQL code for initializeDB and instead of creating a table instead we're writing the code to delete all entries of a table */
+
+python.pythonGenerator.forBlock['restartDB'] = function(block) {
+  // Follow the general formatting of initializeDB to write the code to delete every entry within the three tables ordersList, foodOrders, & drinkOrders
+
+  return [code]
+}
+
+
+
+
+
+/* END OF ISSUE #1 */
 
 // Generator block for food_item. Makes a new instance of the foodItem class
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
