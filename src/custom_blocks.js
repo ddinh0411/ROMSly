@@ -116,6 +116,22 @@ Blockly.Blocks['single_order'] = {
   }
 };
 
+//NotionWeb added Feature
+// Block definition for modifying the drink list. Takes in input for the name of the drink to add to the list.
+Blockly.Blocks['modifyDrinkList'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Add Drink to List")
+        .appendField(new Blockly.FieldTextInput("new drink"), "drink_to_add");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FFA500"); // You can choose your desired color
+    this.setTooltip("Add a new drink to the predefined drink list");
+    this.setHelpUrl("");
+  }
+};
+
+
 /* GENERATORS FOR BLOCKS */
 
 // Generator block for initializing the database. This block should only be placed once at the beginning and can be removed later
@@ -323,6 +339,18 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
 
   return [code];
 };
+
+//NotionWeb added feature
+// Generator block for modifying the drink list. Adds a new drink to the predefined list.
+python.pythonGenerator.forBlock['modifyDrinkList'] = function(block) {
+  var drinkToAdd = block.getFieldValue('drink_to_add');
+  var sanitizedDrink = drinkToAdd.replace(/\s+/g, '_'); // Replace spaces with underscores
+
+  var code = 'cursor.execute("INSERT INTO drinkList (itemName) VALUES (?)", ("' + sanitizedDrink + '",))\n';
+  code += 'connection.commit()\n';
+  return code;
+};
+
 
 
 
