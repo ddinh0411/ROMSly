@@ -343,11 +343,14 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
 //NotionWeb added feature
 // Generator block for modifying the drink list. Adds a new drink to the predefined list.
 python.pythonGenerator.forBlock['modifyDrinkList'] = function(block) {
+  var code = 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n\n';
   var drinkToAdd = block.getFieldValue('drink_to_add');
   var sanitizedDrink = drinkToAdd.replace(/\s+/g, '_'); // Replace spaces with underscores
 
   var code = 'cursor.execute("INSERT INTO drinkList (itemName) VALUES (?)", ("' + sanitizedDrink + '",))\n';
   code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
   return code;
 };
 
