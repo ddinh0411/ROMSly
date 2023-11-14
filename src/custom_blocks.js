@@ -174,6 +174,48 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
   code += '    itemID INTEGER PRIMARY KEY,\n';
   code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS foodList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS appetizerList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS entreeList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS sideList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS dessertList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER DEFAULT 0\n';
   code += '\)\;\'\'\')\n';
 
 
