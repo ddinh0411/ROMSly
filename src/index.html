@@ -43,15 +43,24 @@
     
     <div id="blocklyDiv" style="position: absolute"></div>
     <xml id="toolbox" style="display: none">
-        <block type="initializeDB"></block>
-        <block type="restartDB"></block>
-        <block type="addOrder"></block>
-        <block type="food_item"></block>
-        <block type="drink_item"></block>
-        <block type="combo_item"></block>
-        <block type="identifier"></block>
-        <block type="single_order"></block>
-        <block type="modifyDrinkList"></block>
+        <!-- Admin Category -->
+        <category name="Admin" colour="#3C76D5">
+            <block type="initializeDB"></block>
+            <block type="restartDB"></block>
+        </category>
+        <!-- Menu Items Category -->
+        <category name="Menu Items" colour="#3CD578">
+            <block type="food_item"></block>
+            <block type="drink_item"></block>
+            <block type="combo_item"></block>
+            <block type="add_menuItem"></block>
+        </category>
+        <!-- Users Category -->
+        <category name="Orders" colour="#D3D53C">
+            <block type="identifier"></block>
+            <block type="single_order"></block>
+            <block type="addOrder"></block>
+        </category>
     </xml>
       
     <script>
