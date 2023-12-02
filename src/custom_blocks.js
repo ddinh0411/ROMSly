@@ -236,6 +236,23 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   return code;
 };
 
+/**
+ * 
+ * @param {*} block 
+ * @returns 
+ */
+python.pythonGenerator.forBlock['fetchAll'] = function(block) {
+  // SQL connection setup
+  var code = 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  // Code to fetchAll data from table
+  code += 'cursor.execute(\'\'\'\n';
+  /*
+  * Add code here to actually execute the mySQL code for fetching all data in a column from a table
+  */
+};
+
 // Generator block for adding an order to the database
 Blockly.Python['addOrder'] = function(block) {
   // SQL connection setup
