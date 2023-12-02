@@ -23,19 +23,22 @@
     <!-- https://www.blanchardjulien.com/posts/sql_pyscript/ -->
     <py-config>
         packages = [
-            "sqlite3"
+            "sqlite3",
+            "pandas"
         ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
         ]
     </py-config>
 
-    <section class="pyscript">
+    <div>
         <py-script>
             from js import codeToRun
+            import pandas as pd 
 
             exec(codeToRun)
 
+            
             user_home_dir = os.path.expanduser("~")
             db_file_path = os.path.join(user_home_dir, "ROMSly.db")
 
@@ -55,15 +58,19 @@
                 print(row)
 
             connection.close()
+            
+
+            d = {'col1': [1, 2], 'col2': [3, 4]}
+            df = pd.DataFrame(data=d)
+            display(df)
         </py-script>
-    </section>
+    </div>
       
     <script>
         window.onload = function(){loadCode};
-        var codeToRun = localStorage.getItem("pythonCode");
-        // alert(codeToRun);
         // https://jeff.glass/post/pyscript-js-functions/
         // Getting generated Python code, and passing it into PyScript.
+        var codeToRun = localStorage.getItem("pythonCode");
 
         function loadCode() {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
