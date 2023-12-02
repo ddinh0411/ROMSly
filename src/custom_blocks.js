@@ -11,6 +11,16 @@ Blockly.Blocks['initializeDB'] = {
   }
 };
 
+Blockly.Blocks['restartDB'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Restarts all DB");
+    this.setColour("#3CD0D5"); //Color for block is already set
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
 // Block definition to add an order to the DB. Takes in a single input of a single_order block
 Blockly.Blocks['addOrder'] = {
   init: function() {
@@ -24,24 +34,6 @@ Blockly.Blocks['addOrder'] = {
  this.setHelpUrl("");
   }
 };
-
-/* ISSUE #1 PART 1, Take the definition block code for initializeDB and pretty much copy & paste the code (minus the color which is already given) */
-
-Blockly.Blocks['restartDB'] = {
-  init: function () {
-
-
-    this.setColour("#3CD0D5"); //Color for block is already set
-
-    
-  }
-};
-
-
-
-
-
-/* END OF ISSUE #1 */
 
 // Block definition for food item block. Takes in only input for text of the name of the food item
 Blockly.Blocks['food_item'] = {
@@ -116,6 +108,32 @@ Blockly.Blocks['single_order'] = {
   }
 };
 
+// Block definition for modifying the menu list. Takes in input for the name, price, and prep time of the item to add to the list. Based on the contributions of NotionWeb peer review
+Blockly.Blocks['add_menuItem'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Add Item to Menu");
+    this.appendDummyInput()
+        .appendField("Name")
+        .appendField(new Blockly.FieldTextInput("new item"), "item_name");
+    this.appendDummyInput()
+        .appendField("Price")
+        .appendField(new Blockly.FieldNumber(0, 0, Infinity, 0.01), "item_price");
+    this.appendDummyInput()
+        .appendField("Prep Time")
+        .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "item_prep_time");
+    this.appendDummyInput()
+        .appendField("Table")
+        .appendField(new Blockly.FieldDropdown([["Drink", "drinkList"], ["Appetizer", "appetizerList"], ["Entree", "entreeList"], ["Side", "sideList"], ["Dessert", "dessertList"]]), "item_table");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FFA500"); // You can choose your desired color
+    this.setTooltip("Add a new item to the menu list");
+    this.setHelpUrl("");
+  }
+};
+
+
 /* GENERATORS FOR BLOCKS */
 
 // Generator block for initializing the database. This block should only be placed once at the beginning and can be removed later
@@ -151,18 +169,55 @@ python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerato
   code += '    item VARCHAR\(255\)\n';
   code += '\)\;\'\'\')\n';
 
-/* ISSUE #3: Create the 4 remaining tables following the template from drinkList */
-
-//Code to create new table for drinkList, this is a table where the admin of the business can set the predetermined list of drinks on the Menu
+//Code to create tables for the menu items such as sides, drinks, app, etc.
   code += 'cursor.execute(\'\'\'\n';
   code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
   code += '    itemID INTEGER PRIMARY KEY,\n';
   code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
   code += '\)\;\'\'\')\n';
 
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS foodList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
 
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS appetizerList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
 
-/* END OF ISSUE #3 */
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS entreeList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS sideList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER\n';
+  code += '\)\;\'\'\')\n';
+
+  code += 'cursor.execute(\'\'\'\n';
+  code += 'CREATE TABLE IF NOT EXISTS dessertList\(\n';
+  code += '    itemID INTEGER PRIMARY KEY,\n';
+  code += '    itemName VARCHAR\(60\)\n';
+  code += '    itemPrice FLOAT DEFAULT 0\n';
+  code += '    timeforPrep INTEGER DEFAULT 0\n';
+  code += '\)\;\'\'\')\n';
+
 
 //Closes the SQL connection after commiting
   code += 'connection.commit()\n';
@@ -218,19 +273,19 @@ Blockly.Python['addOrder'] = function(block) {
   return code;
 };
 
-/* ISSUE #1 PART 2, Take the general SQL code for initializeDB and instead of creating a table instead we're writing the code to delete all entries of a table */
+
 
 python.pythonGenerator.forBlock['restartDB'] = function(block) {
   // Follow the general formatting of initializeDB to write the code to delete every entry within the three tables ordersList, foodOrders, & drinkOrders
+  code += 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n';
 
+
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
   return [code]
 }
-
-
-
-
-
-/* END OF ISSUE #1 */
 
 // Generator block for food_item. Makes a new instance of the foodItem class
 python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
@@ -324,7 +379,20 @@ python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerato
   return [code];
 };
 
+// Updated generator block for add_menuItem
+Blockly.Python['add_menuItem'] = function(block) {
+  var itemName = block.getFieldValue('item_name');
+  var tableName = block.getFieldValue('item_table');
+  var itemPrice = block.getFieldValue('item_price');
+  var prepTime = block.getFieldValue('item_prep_time');
 
+  var code = 'connection = sqlite3.connect(db_file_path)\n';
+  code += 'cursor = connection.cursor()\n\n';
+  code += 'cursor.execute("INSERT INTO ' + tableName + ' (itemName, itemPrice, timeforPrep) VALUES (?, ?, ?)", ("' + itemName + '", ' + itemPrice + ', ' + prepTime + '))\n';
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
+};
 
 /* AUX FUNCTIONS */
 
