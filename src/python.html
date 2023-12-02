@@ -24,27 +24,35 @@
     <py-config>
         packages = [
             "sqlite3",
-            "pandas"
+            "pandas",
+            "numpy",
+            "sqlalchemy"
         ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
         ]
     </py-config>
 
-    <div>
+    <div id="pyscriptArea">
         <py-script>
             from js import codeToRun
+            import numpy as np
             import pandas as pd 
+            from sqlalchemy import create_engine
 
             exec(codeToRun)
 
-            
             user_home_dir = os.path.expanduser("~")
             db_file_path = os.path.join(user_home_dir, "ROMSly.db")
 
             connection = sqlite3.connect(db_file_path)
             cursor = connection.cursor()
 
+            #cnx = create_engine(db_file_path).connect()
+            df = pd.read_sql('SELECT * FROM foodOrders', connection)
+            display(df)
+ 
+            """
             cursor.execute("SELECT * FROM orderList")  
             for row in cursor:
                 print(row)
@@ -58,11 +66,9 @@
                 print(row)
 
             connection.close()
+            """
             
-
-            d = {'col1': [1, 2], 'col2': [3, 4]}
-            df = pd.DataFrame(data=d)
-            display(df)
+            print("Python Evaluation Completed.")
         </py-script>
     </div>
       

@@ -21,6 +21,10 @@ table {
     text-align: center; */
 }
 
+#pyscriptArea {
+    margin: 1%;
+}
+
 /* These navigation toolbar styles are modified from Google. */
 nav#toolbar {
     width: 100%;
