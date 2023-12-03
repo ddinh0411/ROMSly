@@ -40,33 +40,34 @@
             import pandas as pd 
             from sqlalchemy import create_engine
 
+            # Run the Blockly generated code (to create/edit/delete orders in DB).
             exec(codeToRun)
 
+            # Get DB location and open connection.
             user_home_dir = os.path.expanduser("~")
             db_file_path = os.path.join(user_home_dir, "ROMSly.db")
 
             connection = sqlite3.connect(db_file_path)
             cursor = connection.cursor()
 
-            #cnx = create_engine(db_file_path).connect()
-            df = pd.read_sql('SELECT * FROM foodOrders', connection)
-            display(df)
- 
-            """
-            cursor.execute("SELECT * FROM orderList")  
-            for row in cursor:
-                print(row)
+            # Query database on current number of orders.
+            cursor.execute("SELECT COUNT(*) FROM orderList")
+            sqlRows = cursor.fetchone()
+            numOrders = sqlRows[0]
+            print(numOrders)
 
-            cursor.execute("SELECT * FROM foodOrders")  
-            for row in cursor:
-                print(row)
+            # Query all orders from DB and store locally.
+            orderListDF = pd.read_sql('SELECT * FROM orderList', connection)
+            display(orderListDF)
+            foodOrderDF = pd.read_sql('SELECT * FROM foodOrders', connection)
+            display(foodOrderDF)
+            drinkOrderDF = pd.read_sql('SELECT * FROM drinkOrders', connection)
+            display(drinkOrderDF)
 
-            cursor.execute("SELECT * FROM drinkOrders")  
-            for row in cursor:
-                print(row)
+            # Combine DataFrames to display orders within one table.
 
+            cursor.close()
             connection.close()
-            """
             
             print("Python Evaluation Completed.")
         </py-script>
