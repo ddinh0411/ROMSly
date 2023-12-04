@@ -54,22 +54,34 @@
             cursor.execute("SELECT COUNT(*) FROM orderList")
             sqlRows = cursor.fetchone()
             numOrders = sqlRows[0]
-            print(numOrders)
+            # print(numOrders)
 
             # Query all orders from DB and store locally.
             orderListDF = pd.read_sql('SELECT * FROM orderList', connection)
-            display(orderListDF)
+            # display(orderListDF)
             foodOrderDF = pd.read_sql('SELECT * FROM foodOrders', connection)
-            display(foodOrderDF)
+            # display(foodOrderDF)
             drinkOrderDF = pd.read_sql('SELECT * FROM drinkOrders', connection)
-            display(drinkOrderDF)
+            # display(drinkOrderDF)
 
             # Combine DataFrames to display orders within one table.
+            orderListDF['Food + Drink Orders'] = ''
+
+            for index, row in drinkOrderDF.iterrows():
+                if (row['id'] - 1) in orderListDF.index:
+                    orderListDF.at[(row['id'] - 1), 'Food + Drink Orders'] = orderListDF.loc[(row['id'] - 1), 'Food + Drink Orders'] + (row['item'] + ", ")
+
+            for index, row in foodOrderDF.iterrows():
+                if (row['id'] - 1) in orderListDF.index:
+                    orderListDF.at[(row['id'] - 1), 'Food + Drink Orders'] = orderListDF.loc[(row['id'] - 1), 'Food + Drink Orders'] + (row['item'] + ", ")
+
+            # Display completed orderList Panda to user.
+            display(orderListDF)
 
             cursor.close()
             connection.close()
             
-            print("Python Evaluation Completed.")
+            # print("Python Evaluation Completed.")
         </py-script>
     </div>
       
