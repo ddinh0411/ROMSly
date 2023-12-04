@@ -81,3 +81,9 @@ nav#toolbar .subtitle {
     margin-top: 0;
     cursor: pointer; */
 }
+
+.debug_button {
+    float: right;
+    margin-left: auto;
+    margin-right: 1.3%;
+}
