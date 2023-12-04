@@ -34,7 +34,7 @@
                 <button class="compile_button">View Orders</button>
                 <button onclick="showCode()" class="debug_button">Show Python</button>
                 <button onclick="savePython()" class="debug_button">Save Python</button>
-                <input type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
+                <input accept=".txt" type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
             </p>
         </td>
         </tr>
@@ -124,7 +124,6 @@
 
         function saveBlocks() {
             var json = Blockly.serialization.workspaces.save(workspace); 
-            // saveTextAsFile(document.getElementById("saveFileName").value, JSON.stringify(json));
             jsonString = JSON.stringify(json)
 
             var blob = new Blob([jsonString], {type: 'text/plain'});
@@ -146,20 +145,24 @@
             fileReader.readAsText(file); 
             fileReader.onload = function() {
                 textJson = fileReader.result
-                // alert(textJson);
-                loadJson = JSON.parse(textJson);
-                Blockly.serialization.workspaces.load(loadJson, workspace);
+                if (isJsonString(textJson)) {
+                    loadJson = JSON.parse(textJson);
+                    Blockly.serialization.workspaces.load(loadJson, workspace);
+                } else {
+                    alert("Not a Valid ROMSly Order!")
+                }
             }; 
-            
-            // FIXME: From Google Blockly samples, delete when not needed.
-            // if (button.blocklySave) {
-            //     Blockly.serialization.workspaces.load(button.blocklySave, workspace);
-            // } else {
-            //     workspace.clear();
-            // }
         }
 
-        
+        // https://stackoverflow.com/questions/3710204/how-to-check-if-a-string-is-a-valid-json-string
+        function isJsonString(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
