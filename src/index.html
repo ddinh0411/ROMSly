@@ -28,9 +28,13 @@
         <tr>
         <td>
             <p>
-                <button onclick="showCode()" class="compile_button">Show Python</button>
-                <button onclick="runCode()" class="compile_button">Run Python</button>
-                <button onclick="saveBlocks()" class="compile_button">Save Python</button>
+                <button onclick="runCode()" class="compile_button">Submit Order</button>
+                <button onclick="saveBlocks()" class="compile_button">Save Order</button>
+                <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
+                <button class="compile_button">View Orders</button>
+                <button onclick="showCode()" class="debug_button">Show Python</button>
+                <button onclick="savePython()" class="debug_button">Save Python</button>
+                <input type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
             </p>
         </td>
         </tr>
@@ -109,7 +113,7 @@
             window.open('./python.html','_blank')
         }
 
-        function saveBlocks() {
+        function savePython() {
             var workspaceText = python.pythonGenerator.workspaceToCode(workspace);
             var blob = new Blob([workspaceText], {type: 'text/plain'});
             var a = document.createElement('a');
@@ -118,7 +122,44 @@
             a.click();
         }
 
+        function saveBlocks() {
+            var json = Blockly.serialization.workspaces.save(workspace); 
+            // saveTextAsFile(document.getElementById("saveFileName").value, JSON.stringify(json));
+            jsonString = JSON.stringify(json)
 
+            var blob = new Blob([jsonString], {type: 'text/plain'});
+            var a = document.createElement('a');
+            a.download = 'ROMSly_Order.txt';
+            a.href = URL.createObjectURL(blob);
+            a.click();
+        }
+        
+        function loadBlocks() {
+            document.getElementById('loadInput').click();
+        }
+
+        function loadBlocksFile(event) {
+            var file = event.target.files[0];
+            var fileReader = new FileReader();
+            var textJson = "";
+
+            fileReader.readAsText(file); 
+            fileReader.onload = function() {
+                textJson = fileReader.result
+                // alert(textJson);
+                loadJson = JSON.parse(textJson);
+                Blockly.serialization.workspaces.load(loadJson, workspace);
+            }; 
+            
+            // FIXME: From Google Blockly samples, delete when not needed.
+            // if (button.blocklySave) {
+            //     Blockly.serialization.workspaces.load(button.blocklySave, workspace);
+            // } else {
+            //     workspace.clear();
+            // }
+        }
+
+        
     </script>
 </body>
 </html>
