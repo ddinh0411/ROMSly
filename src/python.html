@@ -26,7 +26,8 @@
             "sqlite3",
             "pandas",
             "numpy",
-            "sqlalchemy"
+            "sqlalchemy",
+            "Jinja2"
         ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
@@ -76,6 +77,9 @@
                 if (row['id'] - 1) in orderListDF.index:
                     orderListDF.at[(row['id'] - 1), 'Food + Drink Orders'] = orderListDF.loc[(row['id'] - 1), 'Food + Drink Orders'] + (row['item'] + ", ")
 
+            # Prepare the Panda for linking with external CSS.
+            orderListDF.style.set_table_attributes('id="orderDataframe"')
+            
             # Display completed orderList Panda to user.
             display(orderListDF)
 
