@@ -28,10 +28,10 @@
         <tr>
         <td>
             <p>
-                <button onclick="runCode()" class="compile_button">Submit Order</button>
+                <button onclick="runCode(true)" class="compile_button">Submit Order</button>
                 <button onclick="saveBlocks()" class="compile_button">Save Order</button>
                 <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
-                <button class="compile_button">View Orders</button>
+                <button onclick="runCode(false)" class="compile_button">View Orders</button>
                 <button onclick="showCode()" class="debug_button">Show Python</button>
                 <button onclick="savePython()" class="debug_button">Save Python</button>
                 <input accept=".txt" type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
@@ -49,7 +49,8 @@
     <xml id="toolbox" style="display: none">
         <!-- Admin Category -->
         <category name="Admin" colour="#3C76D5">
-            <block type="initializeDB"></block>
+            <!-- NOTE: initializeDB disabled since DB instatiation/connection handled by backend. -->
+            <block type="initializeDB" disabled="true"></block>
             <block type="restartDB"></block>
         </category>
         <!-- Menu Items Category -->
@@ -111,11 +112,16 @@
          * Generates code from current Blockly workspace,
          * and sends it to PyScript backend for evaluation.
          */
-        function runCode() {
+        function runCode(submittingOrder) {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
-            var code = python.pythonGenerator.workspaceToCode(workspace);
-            localStorage.setItem("pythonCode", code);   // Save code to localStorage
-            window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+            if(submittingOrder) {
+                var code = python.pythonGenerator.workspaceToCode(workspace);
+                localStorage.setItem("pythonCode", code);   // Save code to localStorage
+                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+            } else {
+                localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
+                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+            }
         }
 
         /**
