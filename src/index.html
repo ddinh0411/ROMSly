@@ -49,7 +49,8 @@
     <xml id="toolbox" style="display: none">
         <!-- Admin Category -->
         <category name="Admin" colour="#3C76D5">
-            <block type="initializeDB"></block>
+            <!-- NOTE: initializeDB disabled since DB instatiation/connection handled by backend. -->
+            <block type="initializeDB" disabled="true"></block>
             <block type="restartDB"></block>
         </category>
         <!-- Menu Items Category -->
