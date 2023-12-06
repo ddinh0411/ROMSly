@@ -23,11 +23,10 @@
     <!-- https://www.blanchardjulien.com/posts/sql_pyscript/ -->
     <py-config>
         packages = [
-            "sqlite3",
+            "mysql-connector-python",
             "pandas",
             "numpy",
-            "sqlalchemy",
-            "Jinja2"
+            "sqlalchemy"
         ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
@@ -37,56 +36,61 @@
     <div id="pyscriptArea">
         <py-script>
             from js import codeToRun, connectToDB
+            import mysql.connector
             import numpy as np
             import pandas as pd 
             from sqlalchemy import create_engine
+            import asyncio
 
-            # Run the Blockly generated code (to create/edit/delete orders in DB).
-            exec(connectToDB)
-            exec(codeToRun)
+            def connectToServer():
+                exec(connectToDB)
 
-            # Get DB location and open connection.
-            user_home_dir = os.path.expanduser("~")
-            db_file_path = os.path.join(user_home_dir, "ROMSly.db")
+            def runBlocklyQueries():
+                exec(codeToRun)
 
-            connection = sqlite3.connect(db_file_path)
-            cursor = connection.cursor()
+            def getNumOrders(cursor):
+                cursor.execute("SELECT COUNT(*) FROM orderList")
+                sqlRows = cursor.fetchone()
+                numOrders = sqlRows[0]
+                return numOrders
 
-            # Query database on current number of orders.
-            cursor.execute("SELECT COUNT(*) FROM orderList")
-            sqlRows = cursor.fetchone()
-            numOrders = sqlRows[0]
-            # print(numOrders)
+            def generateOrderTable(connection):
+                sqlQuery = '''SELECT 
+                    o.OrderId,
+                    o.CustomerID,
+                    o.OrderTime,
+                    COALESCE(
+                        GROUP_CONCAT(CONCAT(fm.FoodName, ' x', fo.Quantity) SEPARATOR '; '),
+                        'No food ordered'
+                    ) AS FoodItems,
+                    COALESCE(
+                        GROUP_CONCAT(CONCAT(dm.DrinkName, ' x', do.Quantity) SEPARATOR '; '),
+                        'No drinks ordered'
+                    ) AS DrinkItems
+                FROM OrderList o
+                LEFT JOIN FoodOrder fo ON o.OrderId = fo.OrderID
+                LEFT JOIN FoodMenu fm ON fo.FoodID = fm.FoodID
+                LEFT JOIN DrinkOrder do ON o.OrderId = do.OrderID
+                LEFT JOIN DrinkMenu dm ON do.DrinkID = dm.DrinkID
+                GROUP BY o.OrderId
+                ORDER BY o.OrderId;'''
+                orderListDF = pd.read_sql(sqlQuery, connection)
+                return orderListDF
 
-            # Query all orders from DB and store locally.
-            orderListDF = pd.read_sql('SELECT * FROM orderList', connection)
-            # display(orderListDF)
-            foodOrderDF = pd.read_sql('SELECT * FROM foodOrders', connection)
-            # display(foodOrderDF)
-            drinkOrderDF = pd.read_sql('SELECT * FROM drinkOrders', connection)
-            # display(drinkOrderDF)
+            def main():
+                print("Starting Evaluation")
+                connectToServer()
+                runBlocklyQueries()
+                cursor = connection.cursor()
+                totalOrders = getNumOrders(cursor)
+                orderListDF = generateOrderTable(connection)
+                display(orderListDF)
+                cursor.close()
+                connection.close()
+                print("Python Evaluation Done")
 
-            # Combine DataFrames to display orders within one table.
-            orderListDF['Food + Drink Orders'] = ''
-
-            for index, row in drinkOrderDF.iterrows():
-                if (row['id'] - 1) in orderListDF.index:
-                    orderListDF.at[(row['id'] - 1), 'Food + Drink Orders'] = orderListDF.loc[(row['id'] - 1), 'Food + Drink Orders'] + (row['item'] + ", ")
-
-            for index, row in foodOrderDF.iterrows():
-                if (row['id'] - 1) in orderListDF.index:
-                    orderListDF.at[(row['id'] - 1), 'Food + Drink Orders'] = orderListDF.loc[(row['id'] - 1), 'Food + Drink Orders'] + (row['item'] + ", ")
-
-            # Prepare the Panda for linking with external CSS.
-            orderListDF.style.set_table_attributes('id="orderDataframe"')
-            
-            # Display completed orderList Panda to user.
-            display(orderListDF)
-
-            cursor.close()
-            connection.close()
-            
-            # print("Python Evaluation Completed.")
+            if __name__ == "__main__":
+                main()
         </py-script>
     </div>
       
@@ -109,103 +113,15 @@
          * NOTE: For now, instantiates the sqlite db. Temporary until GCP Migration complete.
          */
         function connectToDatabase() {
-            // Generator block for initializing the database. This block should only be placed once at the beginning and can be removed later
-            // Defines the variable code which stores the code that is outputted as a string
-            // Imports in sqlite & os packages to be used
-            var code = 'import sqlite3 \n';
-            code += 'import os \n\n';
-            // Makes a new database within the user's home directory
-            code += 'user_home_dir = os.path.expanduser("~")\n';
-            code += 'db_file_path = os.path.join(user_home_dir, "ROMSly.db")\n\n';
-            //Defines the connection & cursor used by sqlite
-            code += 'connection = sqlite3.connect(db_file_path)\n';
-            code += 'cursor = connection.cursor()\n';
-            //Code to create new table for orderList, this is a table for storing customerId and assigning their order to a number
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS orderList\(\n';
-            code += '    id INTEGER PRIMARY KEY,\n';
-            code += '    customerID VARCHAR\(60\)\n';
-            code += '\)\;\'\'\')\n';
-
-            //Code to create new table for foodOrders, this is a table that uses the order number from above and if the customer orders a food it will placed here
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS foodOrders\(\n';
-            code += '    id INTEGER KEY REFERENCES orderList(id),\n';
-            code += '    item VARCHAR\(255\)\n';
-            code += '\)\;\'\'\')\n';
-
-            //Code to create new table for drinkOrders, this is a table that uses the order number from above and if the customer orders a drink it will placed here
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS drinkOrders\(\n';
-            code += '    id INTEGER KEY REFERENCES orderList(id),\n';
-            code += '    item VARCHAR\(255\)\n';
-            code += '\)\;\'\'\')\n';
-
-            //Code to create tables for the menu items such as sides, drinks, app, etc.
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER\n';
-            code += '\)\;\'\'\')\n';
-
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS foodList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER\n';
-            code += '\)\;\'\'\')\n';
-
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS appetizerList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER\n';
-            code += '\)\;\'\'\')\n';
-
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS entreeList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER\n';
-            code += '\)\;\'\'\')\n';
-
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS sideList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER\n';
-            code += '\)\;\'\'\')\n';
-
-            code += 'cursor.execute(\'\'\'\n';
-            code += 'CREATE TABLE IF NOT EXISTS dessertList\(\n';
-            code += '    itemID INTEGER PRIMARY KEY,\n';
-            code += '    itemName VARCHAR\(60\),\n';
-            code += '    itemPrice FLOAT DEFAULT 0,\n';
-            code += '    timeforPrep INTEGER DEFAULT 0\n';
-            code += '\)\;\'\'\')\n';
-
-
-            //Closes the SQL connection after commiting
-            code += 'connection.commit()\n';
-            code += 'connection.close()\n\n';
-
-            //We have foodItems & drinkItems as Objects currently to allow for multiple attributes, 
-            //this might potentially be changed later. For now this is where we initialize/define the classes foodItem and drinkItem
-            code += 'class FoodItem:\n';
-            code += '    def __init__(self,name):\n';
-            code += '        self.type = "food_item"\n\n';
-            code += '        self.name = name\n\n';
-            code += 'class DrinkItem:\n';
-            code += '    def __init__(self,name):\n';
-            code += '        self.type = "drink_item"\n';
-            code += '        self.name = name\n\n';
-            return code;
+            connectionString = "";
+            connectionString += "connection = mysql.connector.connect( #connection string to database\n";
+            connectionString += "   host='34.82.63.59',"
+            connectionString += "   port='3306',"
+            connectionString += "   user='root',"
+            connectionString += "   password='5.cDl@R|{eh)y\"u-',"
+            connectionString += "   database='ROMSly'"
+            connectionString += "   ) #bad practice to have private information => store in json or env file\""
+            return connectionString;
         }
     </script>
 </body>
