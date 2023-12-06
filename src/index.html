@@ -47,24 +47,27 @@
     
     <div id="blocklyDiv" style="position: absolute"></div>
     <xml id="toolbox" style="display: none">
-        <!-- Admin Category -->
-        <category name="Admin" colour="#3C76D5">
-            <!-- NOTE: initializeDB disabled since DB instatiation/connection handled by backend. -->
-            <block type="initializeDB" disabled="true"></block>
-            <block type="restartDB"></block>
-        </category>
-        <!-- Menu Items Category -->
-        <category name="Menu Items" colour="#3CD578">
-            <block type="food_item"></block>
-            <block type="drink_item"></block>
-            <block type="combo_item"></block>
+        <!-- MenuItems Category -->
+        <category name="Menu Items" colour="#FF0000">
             <block type="add_menuItem"></block>
+            <block type="delete_menuItem"></block>
+            <block type="change_menuItem"></block>
+            <block type="menuItem"></block>
         </category>
-        <!-- Users Category -->
-        <category name="Orders" colour="#D3D53C">
-            <block type="identifier"></block>
-            <block type="single_order"></block>
-            <block type="addOrder"></block>
+        
+        <!-- Orders Category -->
+        <category name="Orders" colour="#FFE400">
+            <block type="comboItem"></block>
+            <block type="customerID"></block>
+            <block type="Order"></block>
+            <block type="add_Order"></block>
+            <block type="delete_Order"></block>
+            <block type="change_Order"></block>
+        </category>
+
+        <!-- Admin Category -->
+        <category name="Admin" colour="#009BFF">
+            <block type="restartDB"></block>
         </category>
     </xml>
       
