@@ -17,8 +17,8 @@ Blockly.Blocks['add_menuItem'] = {
         .appendField("Prep Time")
         .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "item_prep_time");
     this.appendDummyInput()
-        .appendField("Table")
-        .appendField(new Blockly.FieldDropdown([["Drink", "drinkList"], ["Appetizer", "appetizerList"], ["Entree", "entreeList"], ["Side", "sideList"], ["Dessert", "dessertList"]]), "item_table");
+        .appendField("Category")
+        .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "item_category");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#FF001B"); // You can choose your desired color
@@ -48,28 +48,27 @@ Blockly.Blocks['change_menuItem'] = {
 };
 
 Blockly.Blocks['menuItem'] = {
-  init: function () {
+  init: function() {
     this.appendDummyInput()
-      .appendField("Menu Item");
+        .appendField('day')
+        .appendField(new Blockly.FieldDropdown(
+            this.generateOptions), 'DAY');
+  },
 
-    // Dropdown for Menu Name
-    this.appendDummyInput()
-      .appendField("Menu Name")
-      .appendField(new Blockly.FieldDropdown([
-        ["Food", "food"],
-        ["Drink", "drink"]
-      ]), "menuName");
-
-    // Dropdown for Item Name
-    this.appendDummyInput()
-      .appendField("Item Name")
-      .appendField(new Blockly.FieldDropdown([]), "itemName");
-
-    this.setColour("#6400FF");
-    this.setTooltip("");
-    this.setHelpUrl("");
+  generateOptions: function() {
+    var options = [];
+    var now = Date.now();
+    for(var i = 0; i < 7; i++) {
+      var dateString = String(new Date(now)).substring(0, 3);
+      options.push([dateString, dateString.toUpperCase()]);
+      now += 24 * 60 * 60 * 1000;
+    }
+    return options;
   }
 };
+
+
+
 
 
 /* Orders Blocks */
@@ -94,7 +93,7 @@ Blockly.Blocks['customerID'] = {
   }
 };
 
-Blockly.Blocks['Order'] = {
+Blockly.Blocks['Order'] = { 
   init: function () {
     this.appendValueInput("ORDER_ITEM")
         .setCheck(["food_item", "drink_item", "combo_item"])
