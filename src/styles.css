@@ -15,10 +15,36 @@ table {
     width: 100%;
 }
 
+table.dataframe {
+    border-collapse: collapse;
+    border: 1px solid;
+}
+
+/* table.dataframe thead {
+    padding: 1%;
+    text-align: left;
+} */
+
+/* table.dataframe tbody {
+    height: 20px;
+    padding: 1%;
+} */
+
+/* .dataframe th, td {
+    text-align: left;
+} */
+
+.dataframe tr:nth-child(even) {background-color: #f2f2f2;}
+.dataframe tr:hover {background-color: #ddd;}
+
 #blocklyArea {
     height: 99%;
     /* background: #fc9;
     text-align: center; */
+}
+
+#pyscriptArea {
+    margin: 1%;
 }
 
 /* These navigation toolbar styles are modified from Google. */
@@ -76,4 +102,10 @@ nav#toolbar .subtitle {
     margin-right: 10;
     margin-top: 0;
     cursor: pointer; */
+}
+
+.debug_button {
+    float: right;
+    margin-left: auto;
+    margin-right: 1.3%;
 }

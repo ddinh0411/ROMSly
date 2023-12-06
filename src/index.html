@@ -28,9 +28,13 @@
         <tr>
         <td>
             <p>
-                <button onclick="showCode()" class="compile_button">Show Python</button>
-                <button onclick="runCode()" class="compile_button">Run Python</button>
-                <button onclick="saveBlocks()" class="compile_button">Save Python</button>
+                <button onclick="runCode(true)" class="compile_button">Submit Order</button>
+                <button onclick="saveBlocks()" class="compile_button">Save Order</button>
+                <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
+                <button onclick="runCode(false)" class="compile_button">View Orders</button>
+                <button onclick="showCode()" class="debug_button">Show Python</button>
+                <button onclick="savePython()" class="debug_button">Save Python</button>
+                <input accept=".txt" type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
             </p>
         </td>
         </tr>
@@ -45,7 +49,8 @@
     <xml id="toolbox" style="display: none">
         <!-- Admin Category -->
         <category name="Admin" colour="#3C76D5">
-            <block type="initializeDB"></block>
+            <!-- NOTE: initializeDB disabled since DB instatiation/connection handled by backend. -->
+            <block type="initializeDB" disabled="true"></block>
             <block type="restartDB"></block>
         </category>
         <!-- Menu Items Category -->
@@ -64,6 +69,9 @@
     </xml>
       
     <script>
+        /**
+         * From Google Blockly sample code---dynamically resize Blockly to fit window area.
+         */
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
         var workspace = Blockly.inject(blocklyDiv,
@@ -91,25 +99,35 @@
         window.addEventListener('resize', onresize, false);
         onresize();
 
-        // Blockly.serialization.workspaces.load(startBlocks, workspace);
-
+        /**
+         * Creates an alert displaying generated workspace code.
+         */
         function showCode() {
-            // Generate Python code and display it.
             python.pythonGenerator.INFINITE_LOOP_TRAP = null;
-            var code = python.pythonGenerator.workspaceToCode(workspace);
+            var code = python.pythonGenerator.workspaceToCode(workspace);   // Workspace to code.
             alert(code);
         }
 
-        // FIXME: runCode needs to be converted to use PyScript.
-        function runCode() {
+        /**
+         * Generates code from current Blockly workspace,
+         * and sends it to PyScript backend for evaluation.
+         */
+        function runCode(submittingOrder) {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
-            // Save code to localStorage, and launch PyScript for execution.
-            var code = python.pythonGenerator.workspaceToCode(workspace);
-            localStorage.setItem("pythonCode", code);
-            window.open('./python.html','_blank')
+            if(submittingOrder) {
+                var code = python.pythonGenerator.workspaceToCode(workspace);
+                localStorage.setItem("pythonCode", code);   // Save code to localStorage
+                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+            } else {
+                localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
+                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+            }
         }
 
-        function saveBlocks() {
+        /**
+         * Generates Python code from workspace, and saves to local machine.
+         */
+        function savePython() {
             var workspaceText = python.pythonGenerator.workspaceToCode(workspace);
             var blob = new Blob([workspaceText], {type: 'text/plain'});
             var a = document.createElement('a');
@@ -118,7 +136,62 @@
             a.click();
         }
 
+        /**
+         * Serializes the Blockly workspace to JSON, 
+         * and stores on local machine in plaintext format.
+         */
+        function saveBlocks() {
+            var json = Blockly.serialization.workspaces.save(workspace);    // Serialize using Blockly API
+            jsonString = JSON.stringify(json)   // Convert serialized JSON into string.
 
+            var blob = new Blob([jsonString], {type: 'text/plain'});    // Create Blob with json string.
+            var a = document.createElement('a');
+            a.download = 'ROMSly_Order.txt';    // Save to local machine.
+            a.href = URL.createObjectURL(blob);
+            a.click();
+        }
+        
+        /**
+         * Calls browser file input to load plaintext file 
+         * containing serialized Blockly workspace.
+         */
+        function loadBlocks() {
+            document.getElementById('loadInput').click();   // Prompt user for plaintext file.
+        }
+
+        /**
+         * Reads JSON from a plaintext file to restore
+         * a previously saved Blockly workspace.
+         */
+        function loadBlocksFile(event) {
+            var file = event.target.files[0];   // Get plaintext JSON file.
+            var fileReader = new FileReader();
+            var textJson = "";
+
+            fileReader.readAsText(file); 
+            fileReader.onload = function() {
+                textJson = fileReader.result    // Store contents of file as string.
+                if (isJsonString(textJson)) {   // If string contains valid JSON
+                    loadJson = JSON.parse(textJson);    // Parse string into JSON object.
+                    Blockly.serialization.workspaces.load(loadJson, workspace); // Restore blockly workspace with JSON object.
+                } else {    // Else alert user file uploaded is not a valid JSON.
+                    alert("Not a Valid ROMSly Order!")
+                }
+            }; 
+        }
+
+        // https://stackoverflow.com/questions/3710204/how-to-check-if-a-string-is-a-valid-json-string
+        /**
+         * Checks if a provided string can be parsed into valid JSON.
+         */
+        function isJsonString(str) {
+            try {
+                JSON.parse(str);
+            } catch (e) {
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>
