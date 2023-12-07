@@ -117,9 +117,31 @@
          */
         function submitOrders() {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
-            var code = python.pythonGenerator.workspaceToCode(workspace);
-            localStorage.setItem("pythonCode", code);   // Save code to localStorage
-            window.open('./display.html','_blank');       // Launch PyScript for evaluation.
+            var blocklyPython = python.pythonGenerator.workspaceToCode(workspace);
+            //localStorage.setItem("pythonCode", blocklyPython);   // Save code to localStorage
+
+            fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ variable: blocklyPython }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+
+                // Check if there's a redirect instruction in the response data
+                if (data.redirect) {
+                    // Perform the redirect
+                    window.open(data.redirect, '_blank');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            //window.open("{{ url_for('query') }}",'_blank');       // Launch PyScript for evaluation.
         }
 
         function viewOrders() {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pymysql
 import numpy as np
 import pandas as pd
@@ -14,14 +14,17 @@ def index():
 
 @app.route('/query', methods=['POST'])
 def query():
-    data = request.form['data']
-    # Connect to MySQL and execute some query
-    connection = get_db_connection()
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM " + data)  # Example: SELECT * FROM your_table WHERE column = %s
-        queryResult = cursor.fetchall()
-    connection.close()
-    return render_template('python.html', queryResult=queryResult)
+    data = request.get_json()
+    js_variable = data.get('variable', '')
+
+    exec(js_variable)
+    
+    # Do something with the JavaScript variable
+    print("Received JavaScript variable:", js_variable)
+
+    # Send a response back to the client with redirect instruction
+    response_data = {'message': 'Variable received successfully', 'redirect': url_for('view')}
+    return jsonify(response_data)
 
 @app.route('/view')
 def view():
