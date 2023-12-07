@@ -70,7 +70,7 @@ ORDER BY o.OrderId;"""
     df = df.set_index('OrderId')
     
     # Display it to our user.
-    return render_template('results.html',  tables=[df.to_html(classes='data', header="true")])
+    return render_template('orderViewer.html',  tables=[df.to_html(classes='data', header="true")])
 
 if __name__ == '__main__':
     app.run(debug=True)
