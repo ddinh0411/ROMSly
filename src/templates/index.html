@@ -28,7 +28,7 @@
         <tr>
         <td>
             <p>
-                <button onclick="runCode(true)" class="compile_button">Submit Order</button>
+                <button onclick="submitOrders()" class="compile_button">Submit Order</button>
                 <button onclick="saveBlocks()" class="compile_button">Save Order</button>
                 <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
                 <button onclick="viewOrders()" class="compile_button">View Orders</button>
@@ -115,16 +115,11 @@
          * Generates code from current Blockly workspace,
          * and sends it to PyScript backend for evaluation.
          */
-        function runCode(submittingOrder) {
+        function submitOrders() {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
-            if(submittingOrder) {
-                var code = python.pythonGenerator.workspaceToCode(workspace);
-                localStorage.setItem("pythonCode", code);   // Save code to localStorage
-                window.open('./templates/display.html','_blank');       // Launch PyScript for evaluation.
-            } else {
-                localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
-                window.open('./templates/display.html','_blank');       // Launch PyScript for evaluation.
-            }
+            var code = python.pythonGenerator.workspaceToCode(workspace);
+            localStorage.setItem("pythonCode", code);   // Save code to localStorage
+            window.open('./display.html','_blank');       // Launch PyScript for evaluation.
         }
 
         function viewOrders() {

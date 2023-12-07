@@ -23,19 +23,7 @@ def query():
 
 @app.route('/view')
 def view():
-    data = "FoodMenu"
-    # Connect to MySQL and execute some query
-    connection = get_db_connection()
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM " + data)  # Example: SELECT * FROM your_table WHERE column = %s
-        queryResult = cursor.fetchall()
-    connection.close()
-    return render_template('python.html', queryResult=queryResult)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-"""SELECT distinct
+    data = """SELECT distinct
     o.OrderId,
     t.FoodItems,
     t2.DrinkItems
@@ -63,3 +51,14 @@ LEFT JOIN (
     GROUP BY o.orderId
 ) AS t2 ON t2.OrderId = o.OrderId
 ORDER BY o.OrderId;"""
+    # Connect to MySQL and execute some query
+    connection = get_db_connection()
+    with connection.cursor() as cursor:
+        cursor.execute(data)  # Example: SELECT * FROM your_table WHERE column = %s
+        queryResult = cursor.fetchall()
+    connection.close()
+    return render_template('python.html', queryResult=queryResult)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
