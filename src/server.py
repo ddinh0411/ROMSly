@@ -22,11 +22,13 @@ def query():
     js_variable = data.get('variable', '')
 
     connection = get_db_connection()
+    cursor = connection.cursor()
 
     # Dynamically execute our generated Blockly code.
     exec(js_variable)
 
     connection.close()
+    cursor.close()
     
     # print("Received JavaScript variable:", js_variable)
 

@@ -230,14 +230,16 @@ Blockly.Python['add_menuItem'] = function(block) {
     return allowedCategories.includes(category);
   }
   // Generate code
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
   // Check if the category is valid for Food
   if (menuName == 'food') {
     if (isValidCategory(category, allowedCategoriesFood)) {
@@ -256,7 +258,8 @@ Blockly.Python['add_menuItem'] = function(block) {
     // You can customize the insert statement for 'drink' as needed
   }
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
@@ -265,22 +268,26 @@ Blockly.Python['delete_menuItem'] = function(block) {
   var itemNameToDelete = block.getFieldValue('item_name');
   var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
 
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
   if (menuName == 'food') {
     code += 'cursor.execute("UPDATE FoodMenu SET softDeleted = 1 WHERE FoodName = %s", ("' + itemNameToDelete + '",))\n';
   } else if (menuName == 'drink') {
     code += 'cursor.execute("UPDATE DrinkMenu SET softDeleted = 1 WHERE DrinkName = %s", ("' + itemNameToDelete + '",))\n';
     // You can customize the table and column names as needed
   }
+
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
@@ -311,14 +318,16 @@ Blockly.Python['change_menuItem'] = function(block) {
   }
 
   // Generate code
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
 
   // Check if the category is valid for Food
   if (menuName == 'food') {
@@ -366,7 +375,8 @@ Blockly.Python['change_menuItem'] = function(block) {
   }
 
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
@@ -444,14 +454,15 @@ Blockly.Python['Order'] = function(block) {
 Blockly.Python['add_Order'] = function(block) {
   
   // Generate code
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
 
   // Insert into OrderList table
   code += 'cursor.execute("INSERT INTO OrderList (CustomerID, SoftDeleted) VALUES (' + orderCode[0] + ', 0)")\n';
@@ -534,7 +545,8 @@ Blockly.Python['add_Order'] = function(block) {
     }
   }
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
@@ -542,19 +554,22 @@ Blockly.Python['add_Order'] = function(block) {
 Blockly.Python['delete_Order'] = function(block) {
   var orderID = block.getFieldValue('order_id');
 
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
 
   code += 'cursor.execute("UPDATE OrderList SET softDeleted = 1 WHERE OrderId = %s", ("' + orderID + '",))\n';
   
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
@@ -576,14 +591,15 @@ Blockly.Python['change_Order'] = function(block) {
   }
 
   // Generate code
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
 
   // Ensure new quantity of item is valid amount
   if (!(isValidAmount(newQuantity) && isValidWholeNumber(newQuantity))) {
@@ -609,7 +625,8 @@ Blockly.Python['change_Order'] = function(block) {
   }
 
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
@@ -619,18 +636,21 @@ Blockly.Python['change_Order'] = function(block) {
 
 //Generator block to restartDB
 Blockly.Python['restartDB'] = function(block) {
-  var code = 'import mysql.connector\n\n';
-  code += 'connection = mysql.connector.connect(\n';
-  code += '  host="localhost",\n';
-  code += '  user="root",\n';
-  code += '  password="change-me",\n';
-  code += '  database="ROMSly"\n';
-  code += ')\n';
-  code += 'cursor = connection.cursor()\n\n';
+  var code = '';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // var code = 'import mysql.connector\n\n';
+  // code += 'connection = mysql.connector.connect(\n';
+  // code += '  host="localhost",\n';
+  // code += '  user="root",\n';
+  // code += '  password="change-me",\n';
+  // code += '  database="ROMSly"\n';
+  // code += ')\n';
+  // code += 'cursor = connection.cursor()\n\n';
   code += 'cursor.execute("UPDATE OrderList SET SoftDeleted = 1")';
 
   code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
+  // FIXME: DELETE THESE COMMENTS WHEN NO LONGER NEEDED.
+  // code += 'connection.close()\n\n';
   return code;
 };
 
