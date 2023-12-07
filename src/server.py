@@ -21,8 +21,12 @@ def query():
     data = request.get_json()
     js_variable = data.get('variable', '')
 
+    connection = get_db_connection()
+
     # Dynamically execute our generated Blockly code.
     exec(js_variable)
+
+    connection.close()
     
     # print("Received JavaScript variable:", js_variable)
 
@@ -31,7 +35,12 @@ def query():
     return jsonify(response_data)
 
 @app.route('/view')
-def view():
+def view(): 
+    # Display the orderViewer page to the user.
+    return render_template('orderViewer.html')
+
+@app.route('/get_dataframe')
+def get_dataframe():
     # data contains a SQL Query to join together a single orders table for display.
     data = """SELECT distinct
     o.OrderId,
@@ -68,9 +77,13 @@ ORDER BY o.OrderId;"""
     df = pd.read_sql(data, connection)
     # Make the orderID's the panda index for better organization.
     df = df.set_index('OrderId')
-    
-    # Display it to our user.
-    return render_template('orderViewer.html',  tables=[df.to_html(classes='data', header="true")])
+
+    # Render the DataFrame as an HTML table
+    rendered_html = df.to_html(classes='data', header="true")
+
+    connection.close()
+
+    return rendered_html
 
 if __name__ == '__main__':
     app.run(debug=True)

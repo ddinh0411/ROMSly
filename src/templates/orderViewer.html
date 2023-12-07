@@ -17,8 +17,31 @@
     </nav>
     <!-- END NAV BAR -->
     
-    {% for table in tables %}
-            {{ table|safe }}
-    {% endfor %}
+    <!-- Container for the Pandas DataFrame -->
+    <div id="data-container">
+        <!-- DataFrame will be displayed here -->
+    </div>
+
+    <script>
+        function fetchData() {
+            // Use fetch API to request the order panda from the Flask backend.
+            fetch('/get_dataframe')
+                .then(response => response.text())
+                .then(data => {
+                    // Update the content with the new DataFrame
+                    document.getElementById('data-container').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    // Schedule the next request after a delay
+                    setTimeout(fetchData, 5000);  // 5 seconds in this case.
+                });
+        }
+
+        // Make the first request, and function will continue on from there.
+        fetchData();
+    </script>
 </body>
 </html>
