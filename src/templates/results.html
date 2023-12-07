@@ -1,0 +1,15 @@
+<!-- templates/results.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Query Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+    <ul>
+        {% for row in result %}
+            <li>{{ row }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

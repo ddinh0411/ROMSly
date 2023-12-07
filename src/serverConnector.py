@@ -13,14 +13,13 @@ def index():
 @app.route('/query', methods=['POST'])
 def query():
     data = request.form['data']
-    print(data)
     # Connect to MySQL and execute some query
     connection = get_db_connection()
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM ", (data))  # Example: SELECT * FROM your_table WHERE column = %s
-        result = cursor.fetchall()
+        cursor.execute("SELECT * FROM " + data)  # Example: SELECT * FROM your_table WHERE column = %s
+        queryResult = cursor.fetchall()
     connection.close()
-    return render_template('results.html', result=result)
+    return render_template('python.html', queryResult=queryResult)
 
 if __name__ == '__main__':
     app.run(debug=True)
