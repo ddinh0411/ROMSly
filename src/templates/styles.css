@@ -1,0 +1,111 @@
+html, body {
+    background-color: #ECEFF1;
+    font-family: sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+h1 {
+    font-weight: normal;
+    font-size: 140%;
+}
+
+table {
+    height: 100%;
+    width: 100%;
+}
+
+table.dataframe {
+    border-collapse: collapse;
+    border: 1px solid;
+}
+
+/* table.dataframe thead {
+    padding: 1%;
+    text-align: left;
+} */
+
+/* table.dataframe tbody {
+    height: 20px;
+    padding: 1%;
+} */
+
+/* .dataframe th, td {
+    text-align: left;
+} */
+
+.dataframe tr:nth-child(even) {background-color: #f2f2f2;}
+.dataframe tr:hover {background-color: #ddd;}
+
+#blocklyArea {
+    height: 99%;
+    /* background: #fc9;
+    text-align: center; */
+}
+
+#pyscriptArea {
+    margin: 1%;
+}
+
+/* These navigation toolbar styles are modified from Google. */
+nav#toolbar {
+    width: 100%;
+    height: 64px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    background: #2BB4CA;
+}
+
+nav#toolbar .title {
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 8px;
+    line-height: 1.17;
+}
+
+nav#toolbar .subtitle {
+    color: #fff;
+    line-height: 1.17;
+}
+
+.nav_button {
+    border: #fff;
+    background-color: white;
+    font-weight: bold;
+    color: #2BB4CA;
+    padding: 12px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: 0;
+    cursor: pointer;
+    line-height: 1.17;
+}
+
+.compile_button {
+    margin-left: 1%;
+    /* border: #000000;
+    background-color: #e4e4e4;
+    color: #000000;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10;
+    margin-bottom: 0;
+    margin-right: 10;
+    margin-top: 0;
+    cursor: pointer; */
+}
+
+.debug_button {
+    float: right;
+    margin-left: auto;
+    margin-right: 1.3%;
+}

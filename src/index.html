@@ -117,10 +117,10 @@
             if(submittingOrder) {
                 var code = python.pythonGenerator.workspaceToCode(workspace);
                 localStorage.setItem("pythonCode", code);   // Save code to localStorage
-                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+                window.open('./templates/display.html','_blank')       // Launch PyScript for evaluation.
             } else {
                 localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
-                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
+                window.open('./templates/display.html','_blank')       // Launch PyScript for evaluation.
             }
         }
 
