@@ -22,7 +22,8 @@ table.dataframe {
 
 table.dataframe thead {
     padding: 1%;
-    height: 5%;
+    border: 1px solid;
+    height: 8%;
     text-align: left;
 }
 
