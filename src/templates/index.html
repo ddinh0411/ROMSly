@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ROMSly</title>
+    <title>ROMSly Order Manager</title>
     <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
     <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
     <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
     <script src="https://unpkg.com/blockly/python_compressed.js"></script>
     <script src="https://unpkg.com/blockly/msg/en.js"></script>
-    <script src="./custom_blocks.js"></script>
-    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <script src="{{ url_for('static', filename='custom_blocks.js') }}?v={{ version }}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ version }}">
 
 </head>
 <body>
@@ -20,7 +20,7 @@
         <div class="subtitle">Restaurant Order Management System.</div>
         </div>
         
-        <a href="https://github.com/ddinh0411/ROMSly/tree/main/src" class="nav_button" target="_blank">View Code</a>
+        <a href="https://github.com/ddinh0411/ROMSly" class="nav_button" target="_blank">View Code</a>
     </nav>
     <!-- END NAV BAR -->
 
@@ -28,10 +28,10 @@
         <tr>
         <td>
             <p>
-                <button onclick="runCode(true)" class="compile_button">Submit Order</button>
+                <button onclick="submitOrders()" class="compile_button">Submit Order</button>
                 <button onclick="saveBlocks()" class="compile_button">Save Order</button>
                 <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
-                <button onclick="runCode(false)" class="compile_button">View Orders</button>
+                <button onclick="viewOrders()" class="compile_button">View Orders</button>
                 <button onclick="showCode()" class="debug_button">Show Python</button>
                 <button onclick="savePython()" class="debug_button">Save Python</button>
                 <input accept=".txt" type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
@@ -113,18 +113,41 @@
 
         /**
          * Generates code from current Blockly workspace,
-         * and sends it to PyScript backend for evaluation.
+         * and sends it to Flask backend for evaluation via an HTTP request.
+         * Also routes the user to the order display page.
          */
-        function runCode(submittingOrder) {
+        function submitOrders() {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
-            if(submittingOrder) {
-                var code = python.pythonGenerator.workspaceToCode(workspace);
-                localStorage.setItem("pythonCode", code);   // Save code to localStorage
-                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
-            } else {
-                localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
-                window.open('./python.html','_blank')       // Launch PyScript for evaluation.
-            }
+            var blocklyPython = python.pythonGenerator.workspaceToCode(workspace);
+
+            // Use the fetch API to send the generated Blockly code to the Flask backend.
+            fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ variable: blocklyPython }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data);
+
+                // Check if there's a redirect instruction in the response data
+                if (data.redirect) {
+                    // Perform the redirect
+                    window.open(data.redirect, '_blank');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        /**
+         * Sends a HTTP request to the Flask backend to show the user all orders in the database.
+         */
+        function viewOrders() {
+            window.open("{{ url_for('view') }}",'_blank');
         }
 
         /**
