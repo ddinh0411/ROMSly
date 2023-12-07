@@ -1,5 +1,7 @@
 /* DEFINITIONS FOR BLOCKS */
 
+const e = require("express");
+
 /* MenuItem Blocks */
 
 // Block definition for modifying the menu list. Takes in input for the name, price, and prep time of the item to add to the list. Based on the contributions of NotionWeb peer review
@@ -143,7 +145,6 @@ Blockly.Blocks['Order'] = {
   }
 };
 
-//00BC91
 Blockly.Blocks['add_Order'] = {
   init: function() {
     this.setColour("#009688");
@@ -185,7 +186,7 @@ Blockly.Blocks['restartDB'] = {
   init: function () {
     this.appendDummyInput()
       .appendField("Restarts all DB");
-    this.setColour("#3CD0D5"); //Color for block is already set
+    this.setColour("#E45A00"); //Color for block is already set
     this.setTooltip("");
     this.setHelpUrl("");
   }
@@ -396,9 +397,9 @@ Blockly.Python['comboItem'] = function(block) {
   }
 
   // Create a Python tuple with lists of information
-  var tupleCode = '(' + '[' + tableNames.join(', ') + ']' + ', ' +
+  var tupleCode = '[' + '[' + tableNames.join(', ') + ']' + ', ' +
                           '[' + itemNames.join(', ') + ']' + ', ' +
-                          '[' + quantities.join(', ') + ']' + ')';
+                          '[' + quantities.join(', ') + ']' + ']';
 
   return [tupleCode, Blockly.Python.ORDER_ATOMIC];
 };
@@ -425,8 +426,77 @@ Blockly.Python['Order'] = function(block) {
 
 //Generator block to add_Order
 Blockly.Python['add_Order'] = function(block) {
+  var orderCode = Blockly.Python.valueToCode(block, 'ORDER', Blockly.Python.ORDER_ATOMIC);
+  
   var code = '';
+
+  // Determine the order amount
+  if (Array.isArray(order[1][0])) {
+    // If it's a list, set orderAmount to its length
+    var orderAmount = order[1][0].length;
+  } else {
+    // If it's not a list, set orderAmount to 1
+    var orderAmount = 1;
+  }
+
+  // Your existing mySQL connection code...
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  // Insert into OrderList table
+  code += 'cursor.execute("INSERT INTO OrderList (CustomerID, SoftDeleted) VALUES (' + orderCode[0] + ', 0)")\n';
+  // Retrieve the OrderID using LAST_INSERT_ID()
+  code += 'cursor.execute("SELECT LAST_INSERT_ID()")\n';
+  code += 'orderResult = cursor.fetchone()\n';
+  code += 'if orderResult:\n';
+  code += '  orderID = orderResult[0]\n';
+  code += 'else:\n';
+  code += '  print("Error: Unable to retrieve OrderID")\n';
+
+  if (orderAmount > 1)
+  {
+
+  }
+  else
+  {
+    if (orderCode[1][0] === 'food')
+    {
+      var tableName = 'FoodOrder';
+      var idType = 'FoodID'
+      var tableType = 'Food'
+    } 
+    else
+    {
+      var tableName = 'DrinkOrder';
+      var idType = 'DrinkID'
+      var tableType = 'Drink'
+    }
+    var itemName = orderCode[1][1];
+    // Check if the item exists in the menu (replace this with your actual check)
+    var checkItemExistence = 'SELECT ' + tableType + 'ID FROM ' + tableName + ' WHERE ' + tableType + 'Name = "' + itemName + '"';
+    quantity = orderCode[1][2]
+
+    // Execute the query to check item existence
+    code += 'cursor.execute("' + checkItemExistence + '")\n';
+    code += 'result = cursor.fetchone()\n';
+    code += 'if result:\n';
+    code += 'cursor.execute("INSERT INTO ' + tableName + ' (OrderID, '+idType+', Quantity) VALUES (%s, %s, %s)", ("orderID, result[0], '+ quantity +'  "))\n';
+    code += 'else:\n';
+    code += '  print("Error: Item does not exist in the menu")\n';
+
+  }
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
+
 
 //Generator block to delete_Order
 Blockly.Python['delete_Order'] = function(block) {
@@ -444,7 +514,20 @@ Blockly.Python['change_Order'] = function(block) {
 
 //Generator block to restartDB
 Blockly.Python['restartDB'] = function(block) {
-  var code = '';
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  code += 'cursor.execute("UPDATE OrderList SET SoftDeleted = 1")';
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 
