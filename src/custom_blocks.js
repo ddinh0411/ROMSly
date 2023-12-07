@@ -161,7 +161,12 @@ Blockly.Blocks['add_Order'] = {
 Blockly.Blocks['delete_Order'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("delete Order");
+      .appendField("Remove Order");
+    this.appendDummyInput()
+      .appendField("Order ID")
+      .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "order_id");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setColour("#002BBC");
     this.setTooltip("");
     this.setHelpUrl("");
@@ -171,7 +176,19 @@ Blockly.Blocks['delete_Order'] = {
 Blockly.Blocks['change_Order'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("change Order");
+      .appendField("Modify Item in Order");
+    this.appendDummyInput()
+    .appendField("Order ID")
+    .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "order_id");
+    this.appendDummyInput()
+      .appendField("Menu")
+      .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
+    this.appendDummyInput()
+      .appendField("Item Name")
+      .appendField(new Blockly.FieldTextInput("item name"), "item_name");
+    this.appendDummyInput()
+      .appendField("New Quantity")
+      .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "new_quantity");
     this.setColour("#3300BC");
     this.setTooltip("");
     this.setHelpUrl("");
@@ -474,12 +491,77 @@ Blockly.Python['add_Order'] = function(block) {
 
 //Generator block to delete_Order
 Blockly.Python['delete_Order'] = function(block) {
-  var code = '';
+  var orderID = block.getFieldValue('order_id');
+
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  code += 'cursor.execute("UPDATE OrderList SET softDelete = 1 WHERE OrderId = %s", ("' + orderID + '",))\n';
+  
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
 };
 
 //Generator block to change_Order
 Blockly.Python['change_Order'] = function(block) {
-  var code = '';
+  var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
+  var orderID = block.getFieldValue('order_id');
+  var itemName = block.getFieldValue('item_name');
+  var newQuantity = block.getFieldValue('new_quantity');
+
+  // Function to check if the new quantity is non-negative
+  function isValidAmount(value) {
+    return !isNaN(value) && (value >= 0);
+  }
+
+  // Function to check if the value is a valid whole number
+  function isValidWholeNumber(value) {
+    return /^\d+$/.test(value);
+  }
+
+  // Generate code
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  // Ensure new quantity of item is valid amount
+  if (!(isValidAmount(newQuantity) && isValidWholeNumber(newQuantity))) {
+    code += 'print("ERROR: New quantity invalid)';
+  } else {
+    if (menuName == "food") {
+      code += 'cursor.execute("SELECT FoodID FROM FoodMenu WHERE FoodName = '+ itemName +'")';
+          code += 'result = cursor.fetchone()\n';
+          code += 'if result: \n';
+          code += '   itemID = result[0]\n';
+          code += '   cursor.execute("UPDATE FoodOrder SET Quantity = %s WHERE OrderId = %s AND FoodId = %s", (' + newQuantity + '", "' + orderID + '", itemID"))\n';
+          code += 'else:\n';
+          code += '   print("ERROR: Item does not exist inside menu")\n';
+    } else {
+      code += 'cursor.execute("SELECT DrinkID FROM DrinkMenu WHERE DrinkName = '+ itemName +'")';
+          code += 'result = cursor.fetchone()\n';
+          code += 'if result: \n';
+          code += '   itemID = result[0]\n';
+          code += '   cursor.execute("UPDATE DrinkOrder SET Quantity = %s WHERE OrderId = %s AND DrinkID = %s", (' + newQuantity + '", "' + orderID + '", itemID"))\n';
+          code += 'else:\n';
+          code += '   print("ERROR: Item does not exist inside menu")\n';
+    }
+  }
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
 };
 
 
