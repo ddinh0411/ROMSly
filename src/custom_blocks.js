@@ -1,112 +1,6 @@
 /* DEFINITIONS FOR BLOCKS */
 
-// Block definition to initialize DB. There is no inputs as this block will just generate the necessary code.
-Blockly.Blocks['initializeDB'] = {
-  init: function () {
-    this.appendDummyInput()
-      .appendField("Initializes DB & Classes");
-    this.setColour("#1D1D1D");
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-Blockly.Blocks['restartDB'] = {
-  init: function () {
-    this.appendDummyInput()
-      .appendField("Restarts all DB");
-    this.setColour("#3CD0D5"); //Color for block is already set
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-// Block definition to add an order to the DB. Takes in a single input of a single_order block
-Blockly.Blocks['addOrder'] = {
-  init: function() {
-    this.appendValueInput("addOrder")
-        .setCheck("single_order")
-        .appendField("Add Order");
-    this.setPreviousStatement(true, "addOrder");
-    this.setNextStatement(true, "addOrder");
-    this.setColour("#1865FF");
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
-// Block definition for food item block. Takes in only input for text of the name of the food item
-Blockly.Blocks['food_item'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("food name")
-        .appendField(new Blockly.FieldTextInput("raw potato"), "food_name");
-    this.setPreviousStatement(true, "food_item, drink_item, combo_item");
-    this.setNextStatement(true, "food_item, drink_item, combo_item");
-    this.setOutput(true, "food_item");
-    this.setColour("#3B94EC");
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-// Block definition for drink item block. Takes in only input for text of the name of the drink item
-Blockly.Blocks['drink_item'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("drink name")
-        .appendField(new Blockly.FieldTextInput("water"), "drink_name");
-    this.setPreviousStatement(true, "food_item, drink_item, combo_item");
-    this.setNextStatement(true, "food_item, drink_item, combo_item");
-    this.setOutput(true, "drink_item");
-    this.setColour("#FC5B10");
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-// Block definition for combo item block. This block can take either food or drink item blocks as its inputs.
-Blockly.Blocks['combo_item'] = {
-  init: function() {
-    this.appendStatementInput("NAME")
-        .setCheck("food_item, drink_item, combo_item")
-        .appendField("combo_item");
-    this.setOutput(true, "combo_item");
-    this.setColour("#3CC022");
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
-// Block definition for customer identification. This blocks takes a single text input for the name / id of the customer
-Blockly.Blocks['identifier'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("Customer ID")
-        .appendField(new Blockly.FieldTextInput("Table No. or Name"), "customer_id");
-    this.setOutput(true, "identifier");
-    this.setColour("#F1BC21");
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
-
-// Block definition to represent a single order. This takes in two fields, the first is the item being ordered: a food, drink, or combo.
-//the second field is for the customer id block denoting who ordered the item
-Blockly.Blocks['single_order'] = {
-  init: function() {
-    this.appendValueInput("ORDER_ITEM")
-        .setCheck(["food_item", "drink_item", "combo_item"])
-        .appendField("single_order");
-    this.appendValueInput("ID")
-        .setCheck(["identifier"])
-    this.setInputsInline(true);
-    this.setOutput(true, "single_order");
-    this.setColour("#D92AF9");
-    this.setTooltip("");
-    this.setHelpUrl("");
-  }
-};
+/* MenuItem Blocks */
 
 // Block definition for modifying the menu list. Takes in input for the name, price, and prep time of the item to add to the list. Based on the contributions of NotionWeb peer review
 Blockly.Blocks['add_menuItem'] = {
@@ -123,278 +17,185 @@ Blockly.Blocks['add_menuItem'] = {
         .appendField("Prep Time")
         .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "item_prep_time");
     this.appendDummyInput()
-        .appendField("Table")
-        .appendField(new Blockly.FieldDropdown([["Drink", "drinkList"], ["Appetizer", "appetizerList"], ["Entree", "entreeList"], ["Side", "sideList"], ["Dessert", "dessertList"]]), "item_table");
+        .appendField("Category")
+        .appendField(new Blockly.FieldTextInput("Type of Item"), "item_category"); // New field for Category
+    this.appendDummyInput()
+        .appendField("Menu")
+        .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#FFA500"); // You can choose your desired color
+    this.setColour("#FF001B");
     this.setTooltip("Add a new item to the menu list");
     this.setHelpUrl("");
   }
 };
 
+Blockly.Blocks['delete_menuItem'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Remove Item in Menu");
+    this.appendDummyInput()
+      .appendField("Menu")
+      .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
+    this.appendDummyInput()
+      .appendField("Name")
+      .appendField(new Blockly.FieldTextInput("new item"), "item_name");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FF009B");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['change_menuItem'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Modify Item in Menu");
+    this.appendDummyInput()
+      .appendField("Menu")
+      .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
+    this.appendDummyInput()
+      .appendField("Item Name")
+      .appendField(new Blockly.FieldTextInput("item name"), "item_name");
+    this.appendDummyInput()
+      .appendField("Field to Update")
+      .appendField(new Blockly.FieldDropdown([["Price", "price"], ["Prep Time", "prep_time"], ["Category", "category"]]), "value_name");
+    this.appendDummyInput()
+      .appendField("New Value")
+      .appendField(new Blockly.FieldTextInput("default"), "item_val_new"); // New field for Category  
+    this.setColour("#E400FF");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['menuItem'] = {
+  init: function() {
+    this.setColour("#6400FF");
+    this.appendDummyInput()
+        .appendField("Menu Item");
+
+    this.appendDummyInput()
+        .appendField("Menu")
+        .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
+
+    this.appendDummyInput()
+        .appendField("Item Name")
+        .appendField(new Blockly.FieldTextInput("Item Name"), "item_name");
+
+    this.appendDummyInput()
+      .appendField("Quantity")
+      .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "quantity");
+
+    this.setPreviousStatement(true, 'menuItem');
+    this.setNextStatement(true, 'menuItem');
+    this.setOutput(true, 'menuItem');
+
+    // Set inputs and outputs to be aligned vertically
+    this.setInputsInline(false);
+  }
+};
+
+
+
+
+/* Orders Blocks */
+
+Blockly.Blocks['comboItem'] = {
+  init: function() {
+    this.appendStatementInput('MENU_ITEMS')
+        .setCheck('menuItem')
+        .appendField("Combo Item");
+    this.setOutput(true, 'comboItem');
+    this.setColour("#2BBC00");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+
+Blockly.Blocks['customerID'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Customer ID")
+      .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "customerID");
+    this.setOutput(true, 'customerID');
+    this.setColour("#367823");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['Order'] = {
+  init: function() {
+    this.setColour("#00BC91");
+    this.appendValueInput('CUSTOMER')
+        .setCheck('customerID')
+        .appendField("Create Order for Customer");
+    this.appendValueInput('MENU_ITEMS')
+        .setCheck(['menuItem', 'comboItem']) // Accepts both menuItem and comboItem
+        .appendField("Menu Items");
+    this.setOutput(true, 'Order');  // Set to true for value block
+    this.setInputsInline(false); // Set to false to display inputs vertically
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+//00BC91
+Blockly.Blocks['add_Order'] = {
+  init: function() {
+    this.setColour("#009688");
+    this.appendValueInput('ORDER')
+        .setCheck('Order')
+        .appendField("Add Order");
+    this.setPreviousStatement(true, 'add_Order');
+    this.setNextStatement(true, 'add_Order');
+    this.setInputsInline(false);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['delete_Order'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("delete Order");
+    this.setColour("#002BBC");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['change_Order'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("change Order");
+    this.setColour("#3300BC");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+/* Admin Blocks */
+
+// Will reset the database to the defaults values
+Blockly.Blocks['restartDB'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Restarts all DB");
+    this.setColour("#3CD0D5"); //Color for block is already set
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+
 
 /* GENERATORS FOR BLOCKS */
 
-// Generator block for initializing the database. This block should only be placed once at the beginning and can be removed later
-python.pythonGenerator.forBlock['initializeDB'] = function(block, pythonGenerator) {
-  // Defines the variable code which stores the code that is outputted as a string
-  // Imports in sqlite & os packages to be used
-  var code = 'import sqlite3 \n';
-  code += 'import os \n\n';
-  // Makes a new database within the user's home directory
-  code += 'user_home_dir = os.path.expanduser("~")\n';
-  code += 'db_file_path = os.path.join(user_home_dir, "ROMSly.db")\n\n';
-  //Defines the connection & cursor used by sqlite
-  code += 'connection = sqlite3.connect(db_file_path)\n';
-  code += 'cursor = connection.cursor()\n';
-  //Code to create new table for orderList, this is a table for storing customerId and assigning their order to a number
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS orderList\(\n';
-  code += '    id INTEGER PRIMARY KEY,\n';
-  code += '    customerID VARCHAR\(60\)\n';
-  code += '\)\;\'\'\')\n';
-
-//Code to create new table for foodOrders, this is a table that uses the order number from above and if the customer orders a food it will placed here
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS foodOrders\(\n';
-  code += '    id INTEGER KEY REFERENCES orderList(id),\n';
-  code += '    item VARCHAR\(255\)\n';
-  code += '\)\;\'\'\')\n';
-
-//Code to create new table for drinkOrders, this is a table that uses the order number from above and if the customer orders a drink it will placed here
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS drinkOrders\(\n';
-  code += '    id INTEGER KEY REFERENCES orderList(id),\n';
-  code += '    item VARCHAR\(255\)\n';
-  code += '\)\;\'\'\')\n';
-
-//Code to create tables for the menu items such as sides, drinks, app, etc.
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS drinkList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER\n';
-  code += '\)\;\'\'\')\n';
-
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS foodList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER\n';
-  code += '\)\;\'\'\')\n';
-
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS appetizerList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER\n';
-  code += '\)\;\'\'\')\n';
-
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS entreeList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER\n';
-  code += '\)\;\'\'\')\n';
-
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS sideList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER\n';
-  code += '\)\;\'\'\')\n';
-
-  code += 'cursor.execute(\'\'\'\n';
-  code += 'CREATE TABLE IF NOT EXISTS dessertList\(\n';
-  code += '    itemID INTEGER PRIMARY KEY,\n';
-  code += '    itemName VARCHAR\(60\),\n';
-  code += '    itemPrice FLOAT DEFAULT 0,\n';
-  code += '    timeforPrep INTEGER DEFAULT 0\n';
-  code += '\)\;\'\'\')\n';
-
-
-//Closes the SQL connection after commiting
-  code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
-
-//We have foodItems & drinkItems as Objects currently to allow for multiple attributes, 
-//this might potentially be changed later. For now this is where we initialize/define the classes foodItem and drinkItem
-  code += 'class FoodItem:\n';
-  code += '    def __init__(self,name):\n';
-  code += '        self.type = "food_item"\n\n';
-  code += '        self.name = name\n\n';
-  code += 'class DrinkItem:\n';
-  code += '    def __init__(self,name):\n';
-  code += '        self.type = "drink_item"\n';
-  code += '        self.name = name\n\n';
-  return code;
-};
-
-/**
- * 
- * @param {*} block 
- * @returns 
- */
-python.pythonGenerator.forBlock['fetchAll'] = function(block) {
-  // SQL connection setup
-  var code = 'connection = sqlite3.connect(db_file_path)\n';
-  code += 'cursor = connection.cursor()\n\n';
-
-  // Code to fetchAll data from table
-  code += 'cursor.execute(\'\'\'\n';
-  /*
-  * Add code here to actually execute the mySQL code for fetching all data in a column from a table
-  */
-};
-
-// Generator block for adding an order to the database
-Blockly.Python['addOrder'] = function(block) {
-  // SQL connection setup
-  var code = 'connection = sqlite3.connect(db_file_path)\n';
-  code += 'cursor = connection.cursor()\n\n';
-
-  // Get the code from the 'single_order' block to be outputted
-  var orderItemBlock = block.getInputTargetBlock("addOrder");
-  var orderCode = Blockly.Python.blockToCode(orderItemBlock)[0];
-
-  // Adds in the code for single_order. So anytime a block has inputs, we also print out the code needed for the inputs as well
-  code += orderCode + '\n';
-
-  // Grabs the necessary ordered items from the first index of the order list
-  code += 'ordered_item = order[0]\n';
-  // Grabs the customerID from the second index of the order list
-  code += 'customerID = order[1]\n';
-
-  //First adds in the customer into the orderList table to get their corresponding orderID
-  code += 'cursor.execute("INSERT INTO orderList (customerID) VALUES (?)", (customer_id,))\n';
-  code += 'order_id = cursor.lastrowid\n';
-
-  //Since the ordered_items can be n times long, we use a for loop to iterate through the list
-  code += 'for item in ordered_item:\n';
-  //We use the type attribute assinged earlier within the class definition to determine if a item is a food or drink item. We then insert into the corresponding DB
-  code += '    if hasattr(item, "type"):\n';
-  code += '        if item.type == "food_item":\n';
-  code += '            cursor.execute("INSERT INTO foodOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n';
-  code += '        elif item.type == "drink_item":\n';
-  code += '            cursor.execute("INSERT INTO drinkOrders (id, item) VALUES (?, ?)", (order_id, item.name,))\n\n';
-
-  //Closes the connection after making changes
-  code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
-  return code;
-};
-
-
-
-python.pythonGenerator.forBlock['restartDB'] = function(block) {
-  // Follow the general formatting of initializeDB to write the code to delete every entry within the three tables ordersList, foodOrders, & drinkOrders
-  code += 'connection = sqlite3.connect(db_file_path)\n';
-  code += 'cursor = connection.cursor()\n';
-
-
-
-  code += 'connection.commit()\n';
-  code += 'connection.close()\n\n';
-  return [code]
-}
-
-// Generator block for food_item. Makes a new instance of the foodItem class
-python.pythonGenerator.forBlock['food_item'] = function(block, pythonGenerator) {
-  var var_name = block.getFieldValue('food_name');
-  var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
-  block.setFieldValue(var_name, 'food_name');
-  var code = var_name + ' = FoodItem("' + var_name + '")\n';
-  return [code];
-};
-
-// Generator block for drink_item. Makes a new instance of the DrinkItem class
-python.pythonGenerator.forBlock['drink_item'] = function(block, pythonGenerator) {
-  var var_name = block.getFieldValue('drink_name');
-  var_name = var_name.replace(/\s+/g, '_'); // Remove whitespace
-  block.setFieldValue(var_name, 'drink_name');
-  var code = var_name + ' = DrinkItem("' + var_name + '")\n';
-  return [code];
-};
-
-// Generator block for combo_item. Will call the generators for all foodItem and drinkItem blocks within the combo item before storing all of the items as a list named combo
-python.pythonGenerator.forBlock['combo_item'] = function(block, pythonGenerator) {
-  var items = [];
-  var itemBlock = block.getInputTargetBlock('NAME'); // Get the first item
-// Gets the list of all items within the combo
-  while (itemBlock) {
-    //iterating through the list
-    var itemName = getItemNameFromBlock(itemBlock);
-    if (itemName) {
-      //if there is a space within the name of the object will replace it with a _. NOTE ADD A WAY TO CONVERT BACK FOR DISPLAY
-      var sanitizedName = itemName.replace(/\s+/g, '_'); // Replace spaces with underscores
-
-      var itemCode;
-      if (itemBlock.type === 'food_item') {
-        itemCode = sanitizedName + ' = FoodItem("' + sanitizedName + '")'; // Generate code for food_item
-      } else if (itemBlock.type === 'drink_item') {
-        itemCode = sanitizedName + ' = DrinkItem("' + sanitizedName + '")'; // Generate code for drink_item
-      }
-
-      items.push(itemCode);
-    }
-    itemBlock = itemBlock.getNextBlock(); // Move to the next item
-  }
-// Makes the list of items
-  var listCode = 'Combo_item = [' + items.map(function(item) { return "'" + item.split(" = ")[0] + "'"; }).join(', ') + ']';
-
-  var fullCode = items.join('\n') + '\n' + listCode;
-  return [fullCode];
-};
-
-// Generator block for customer_id. Just sets the customer_id var to the name / id of the customer
-python.pythonGenerator.forBlock['identifier'] = function(block) {
-  var var_name = block.getFieldValue('customer_id');
-  var code = 'customer_id = "' + var_name + '"\n';
-  return [code];
-};
-
-// Generator block for single order
-python.pythonGenerator.forBlock['single_order'] = function(block, pythonGenerator) {
-  var Order_Block = block.getInputTargetBlock('ORDER_ITEM');
-  var CustomerID_Block = block.getInputTargetBlock('ID');
-
-  var code = ''; // Initialize code as an empty string
-  var orderedItems = '';
-  var customerID_Code = ''; // Variable for the full line of code for customer ID
-  var customerID = ''; // Variable for just the name of the customer
-
-  if (CustomerID_Block) {
-    // Check if the customer ID block is an identifier
-    if (CustomerID_Block.type === 'identifier') {
-      // Generate code for the customer ID block
-      customerID_Code = pythonGenerator.blockToCode(CustomerID_Block)[0];
-      customerID = getItemNameFromBlock(CustomerID_Block);
-    }
-  }
-
-  if (Order_Block) {
-    // Check if the ordered item is a food_item, drink_item, or combo_item
-    if (Order_Block.type === 'food_item' || Order_Block.type === 'drink_item' || Order_Block.type === 'combo_item') {
-      // Generate code for the ordered item
-      orderedItems = pythonGenerator.blockToCode(Order_Block)[0];
-    }
-
-    code += customerID_Code + '\n'; // Add the full line of code for the customer ID
-    code += orderedItems + '\n'; // Add the generated code for the ordered item
-    code += 'order = [[' + getItemNameFromBlock(Order_Block) + '], customer_id]'; // Construct the order list
-  } else {
-    // Handle cases where the ordered item is not connected
-    code = customerID_Code + '\norder = [[nothing], nobody]'; // Empty list for ordered items and customer ID
-  }
-
-  return [code];
-};
+/* Generators for MenuItems */
 
 // Updated generator block for add_menuItem
 Blockly.Python['add_menuItem'] = function(block) {
@@ -402,38 +203,254 @@ Blockly.Python['add_menuItem'] = function(block) {
   var tableName = block.getFieldValue('item_table');
   var itemPrice = block.getFieldValue('item_price');
   var prepTime = block.getFieldValue('item_prep_time');
-
-  var code = 'connection = sqlite3.connect(db_file_path)\n';
+  var category = block.getFieldValue('item_category').toLowerCase();  // Convert to lowercase
+  var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
+  // Define allowed categories for Food and Drink in lowercase
+  var allowedCategoriesFood = ['appetizer', 'entree', 'dessert', 'side', 'amuse-bouche'];
+  var allowedCategoriesDrink = ['non-alcoholic', 'vodka', 'tequila', 'whiskey', 'rum', 'beer', 'wine'];
+  // Function to check if the category is valid
+  function isValidCategory(category, allowedCategories) {
+    return allowedCategories.includes(category);
+  }
+  // Generate code
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
   code += 'cursor = connection.cursor()\n\n';
-  code += 'cursor.execute("INSERT INTO ' + tableName + ' (itemName, itemPrice, timeforPrep) VALUES (?, ?, ?)", ("' + itemName + '", ' + itemPrice + ', ' + prepTime + '))\n';
+  // Check if the category is valid for Food
+  if (menuName == 'food') {
+    if (isValidCategory(category, allowedCategoriesFood)) {
+      code += 'cursor.execute("INSERT INTO ' + tableName + ' (FoodName, Price, PrepTime, SoftDelete, Category) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', ' + prepTime + ', 0 , "' + category + '"))\n';
+    } else {
+      code += 'print("INVALID CATEGORY: Please choose a valid category for Food")\n';
+    }
+  }
+  // Check if the category is valid for Drink
+  else if (menuName == 'drink') {
+    if (isValidCategory(category, allowedCategoriesDrink)) {
+      code += 'cursor.execute("INSERT INTO ' + tableName + ' (DrinkName, Price, Category, SoftDelete, PrepTime) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', "' + category + '", 0 , ' + prepTime + '))\n';
+    } else {
+      code += 'print("INVALID CATEGORY: Please choose a valid category for Drink")\n';
+    }
+    // You can customize the insert statement for 'drink' as needed
+  }
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
   return code;
 };
 
-/* AUX FUNCTIONS */
+//Generator block to delete_menuItem
+Blockly.Python['delete_menuItem'] = function(block) {
+  var itemNameToDelete = block.getFieldValue('item_name');
+  var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
 
-function getItemNameFromBlock(block) {
-  //Function that will return the name of the input block. Mainly used within single_order to help with ordered_items
-  if (block.type === 'food_item') {
-    return block.getFieldValue('food_name');
-  } else if (block.type === 'drink_item') {
-    return block.getFieldValue('drink_name');
-  } else if (block.type === 'identifier') {
-    return block.getFieldValue('customer_id');
-  } else if (block.type === 'combo_item') {
-    var itemsBlock = block.getInputTargetBlock('NAME');
-    var items = [];
-    while (itemsBlock){
-      var itemName = getItemNameFromBlock(itemsBlock);
-      if (itemName) {
-        items.push(itemName);
-      }
-      itemsBlock = itemsBlock.getNextBlock();
-    }
-    return items;
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+  if (menuName == 'food') {
+    code += 'cursor.execute("UPDATE FoodMenu SET softDelete = 1 WHERE FoodName = %s", ("' + itemNameToDelete + '",))\n';
+  } else if (menuName == 'drink') {
+    code += 'cursor.execute("UPDATE DrinkMenu SET softDelete = 1 WHERE DrinkName = %s", ("' + itemNameToDelete + '",))\n';
+    // You can customize the table and column names as needed
+  }
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
+};
+
+//Generator block to change_menuItem
+Blockly.Python['change_menuItem'] = function(block) {
+  var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
+  var valueName = block.getFieldValue('value_name');
+  var newValue = block.getFieldValue('item_val_new');
+  var itemName = block.getFieldValue('item_name');
+
+  // Define allowed categories for Food and Drink in lowercase
+  var allowedCategoriesFood = ['appetizer', 'entree', 'dessert', 'side', 'amuse-bouche'];
+  var allowedCategoriesDrink = ['non-alcoholic', 'vodka', 'tequila', 'whiskey', 'rum', 'beer', 'wine'];
+
+  // Function to check if the category is valid
+  function isValidCategory(category, allowedCategories) {
+    return allowedCategories.includes(category);
   }
 
-  // Default case (e.g., if block type is unknown)
-  return '';
+  // Function to check if the value is a valid number with up to 2 decimal points
+  function isValidNumber(value) {
+    return !isNaN(value) && /^\d+(\.\d{1,2})?$/.test(value);
+  }
+
+  // Function to check if the value is a valid whole number
+  function isValidWholeNumber(value) {
+    return /^\d+$/.test(value);
+  }
+
+  // Generate code
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+
+  // Check if the category is valid for Food
+  if (menuName == 'food') {
+    if (valueName == 'category') {
+      if (isValidCategory(newValue, allowedCategoriesFood)) {
+        code += 'cursor.execute("UPDATE FoodMenu SET Category = %s WHERE FoodName = %s", ("' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID CATEGORY: Please choose a valid category for Food")\n';
+      }
+    } else if (valueName == 'price') {
+      if (isValidNumber(newValue)) {
+        code += 'cursor.execute("UPDATE FoodMenu SET Price = %s WHERE FoodName = %s", (' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID PRICE: Please enter a valid number for Food")\n';
+      }
+    } else if (valueName == 'prep_time') {
+      if (isValidWholeNumber(newValue)) {
+        code += 'cursor.execute("UPDATE FoodMenu SET PrepTime = %s WHERE FoodName = %s", (' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID PREP TIME: Please enter a valid whole number for Food")\n';
+      }
+    }
+  }
+  // Check if the category is valid for Drink
+  else if (menuName == 'drink') {
+    if (valueName == 'category') {
+      if (isValidCategory(newValue, allowedCategoriesDrink)) {
+        code += 'cursor.execute("UPDATE DrinkMenu SET Category = %s WHERE DrinkName = %s", ("' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID CATEGORY: Please choose a valid category for Drink")\n';
+      }
+    } else if (valueName == 'price') {
+      if (isValidNumber(newValue)) {
+        code += 'cursor.execute("UPDATE DrinkMenu SET Price = %s WHERE DrinkName = %s", (' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID PRICE: Please enter a valid number for Drink")\n';
+      }
+    } else if (valueName == 'prep_time') {
+      if (isValidWholeNumber(newValue)) {
+        code += 'cursor.execute("UPDATE DrinkMenu SET PrepTime = %s WHERE DrinkName = %s", (' + newValue + '", "' + itemName + '"))\n';
+      } else {
+        code += 'print("INVALID PREP TIME: Please enter a valid whole number for Drink")\n';
+      }
+    }
+  }
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
 };
+
+// Generator block for a menuItem
+Blockly.Python['menuItem'] = function(block) {
+  var menuType = block.getFieldValue('menu_name');
+  var itemName = block.getFieldValue('item_name');
+  var quantity = block.getFieldValue('quantity');
+
+  // Create a Python tuple
+  var tupleCode = '(' + menuType + ', "' + itemName + '", ' + quantity + ')';
+
+  return [tupleCode, Blockly.Python.ORDER_ATOMIC];
+};
+
+
+
+
+/* Generators for Orders */
+
+//Generator block to comboItem
+Blockly.Python['comboItem'] = function(block) {
+  // Initialize lists to store information
+  var tableNames = [];
+  var itemNames = [];
+  var quantities = [];
+
+  // Iterate over connected menuItem blocks
+  var menuItemBlock = block.getInputTargetBlock('MENU_ITEMS');
+  while (menuItemBlock) {
+    // Generate tuple code from the menuItem block
+    var menuItemTupleCode = Blockly.Python['menuItem'](menuItemBlock)[0];
+
+    // Split the tuple code to extract individual values
+    var tupleValues = menuItemTupleCode.slice(1, -1).split(', ');
+
+    // Append values to respective lists
+    tableNames.push(tupleValues[0]);
+    itemNames.push(tupleValues[1]);
+    quantities.push(tupleValues[2]);
+
+    // Move to the next connected menuItem block
+    menuItemBlock = menuItemBlock.getNextBlock();
+  }
+
+  // Create a Python tuple with lists of information
+  var tupleCode = '(' + '[' + tableNames.join(', ') + ']' + ', ' +
+                          '[' + itemNames.join(', ') + ']' + ', ' +
+                          '[' + quantities.join(', ') + ']' + ')';
+
+  return [tupleCode, Blockly.Python.ORDER_ATOMIC];
+};
+
+
+//Generator block to customerID
+Blockly.Python['customerID'] = function(block) {
+  var customerID = block.getFieldValue('customerID');
+  // Return the customer ID value as a string
+  return [customerID, Blockly.Python.ORDER_ATOMIC];
+};
+
+
+//Generator block to Order
+Blockly.Python['Order'] = function(block) {
+  var customerID = Blockly.Python.valueToCode(block, 'CUSTOMER', Blockly.Python.ORDER_ATOMIC);
+  var menuItems = Blockly.Python.valueToCode(block, 'MENU_ITEMS', Blockly.Python.ORDER_ATOMIC);
+  // Generate Python code for the 'Order' block
+  var code = '[' + customerID + ', ' + menuItems + ']';
+
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+
+//Generator block to add_Order
+Blockly.Python['add_Order'] = function(block) {
+  var code = '';
+};
+
+//Generator block to delete_Order
+Blockly.Python['delete_Order'] = function(block) {
+  var code = '';
+};
+
+//Generator block to change_Order
+Blockly.Python['change_Order'] = function(block) {
+  var code = '';
+};
+
+
+
+/* Generators for Admins */
+
+//Generator block to restartDB
+Blockly.Python['restartDB'] = function(block) {
+  var code = '';
+};
+
+
+
+
+
+
+/* AUXILARY FUNCTIONS */
+
