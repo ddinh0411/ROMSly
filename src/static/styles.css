@@ -20,10 +20,11 @@ table.dataframe {
     border: 1px solid;
 }
 
-/* table.dataframe thead {
+table.dataframe thead {
     padding: 1%;
+    height: 5%;
     text-align: left;
-} */
+}
 
 /* table.dataframe tbody {
     height: 20px;

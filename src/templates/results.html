@@ -3,13 +3,23 @@
 <html>
 <head>
     <title>Query Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Results</h1>
-    <ul>
-        {% for row in result %}
-            <li>{{ row }}</li>
-        {% endfor %}
-    </ul>
+    <!-- NAV BAR -->
+    <nav id="toolbar">
+        <div class="title-grow">
+        <div class="title">ROMSly Order Viewer</div>
+        <div class="subtitle">Restaurant Order Management System.</div>
+        </div>
+        
+        <a href="https://github.com/ddinh0411/ROMSly" class="nav_button" target="_blank">View Code</a>
+    </nav>
+    <!-- END NAV BAR -->
+    
+    {% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+    {% endfor %}
 </body>
 </html>

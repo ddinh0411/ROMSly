@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import pymysql
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -53,11 +55,13 @@ LEFT JOIN (
 ORDER BY o.OrderId;"""
     # Connect to MySQL and execute some query
     connection = get_db_connection()
-    with connection.cursor() as cursor:
-        cursor.execute(data)  # Example: SELECT * FROM your_table WHERE column = %s
-        queryResult = cursor.fetchall()
-    connection.close()
-    return render_template('python.html', queryResult=queryResult)
+    df = pd.read_sql(data, connection)
+    # with connection.cursor() as cursor:
+    #     cursor.execute(data)  # Example: SELECT * FROM your_table WHERE column = %s
+    #     queryResult = cursor.fetchall()
+    # connection.close()
+    # return render_template('python.html', queryResult=queryResult)
+    return render_template('results.html',  tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 if __name__ == '__main__':
     app.run(debug=True)
