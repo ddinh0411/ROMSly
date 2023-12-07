@@ -26,7 +26,9 @@
             "mysql-connector-python",
             "pandas",
             "numpy",
-            "sqlalchemy"
+            "sqlalchemy",
+            "flask",
+            "flask-mysql"
         ]
         plugins = [
           "https://pyscript.net/latest/plugins/python/py_tutor.py"
@@ -41,9 +43,20 @@
             import pandas as pd 
             from sqlalchemy import create_engine
             import asyncio
+            from flask import Flask
+            from flaskext.mysql import MySQL
 
-            def connectToServer():
+            def OLDconnectToServer():
                 exec(connectToDB)
+            
+            def connectToServer():
+                app = Flask(__name__)
+                mysql = MySQL()
+                app.config['MYSQL_DATABASE_USER'] = 'root'
+                app.config['MYSQL_DATABASE_PASSWORD'] = 'ROMSly'
+                app.config['MYSQL_DATABASE_DB'] = 'mysql'
+                app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+                mysql.init_app(app)
 
             def runBlocklyQueries():
                 exec(codeToRun)
@@ -113,14 +126,15 @@
          * NOTE: For now, instantiates the sqlite db. Temporary until GCP Migration complete.
          */
         function connectToDatabase() {
-            connectionString = "";
-            connectionString += "connection = mysql.connector.connect( #connection string to database\n";
-            connectionString += "   host='34.82.63.59',"
-            connectionString += "   port='3306',"
-            connectionString += "   user='root',"
-            connectionString += "   password='5.cDl@R|{eh)y\"u-',"
-            connectionString += "   database='ROMSly'"
-            connectionString += "   ) #bad practice to have private information => store in json or env file\""
+            connectionString = `
+connection = mysql.connector.connect( #connection string to database
+    host='127.0.0.1',
+    port='3306',
+    user='root',
+    password='ROMSly',
+    database='mysql'
+    ) #bad practice to have private information => store in json or env file`;
+            alert(connectionString);
             return connectionString;
         }
     </script>
