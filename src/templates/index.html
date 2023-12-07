@@ -8,8 +8,8 @@
     <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
     <script src="https://unpkg.com/blockly/python_compressed.js"></script>
     <script src="https://unpkg.com/blockly/msg/en.js"></script>
-    <script src="./custom_blocks.js"></script>
-    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <script src="{{ url_for('static', filename='custom_blocks.js') }}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ version }}">
 
 </head>
 <body>
@@ -31,7 +31,7 @@
                 <button onclick="runCode(true)" class="compile_button">Submit Order</button>
                 <button onclick="saveBlocks()" class="compile_button">Save Order</button>
                 <button onclick="loadBlocks()" class="compile_button">Recall Order</button>
-                <button onclick="runCode(false)" class="compile_button">View Orders</button>
+                <button onclick="viewOrders()" class="compile_button">View Orders</button>
                 <button onclick="showCode()" class="debug_button">Show Python</button>
                 <button onclick="savePython()" class="debug_button">Save Python</button>
                 <input accept=".txt" type="file" id="loadInput" style="display: none;" onchange="loadBlocksFile(event)">
@@ -120,11 +120,16 @@
             if(submittingOrder) {
                 var code = python.pythonGenerator.workspaceToCode(workspace);
                 localStorage.setItem("pythonCode", code);   // Save code to localStorage
-                window.open('./templates/display.html','_blank')       // Launch PyScript for evaluation.
+                window.open('./templates/display.html','_blank');       // Launch PyScript for evaluation.
             } else {
                 localStorage.setItem("pythonCode", "");   // FIXME: Change this placeholder once mySQL is fixed.
-                window.open('./templates/display.html','_blank')       // Launch PyScript for evaluation.
+                window.open('./templates/display.html','_blank');       // Launch PyScript for evaluation.
             }
+        }
+
+        function viewOrders() {
+            localStorage.setItem("pythonCode", "");
+            window.open("{{ url_for('view') }}",'_blank');
         }
 
         /**
