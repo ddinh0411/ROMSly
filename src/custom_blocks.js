@@ -241,7 +241,7 @@ Blockly.Python['add_menuItem'] = function(block) {
   // Check if the category is valid for Food
   if (menuName == 'food') {
     if (isValidCategory(category, allowedCategoriesFood)) {
-      code += 'cursor.execute("INSERT INTO ' + tableName + ' (FoodName, Price, PrepTime, SoftDelete, Category) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', ' + prepTime + ', 0 , "' + category + '"))\n';
+      code += 'cursor.execute("INSERT INTO ' + tableName + ' (FoodName, Price, PrepTime, SoftDeleted, Category) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', ' + prepTime + ', 0 , "' + category + '"))\n';
     } else {
       code += 'print("INVALID CATEGORY: Please choose a valid category for Food")\n';
     }
@@ -249,7 +249,7 @@ Blockly.Python['add_menuItem'] = function(block) {
   // Check if the category is valid for Drink
   else if (menuName == 'drink') {
     if (isValidCategory(category, allowedCategoriesDrink)) {
-      code += 'cursor.execute("INSERT INTO ' + tableName + ' (DrinkName, Price, Category, SoftDelete, PrepTime) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', "' + category + '", 0 , ' + prepTime + '))\n';
+      code += 'cursor.execute("INSERT INTO ' + tableName + ' (DrinkName, Price, Category, SoftDeleted, PrepTime) VALUES (%s, %s, %s, %s, %s)", ("' + itemName + '", ' + itemPrice + ', "' + category + '", 0 , ' + prepTime + '))\n';
     } else {
       code += 'print("INVALID CATEGORY: Please choose a valid category for Drink")\n';
     }
@@ -274,9 +274,9 @@ Blockly.Python['delete_menuItem'] = function(block) {
   code += ')\n';
   code += 'cursor = connection.cursor()\n\n';
   if (menuName == 'food') {
-    code += 'cursor.execute("UPDATE FoodMenu SET softDelete = 1 WHERE FoodName = %s", ("' + itemNameToDelete + '",))\n';
+    code += 'cursor.execute("UPDATE FoodMenu SET softDeleted = 1 WHERE FoodName = %s", ("' + itemNameToDelete + '",))\n';
   } else if (menuName == 'drink') {
-    code += 'cursor.execute("UPDATE DrinkMenu SET softDelete = 1 WHERE DrinkName = %s", ("' + itemNameToDelete + '",))\n';
+    code += 'cursor.execute("UPDATE DrinkMenu SET softDeleted = 1 WHERE DrinkName = %s", ("' + itemNameToDelete + '",))\n';
     // You can customize the table and column names as needed
   }
   code += 'connection.commit()\n';
@@ -453,15 +453,15 @@ Blockly.Python['add_Order'] = function(block) {
   code += ')\n';
   code += 'cursor = connection.cursor()\n\n';
 
-    // Insert into OrderList table
-    code += 'cursor.execute("INSERT INTO OrderList (CustomerID, SoftDeleted) VALUES (' + orderCode[0] + ', 0)")\n';
-    // Retrieve the OrderID using LAST_INSERT_ID()
-    code += 'cursor.execute("SELECT LAST_INSERT_ID()")\n';
-    code += 'orderResult = cursor.fetchone()\n';
-    code += 'if orderResult:\n';
-    code += '  orderID = orderResult[0]\n';
-    code += 'else:\n';
-    code += '  print("Error: Unable to retrieve OrderID")\n';
+  // Insert into OrderList table
+  code += 'cursor.execute("INSERT INTO OrderList (CustomerID, SoftDeleted) VALUES (' + orderCode[0] + ', 0)")\n';
+  // Retrieve the OrderID using LAST_INSERT_ID()
+  code += 'cursor.execute("SELECT LAST_INSERT_ID()")\n';
+  code += 'orderResult = cursor.fetchone()\n';
+  code += 'if orderResult:\n';
+  code += '  orderID = orderResult[0]\n';
+  code += 'else:\n';
+  code += '  print("Error: Unable to retrieve OrderID")\n';
 
   var orderCode = Blockly.Python.valueToCode(block, 'ORDER', Blockly.Python.ORDER_ATOMIC);
 
@@ -476,17 +476,66 @@ Blockly.Python['add_Order'] = function(block) {
 
   if(orderAmount > 1)
   {
-
+    for(var i = 0; i < orderAmount; i++)
+    {
+      if(orderCode[1][0][i] === "food")
+      {
+        var itemName = orderCode[1][1][i]
+        var quantity = orderCode[1][2][i]
+        code += 'cursor.execute("SELECT FoodID FROM FoodMenu WHERE FoodName = '+ itemName +'")';
+        code += 'result = cursor.fetchone()\n';
+        code += 'if result: \n';
+        code += '   itemID = result[0]\n';
+        code += '   cursor.execute("INSERT INTO FoodOrder (OrderID, FoodID, Quantity) VALUES (%s, %s, %s)", (orderID, itemID, '+ quantity +'))';
+        code += 'else:\n';
+        code += '   print("ERROR: Item does not exist inside menu")\n';
+  
+      }
+      else
+      {
+        var itemName = orderCode[1][1][i]
+        var quantity = orderCode[1][2][i]
+        code += 'cursor.execute("SELECT DrinkID FROM DrinkMenu WHERE FoodName = '+ itemName +'")';
+        code += 'result = cursor.fetchone()\n';
+        code += 'if result: \n';
+        code += ' itemID = result[0]\n';
+        code += ' cursor.execute("INSERT INTO DrinkOrder (OrderID, DrinkID, Quantity) VALUES (%s, %s, %s)", (orderID, itemID, '+ quantity +'))'
+        code += 'else:\n';
+        code += '   print("ERROR: Item does not exist inside menu")\n';
+      }
+    }
   }
   else
   {
     if(orderCode[1][0] === "food")
     {
-      
+      var itemName = orderCode[1][1]
+      var quantity = orderCode[1][2]
+      code += 'cursor.execute("SELECT FoodID FROM FoodMenu WHERE FoodName = '+ itemName +'")';
+      code += 'result = cursor.fetchone()\n';
+      code += 'if result: \n';
+      code += '   itemID = result[0]\n';
+      code += '   cursor.execute("INSERT INTO FoodOrder (OrderID, FoodID, Quantity) VALUES (%s, %s, %s)", (orderID, itemID, '+ quantity +'))';
+      code += 'else:\n';
+      code += '   print("ERROR: Item does not exist inside menu")\n';
+
+    }
+    else
+    {
+      var itemName = orderCode[1][1]
+      var quantity = orderCode[1][2]
+      code += 'cursor.execute("SELECT DrinkID FROM DrinkMenu WHERE FoodName = '+ itemName +'")';
+      code += 'result = cursor.fetchone()\n';
+      code += 'if result: \n';
+      code += ' itemID = result[0]\n';
+      code += ' cursor.execute("INSERT INTO DrinkOrder (OrderID, DrinkID, Quantity) VALUES (%s, %s, %s)", (orderID, itemID, '+ quantity +'))'
+      code += 'else:\n';
+      code += '   print("ERROR: Item does not exist inside menu")\n';
     }
   }
-
-
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
 //Generator block to delete_Order
@@ -502,7 +551,7 @@ Blockly.Python['delete_Order'] = function(block) {
   code += ')\n';
   code += 'cursor = connection.cursor()\n\n';
 
-  code += 'cursor.execute("UPDATE OrderList SET softDelete = 1 WHERE OrderId = %s", ("' + orderID + '",))\n';
+  code += 'cursor.execute("UPDATE OrderList SET softDeleted = 1 WHERE OrderId = %s", ("' + orderID + '",))\n';
   
   code += 'connection.commit()\n';
   code += 'connection.close()\n\n';
@@ -570,7 +619,19 @@ Blockly.Python['change_Order'] = function(block) {
 
 //Generator block to restartDB
 Blockly.Python['restartDB'] = function(block) {
-  var code = '';
+  var code = 'import mysql.connector\n\n';
+  code += 'connection = mysql.connector.connect(\n';
+  code += '  host="localhost",\n';
+  code += '  user="root",\n';
+  code += '  password="change-me",\n';
+  code += '  database="ROMSly"\n';
+  code += ')\n';
+  code += 'cursor = connection.cursor()\n\n';
+  code += 'cursor.execute("UPDATE OrderList SET SoftDeleted = 1")';
+
+  code += 'connection.commit()\n';
+  code += 'connection.close()\n\n';
+  return code;
 };
 
 
