@@ -113,13 +113,14 @@
 
         /**
          * Generates code from current Blockly workspace,
-         * and sends it to PyScript backend for evaluation.
+         * and sends it to Flask backend for evaluation via an HTTP request.
+         * Also routes the user to the order display page.
          */
         function submitOrders() {
             // https://stackoverflow.com/questions/27765666/passing-variable-through-javascript-from-one-html-page-to-another-page
             var blocklyPython = python.pythonGenerator.workspaceToCode(workspace);
-            //localStorage.setItem("pythonCode", blocklyPython);   // Save code to localStorage
 
+            // Use the fetch API to send the generated Blockly code to the Flask backend.
             fetch('/query', {
                 method: 'POST',
                 headers: {
@@ -140,12 +141,12 @@
             .catch(error => {
                 console.error('Error:', error);
             });
-
-            //window.open("{{ url_for('query') }}",'_blank');       // Launch PyScript for evaluation.
         }
 
+        /**
+         * Sends a HTTP request to the Flask backend to show the user all orders in the database.
+         */
         function viewOrders() {
-            localStorage.setItem("pythonCode", "");
             window.open("{{ url_for('view') }}",'_blank');
         }
 
