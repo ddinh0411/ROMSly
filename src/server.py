@@ -8,7 +8,7 @@ app = Flask(__name__)
 def get_db_connection():
     # Connect to your MySQL server. 
     # This is currently a localhost instance, so you will need to provide your own.
-    return pymysql.connect(host='127.0.0.1', port=3306, user='root', password='ROMSly', db='mysql')
+    return pymysql.connect(host='34.82.63.59', port=3306, user='root', password='5.cDl@R|{eh)y"u-', db='ROMSly')
 
 @app.route('/')
 def index():
@@ -71,6 +71,7 @@ LEFT JOIN (
     LEFT JOIN DrinkMenu dm ON do.DrinkID = dm.DrinkID
     GROUP BY o.orderId
 ) AS t2 ON t2.OrderId = o.OrderId
+WHERE o.SoftDeleted = 0
 ORDER BY o.OrderId;"""
 
     # Connect to MySQL database and execute the query to present all orders. 
