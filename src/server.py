@@ -1,14 +1,31 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+import json
 import pymysql
 import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
 
+# Reads an MySQL server connection configuration from config.json and opens a connection.
 def get_db_connection():
-    # Connect to your MySQL server. 
-    # This is currently a localhost instance, so you will need to provide your own.
-    return pymysql.connect(host='34.82.63.59', port=3306, user='root', password='5.cDl@R|{eh)y"u-', db='ROMSly')
+    # Load your MySQL server connection configuration from config.json.
+    config = get_mysql_config()
+    # Connect to your MySQL server.
+    connection = pymysql.connect(
+        host=config.get('host', ''),
+        port=config.get('port', ''),
+        user=config.get('user', ''),
+        password=config.get('password', ''),
+        database=config.get('database', ''),
+    )
+
+    # Return connection to process that need it.
+    return connection
+
+def get_mysql_config():
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    return config.get('mysql', {})
 
 @app.route('/')
 def index():
