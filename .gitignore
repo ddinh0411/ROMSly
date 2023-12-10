@@ -1,2 +1,4 @@
 src/.DS_Store
 src/static/.DS_Store
+src/package.json
+config.json
