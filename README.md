@@ -4,9 +4,9 @@
 
 Ethan Clunie, Daniel Dinh, Mason Li, & Max Starreveld
 
-## Github-Pages Prototype URL
+<!-- ## Github-Pages Prototype URL
 
-[ROMSly Prototype](https://ddinh0411.github.io/ROMSly/src/index.html)
+[ROMSly Prototype](https://ddinh0411.github.io/ROMSly/src/index.html) -->
 
 ## About ROMSly
 
