@@ -71,7 +71,7 @@
         </category>
     </xml>
       
-    <script>
+    <script type="text/javascript">
         /**
          * From Google Blockly sample code---dynamically resize Blockly to fit window area.
          */
@@ -101,6 +101,30 @@
         };
         window.addEventListener('resize', onresize, false);
         onresize();
+
+        // Get sample blocks on page load.
+        document.addEventListener("DOMContentLoaded", initBlocks());
+
+        /**
+         * Sends an HTTP request to get sample blocks to load into workspace on first page load.
+         */
+        function initBlocks() {
+            fetch('/get_default_blocks')
+                .then(response => response.text())
+                .then(data => {
+                    // Parse our plaintext JSON into a JSON object for Blockly.
+                    initialBlocks = JSON.parse(data);
+                    // Load into workspace.
+                    Blockly.serialization.workspaces.load(initialBlocks, workspace);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    // Schedule the next request after a delay
+                    setTimeout(fetchData, 5000);  // 5 seconds in this case.
+                });
+        }
 
         /**
          * Creates an alert displaying generated workspace code.

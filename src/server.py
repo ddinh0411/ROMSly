@@ -41,6 +41,14 @@ def view():
     # Display the orderViewer page to the user.
     return render_template('orderViewer.html')
 
+@app.route('/get_default_blocks')
+def get_default_blocks():
+    # Get our sample Blockly code to display when file opens.
+    with open('static/sampleOrder.txt', 'r') as file:
+        static_blockly = file.read()
+
+    return static_blockly
+
 @app.route('/get_dataframe')
 def get_dataframe():
     # data contains a SQL Query to join together a single orders table for display.
@@ -89,5 +97,5 @@ ORDER BY o.OrderId;"""
     return rendered_html
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+    app.run(debug=True, threaded=True)
 
