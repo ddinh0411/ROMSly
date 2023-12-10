@@ -121,10 +121,6 @@
                 .catch(error => {
                     console.error("Error:", error);
                 })
-                .finally(() => {
-                    // Schedule the next request after a delay
-                    setTimeout(fetchData, 5000);  // 5 seconds in this case.
-                });
         }
 
         /**
@@ -151,7 +147,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ variable: blocklyPython }),
+                body: JSON.stringify({ userQuery: blocklyPython }),
             })
             .then(response => response.json())
             .then(data => {

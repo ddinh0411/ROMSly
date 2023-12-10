@@ -37,19 +37,19 @@ def index():
 def query():
     # Get the Blockly generated Python code from index.html
     data = request.get_json()
-    js_variable = data.get('variable', '')
+    blockyCode = data.get('userQuery', '')
 
     connection = get_db_connection()
     cursor = connection.cursor()
 
     # Dynamically execute our generated Blockly code.
-    exec(js_variable)
+    exec(blockyCode)
 
     connection.close()
     cursor.close()
 
     # Send a response back to the client with redirect instruction
-    response_data = {'message': 'Variable received successfully', 'redirect': url_for('view')}
+    response_data = {'message': 'Blockly code recieved successfully', 'redirect': url_for('view')}
     return jsonify(response_data)
 
 @app.route('/view')
