@@ -89,5 +89,5 @@ ORDER BY o.OrderId;"""
     return rendered_html
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(threaded=True)
 
