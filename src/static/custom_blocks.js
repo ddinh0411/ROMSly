@@ -18,12 +18,11 @@ Blockly.Blocks['add_menuItem'] = {
         .appendField(new Blockly.FieldNumber(0, 0, Infinity, 1), "item_prep_time");
     this.appendDummyInput()
         .appendField("Category")
-        .appendField(new Blockly.FieldTextInput("Type of Item"), "item_category"); // New field for Category
+        .appendField(new Blockly.FieldDropdown([["Appetizer", "appetizer"], ["Entree", "entree"], ["Dessert", "dessert"], ["Side", "side"], ["Non-Alcoholic", "non-alcoholic"],
+        ["Vodka", "vodka"], ["Tequila", "tequila"], ["Whiskey", "whiskey"], ["Rum", "rum"], ["Beer", "beer"],["Wine", "wine"] ]), "item_category");
     this.appendDummyInput()
         .appendField("Menu")
         .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
     this.setColour("#FF001B");
     this.setTooltip("Add a new item to the menu list");
     this.setHelpUrl("");
@@ -40,8 +39,6 @@ Blockly.Blocks['delete_menuItem'] = {
     this.appendDummyInput()
       .appendField("Name")
       .appendField(new Blockly.FieldTextInput("new item"), "item_name");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
     this.setColour("#FF009B");
     this.setTooltip("");
     this.setHelpUrl("");
@@ -60,11 +57,31 @@ Blockly.Blocks['change_menuItem'] = {
       .appendField(new Blockly.FieldTextInput("item name"), "item_name");
     this.appendDummyInput()
       .appendField("Field to Update")
-      .appendField(new Blockly.FieldDropdown([["Price", "price"], ["Prep Time", "prep_time"], ["Category", "category"]]), "value_name");
+      .appendField(new Blockly.FieldDropdown([["Price", "price"], ["Prep Time", "prep_time"]]), "value_name");
     this.appendDummyInput()
       .appendField("New Value")
       .appendField(new Blockly.FieldTextInput("default"), "item_val_new"); // New field for Category  
     this.setColour("#E400FF");
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['change_Category'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("Modify Category of Menu Itemu");
+    this.appendDummyInput()
+      .appendField("Menu")
+      .appendField(new Blockly.FieldDropdown([["Food", "food"], ["Drink", "drink"]]), "menu_name");
+    this.appendDummyInput()
+      .appendField("Item Name")
+      .appendField(new Blockly.FieldTextInput("item name"), "item_name");
+      this.appendDummyInput()
+      .appendField("The New Category")
+      .appendField(new Blockly.FieldDropdown([["Appetizer", "appetizer"], ["Entree", "entree"], ["Dessert", "dessert"], ["Side", "side"], ["Non-Alcoholic", "non-alcoholic"],
+      ["Vodka", "vodka"], ["Tequila", "tequila"], ["Whiskey", "whiskey"], ["Rum", "rum"], ["Beer", "beer"],["Wine", "wine"] ]), "new_category");
+    this.setColour("#8F00D3");
     this.setTooltip("");
     this.setHelpUrl("");
   }
@@ -275,15 +292,6 @@ Blockly.Python['change_menuItem'] = function(block) {
   var newValue = block.getFieldValue('item_val_new');
   var itemName = block.getFieldValue('item_name');
 
-  // Define allowed categories for Food and Drink in lowercase
-  var allowedCategoriesFood = ['appetizer', 'entree', 'dessert', 'side', 'amuse-bouche'];
-  var allowedCategoriesDrink = ['non-alcoholic', 'vodka', 'tequila', 'whiskey', 'rum', 'beer', 'wine'];
-
-  // Function to check if the category is valid
-  function isValidCategory(category, allowedCategories) {
-    return allowedCategories.includes(category);
-  }
-
   // Function to check if the value is a valid number with up to 2 decimal points
   function isValidNumber(value) {
     return !isNaN(value) && /^\d+(\.\d{1,2})?$/.test(value);
@@ -299,14 +307,7 @@ Blockly.Python['change_menuItem'] = function(block) {
 
   // Check if the category is valid for Food
   if (menuName == 'food') {
-    if (valueName == 'category') {
-      if (isValidCategory(newValue, allowedCategoriesFood)) {
-        newValue = newValue.toLowerCase();
-        code += 'cursor.execute("UPDATE FoodMenu SET Category = %s WHERE FoodName = %s", ("' + newValue + '", "' + itemName + '"))\n';
-      } else {
-        code += 'print("INVALID CATEGORY: Please choose a valid category for Food")\n';
-      }
-    } else if (valueName == 'price') {
+    if (valueName == 'price') {
       if (isValidNumber(newValue)) {
         code += 'cursor.execute("UPDATE FoodMenu SET Price = %s WHERE FoodName = %s", (' + newValue + ', "' + itemName + '"))\n';
       } else {
@@ -322,14 +323,7 @@ Blockly.Python['change_menuItem'] = function(block) {
   }
   // Check if the category is valid for Drink
   else if (menuName == 'drink') {
-    if (valueName == 'category') {
-      if (isValidCategory(newValue, allowedCategoriesDrink)) {
-        newValue = newValue.toLowerCase();
-        code += 'cursor.execute("UPDATE DrinkMenu SET Category = %s WHERE DrinkName = %s", ("' + newValue + '", "' + itemName + '"))\n';
-      } else {
-        code += 'print("INVALID CATEGORY: Please choose a valid category for Drink")\n';
-      }
-    } else if (valueName == 'price') {
+    if (valueName == 'price') {
       if (isValidNumber(newValue)) {
         code += 'cursor.execute("UPDATE DrinkMenu SET Price = %s WHERE DrinkName = %s", (' + newValue + ', "' + itemName + '"))\n';
       } else {
@@ -342,6 +336,45 @@ Blockly.Python['change_menuItem'] = function(block) {
         code += 'print("INVALID PREP TIME: Please enter a valid whole number for Drink")\n';
       }
     }
+  }
+
+  code += 'connection.commit()\n';
+  return code;
+};
+
+Blockly.Python['change_Category'] = function(block) {
+  var menuName = block.getFieldValue('menu_name').toLowerCase();  // Convert to lowercase
+  var newCategory = block.getFieldValue('new_category');
+  var itemName = block.getFieldValue('item_name');
+
+  // Define allowed categories for Food and Drink in lowercase
+  var allowedCategoriesFood = ['appetizer', 'entree', 'dessert', 'side', 'amuse-bouche'];
+  var allowedCategoriesDrink = ['non-alcoholic', 'vodka', 'tequila', 'whiskey', 'rum', 'beer', 'wine'];
+
+  // Function to check if the category is valid
+  function isValidCategory(category, allowedCategories) {
+    return allowedCategories.includes(category);
+  }
+
+  // Generate code
+  var code = '';
+
+  // Check if the category is valid for Food
+  if (menuName == 'food') {
+    if (isValidCategory(newCategory, allowedCategoriesFood)) {
+      code += 'cursor.execute("UPDATE FoodMenu SET Category = %s WHERE FoodName = %s", ("' + newCategory + '", "' + itemName + '"))\n';
+    } else {
+      code += 'print("INVALID CATEGORY: Please choose a valid category for Food")\n';
+    }
+}
+  // Check if the category is valid for Drink
+  else if (menuName == 'drink') {
+    if (isValidCategory(newCategory, allowedCategoriesDrink)) {
+      code += 'cursor.execute("UPDATE DrinkMenu SET Category = %s WHERE DrinkName = %s", ("' + newCategory + '", "' + itemName + '"))\n';
+    } else {
+      code += 'print("INVALID CATEGORY: Please choose a valid category for Drink")\n';
+    }
+
   }
 
   code += 'connection.commit()\n';
