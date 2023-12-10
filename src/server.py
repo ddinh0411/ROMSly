@@ -6,11 +6,11 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Reads an MySQL server connection configuration from config.json and opens a connection.
+# Reads an MySQL server connection given a JSON object containing config and opens a connection.
 def get_db_connection():
     # Load your MySQL server connection configuration from config.json.
     config = get_mysql_config()
-    # Connect to your MySQL server.
+    # Get connection details from JSON object.
     connection = pymysql.connect(
         host=config.get('host', ''),
         port=config.get('port', ''),
@@ -22,6 +22,7 @@ def get_db_connection():
     # Return connection to process that need it.
     return connection
 
+# Load MySQL configuration from config.json
 def get_mysql_config():
     with open('config.json', 'r') as file:
         config = json.load(file)
@@ -46,8 +47,6 @@ def query():
 
     connection.close()
     cursor.close()
-    
-    # print("Received JavaScript variable:", js_variable)
 
     # Send a response back to the client with redirect instruction
     response_data = {'message': 'Variable received successfully', 'redirect': url_for('view')}
