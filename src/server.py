@@ -1,14 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+import json
 import pymysql
 import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
 
+# Reads an MySQL server connection given a JSON object containing config and opens a connection.
 def get_db_connection():
-    # Connect to your MySQL server. 
-    # This is currently a localhost instance, so you will need to provide your own.
-    return pymysql.connect(host='34.82.63.59', port=3306, user='root', password='5.cDl@R|{eh)y"u-', db='ROMSly')
+    # Load your MySQL server connection configuration from config.json.
+    config = get_mysql_config()
+    # Get connection details from JSON object.
+    connection = pymysql.connect(
+        host=config.get('host', ''),
+        port=config.get('port', ''),
+        user=config.get('user', ''),
+        password=config.get('password', ''),
+        database=config.get('database', ''),
+    )
+
+    # Return connection to process that need it.
+    return connection
+
+# Load MySQL configuration from config.json
+def get_mysql_config():
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    return config.get('mysql', {})
 
 @app.route('/')
 def index():
@@ -19,27 +37,33 @@ def index():
 def query():
     # Get the Blockly generated Python code from index.html
     data = request.get_json()
-    js_variable = data.get('variable', '')
+    blockyCode = data.get('userQuery', '')
 
     connection = get_db_connection()
     cursor = connection.cursor()
 
     # Dynamically execute our generated Blockly code.
-    exec(js_variable)
+    exec(blockyCode)
 
     connection.close()
     cursor.close()
-    
-    # print("Received JavaScript variable:", js_variable)
 
     # Send a response back to the client with redirect instruction
-    response_data = {'message': 'Variable received successfully', 'redirect': url_for('view')}
+    response_data = {'message': 'Blockly code recieved successfully', 'redirect': url_for('view')}
     return jsonify(response_data)
 
 @app.route('/view')
 def view(): 
     # Display the orderViewer page to the user.
     return render_template('orderViewer.html')
+
+@app.route('/get_default_blocks')
+def get_default_blocks():
+    # Get our sample Blockly code to display when file opens.
+    with open('static/sampleOrder.txt', 'r') as file:
+        static_blockly = file.read()
+
+    return static_blockly
 
 @app.route('/get_dataframe')
 def get_dataframe():
@@ -89,5 +113,5 @@ ORDER BY o.OrderId;"""
     return rendered_html
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
 

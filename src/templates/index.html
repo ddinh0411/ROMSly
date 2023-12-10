@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
     <script src="https://unpkg.com/blockly/python_compressed.js"></script>
     <script src="https://unpkg.com/blockly/msg/en.js"></script>
-    <script src="{{ url_for('static', filename='custom_blocks.js') }}?v={{ version }}" defer></script>
+    <script src="{{ url_for('static', filename='custom_blocks.js') }}?v={{ version }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}?v={{ version }}">
 
 </head>
@@ -72,7 +72,7 @@
         </category>
     </xml>
       
-    <script>
+    <script type="text/javascript">
         /**
          * From Google Blockly sample code---dynamically resize Blockly to fit window area.
          */
@@ -103,6 +103,26 @@
         window.addEventListener('resize', onresize, false);
         onresize();
 
+        // Get sample blocks on page load.
+        document.addEventListener("DOMContentLoaded", initBlocks());
+
+        /**
+         * Sends an HTTP request to get sample blocks to load into workspace on first page load.
+         */
+        function initBlocks() {
+            fetch('/get_default_blocks')
+                .then(response => response.text())
+                .then(data => {
+                    // Parse our plaintext JSON into a JSON object for Blockly.
+                    initialBlocks = JSON.parse(data);
+                    // Load into workspace.
+                    Blockly.serialization.workspaces.load(initialBlocks, workspace);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                })
+        }
+
         /**
          * Creates an alert displaying generated workspace code.
          */
@@ -127,7 +147,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ variable: blocklyPython }),
+                body: JSON.stringify({ userQuery: blocklyPython }),
             })
             .then(response => response.json())
             .then(data => {
