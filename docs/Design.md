@@ -46,8 +46,8 @@ The design of Blockly has changed drastically since starting. Initially we wante
   - the name of the Menu Item
   - The quantity of the Menu Item
 
-- comboItem: This block allows for the creation of a combination of items (food and drink) to be added together into one item. To do so, this block takes in a variable number of menuItem blocks as inputs to group them into one single comboItem
-  - 
+- comboItem: This block allows for the creation of a combination of items (food and drink) to be added together into one item. To do so, this block takes in inputs: 
+  - a variable number of menuItem blocks to be grouped into a single comboItem
 
 - customerID: This block allows the user to provide a customer id for blocks like add_Order which require the id of the customer an action must be done for. This block takes in a single input, that being:
   - an integer representing the customer id
