@@ -45,10 +45,10 @@ These instructions are for running ROMSly with a localhost MySQL server on your 
 2. Go to the Data Console (top left by default) and hit New Data Source
 
 
-![Where the Click](docs/img/Screen%20Shot%202023-12-10%20at%201.11.52%20PM.png){width=300}
+![Where the Click](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/Screen%20Shot%202023-12-10%20at%201.11.52%20PM.png){width=300}
 
-3. Selecy 'MySQL' as the data source type
-4. On the configuration screen, fill in the following details. 
+1. Selecy 'MySQL' as the data source type
+2. On the configuration screen, fill in the following details. 
     - Host: localhost
     - Port: 3306
     - User: root
@@ -56,7 +56,7 @@ These instructions are for running ROMSly with a localhost MySQL server on your 
 
 From there, DataGrip should be connected to your MySQL server on Docker!
 
-![What the datasource localhost should look like](docs/img/localhost_db){width=300}
+![What the datasource localhost should look like](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/localhost_db.png){width=300}
 
 
 #### Creating the tables & populating with data
@@ -66,9 +66,9 @@ From there, DataGrip should be connected to your MySQL server on Docker!
 3. Right click on the ROMSly database
 4. Navigate to the New -> Query Console
 
-![How to make new query console](docs/img/query_console){width=300}
+![How to make new query console](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/query_console.png){width=300}
 
-3. Type in the SQL statements below to create the tables similar to the GCP server
+1. Type in the SQL statements below to create the tables similar to the GCP server
 ```mysql
 
 -- OrderList Table: Primary table used to stored relevant information required for an order
@@ -122,9 +122,9 @@ CREATE TABLE DrinkOrder (
 ```
 2. Select all of the statements and hit the green play button in the upper right of the query console
 
-![How to run SQL statement in Datagrip](docs/img/run_query){width=300}
+![How to run SQL statement in Datagrip](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/run_query.png){width=300}
 
-3. Copy and paste the following code to also add in some pre-defined data for the menus
+1. Copy and paste the following code to also add in some pre-defined data for the menus
 ```mysql
 INSERT INTO FoodMenu (FoodName, Price, PrepTime, Category) VALUES
 ('pizza', 19.00, 30, 'entree'),
@@ -158,7 +158,7 @@ This is the alternate way to see the tables of orders, and the only way to see t
 2. Under the ROMSly database, there should be the tables for OrderList, FoodOrders, DrinkOrders, DrinkMenu, and FoodMenu
 3. Double click on any of these to see the table
 
-![Example with the DrinkMenu table](docs/img/test_table){width=300}
+![Example with the DrinkMenu table](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/test_table.png){width=300}
 
 ### ROMSly Operations (Buttons)
 
