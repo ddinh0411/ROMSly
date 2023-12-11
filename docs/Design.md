@@ -41,7 +41,30 @@ The design of Blockly has changed drastically since starting. Initially we wante
   - name of the Menu Item
   - the new Category of the Menu Item
 
-- MenuItem: This block serves as the main block used to represent an item from the menu tables. So this would be a item on the menu at a food service location
+- menuItem: This block serves as the main block used to represent an item from the menu tables. So this would be a item on the menu at a food service location. This block takes in three user inputs to represent the a menu item. Those being:
+  - the type of Menu Item it is (Food / Drink)
+  - the name of the Menu Item
+  - The quantity of the Menu Item
+
+- comboItem: This block allows for the creation of a combination of items (food and drink) to be added together into one item. 
+  - 
+
+- customerID: 
+  - 
+
+- Order: 
+  - 
+
+- add_Order: 
+  - 
+
+- delete_Order: 
+  - 
+
+- change_Order: 
+  - 
+
+- restartDB: 
   - 
 
 ### Buttons
