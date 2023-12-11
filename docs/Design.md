@@ -46,26 +46,29 @@ The design of Blockly has changed drastically since starting. Initially we wante
   - the name of the Menu Item
   - The quantity of the Menu Item
 
-- comboItem: This block allows for the creation of a combination of items (food and drink) to be added together into one item. 
+- comboItem: This block allows for the creation of a combination of items (food and drink) to be added together into one item. To do so, this block takes in a variable number of menuItem blocks as inputs to group them into one single comboItem
   - 
 
-- customerID: 
-  - 
+- customerID: This block allows the user to provide a customer id for blocks like add_Order which require the id of the customer an action must be done for. This block takes in a single input, that being:
+  - an integer representing the customer id
 
-- Order: 
-  - 
+- Order: This block allows for the creation of a singular order consisting of:
+  - an integer, the customer id, for who this order belongs to
+  - a block representing the actual order itself (either a menuItem or comboItem block)
 
-- add_Order: 
-  - 
+- add_Order: This block adds an order to the OrderList table within the MySQL database. To do so, it takes in an input:
+  - an __ORDER__ block to add to the database
 
-- delete_Order: 
-  - 
+- delete_Order: This block allows a user to delete an order from the OrderList table. To do so, it takes in a single input from the user:
+  - the __ORDER ID__ of the order to delete
 
-- change_Order: 
-  - 
+- change_Order: This block allows a user to modify an odrder that's currently stored in the database. Specifically, it can change the quantity of the item being ordered. To do so, this block takes in multiple inputs:
+  - the __ORDER ID__ of the order to modify
+  - the menu that the item the user wants to modify belongs to (Food / Drink)
+  - the name of the item being modified
+  - an integer representing the new quantity to change to
 
-- restartDB: 
-  - 
+- restartDB: This block will immediately restart the database system fresh by setting the SoftDeleted value of every entry in the OrderList table to one.
 
 ### Buttons
 
