@@ -22,6 +22,10 @@ ROMSly (Restaurant Order Management System) is a way for restaurants to easily c
 
 This project involves the topic of parsing as we are taking syntax from the user and parsing them into syntax that will be stored into the database to store and organize. The inputs would be start as simple clicks representing both the menu item and where the item was ordered from and need to be parsed into what needs to be cooked by the kitchen staff in the back. The DSL will also abstract complex tasks away from users, allowing users to chain together simple blocks to execute multi-layered, recursive based operations on the database. ROMSly will also perform work unseen to end users to ensure the system runs as smoothly as possible at all times.
 
+
+![ROMSly Order Manager](docs/img/ROMSly_Order_Manager){width=600}
+
+
 ------------
 
 ## ROMSly Videos
@@ -41,10 +45,34 @@ Here is the video link explaining how we're able to connect to a mySQL server wi
 
 ## Functionality of Blockly
 
-Blockly works by taking in 
+ROMSly works by connecting a SQL server and allowing users to quickly interact and view the contents of the database in a quick and user friendly way without the need for understanding SQL or databases. ROMSly does so by utilizing Blockly as it allows user to customize and understand the functionality of a block much quicker than the line of code required to accomplish the same thing. The documentation and more in-depth description of the Blockly blocks and what they're expected inputs and functions are can be found [here](./docs/Design.md). Each item within the menu will have these attributes associated with it:
+
+- Name: the name of the food/drink item
+- Prep Time: the time required for the kitchen to make the item from scratch
+- Price: the cost of the item in USD
+- Category: the category of the item. This is the course it appears in for food and the primary ingredient for drinks. Specific categories seen [here](./docs/Design.md).
+
+. The Blockly blocks for ROMSly can be broken into 3 categories those being:
+
+- Menu Items: These blocks are primarily focused on the menu items on a menu at any food service establishment. These blocks serve as the blocks to add, remove, or modify an item within a pre-defined menu and to allow access of the menu through the use of MenuItem blocks. The specific blocks within this are:
+  - add Menu Item: allows the manager of a restaurant to add a item to a menu
+  - delete Item: allows the manager to remove an item from the menu
+  - change Menu Item: allows the manager/user to change the preparation time or price of a item on the menu
+  - Change Category: allows the user to modify what the category identification of the menu item is.
+- Orders: These blocks primarily serve to represent an order at the restaurant. These blocks can be used to build more complex orders and also add, delete, or change orders within the ROMSly database. The specific blocks within this are:
+  - Combo Item: allows for multiple menuItem blocks to be placed together within the same order (most people don't order just a water at a restaurant)
+  - Customer ID: the table or customer number used to identify the customer.
+  - Order: This block will take an ordered item either from Combo Item or Menu Item in addition to a customer ID and save it as a tuple
+  - add Order: Will take an order and add in the appropriate tables in the ROMSly database.
+  - delete Order: allows for removing of an order from the table (soft deleted) and will remove from the ROMSly Order Viewer
+  - change Order: allows the server to modify the number of a certain menuItem of a certain order
+- Admin
+  - Restart database: Will take the OrderList table and soft delete all orders, hiding all of them when looking at Order Viewer
+
+With these blocks, users are able to create orders by taking in pre-defined menuItems and then adding them either solo or in combination with other items to an Order by a customer of certain ID. This order can then be added to the tables, modified to meet new specifications (quantity only), or removed entirely if need be. For the manager/owner of the restaurant the menu can be defined and altered to their liking, items can be either added, removed, or changed as time moves on and specifications and supplies change for the restaurant. Finally orders can be seen easily with the ROMSly Order Viewer which allows for users to quickly see what orders there are and for which ID.
 
 
-
+![ROMSly Order Viewer](docs/img/ROMSly_Order_Viewer){width=600}
 
 -------------
 
@@ -62,6 +90,6 @@ Since ROMSly was such a large project, the work was divided amongst the team to 
 
 - Daniel Dinh: The primary programmer for the Blockly toolbox and the blocks. Daniel was assigned the Blockly as he understood the documentation and how they worked and how to accomplish the desired output and generated code. In the end Daniel was the primary coder for the Blockly code and most of the code was written by Daniel with the others available to help peer code when the need arised. This  goes for both the old blocks and the newer blocks as well that were reworked during the first week of December.
 
-- Mason Li: Worked on the Flask application and HTML files for the frontend and connections to the backend. Mason was primarily in charge of setting up the HTMLS and figuring out how to execute the Python code generated by the Blockly. In the end Mason set up the Flask server and the execution for ROMSly and got it to be able to connect with either a localhost or the GCP database.
+- Mason Li: Worked mainly on writing the Flask Backend for ROMSly, such as communicating between the Blocky Frontend and the Google Cloud Projects MySQL server. Mason was also mainly in charge of setting up the HTML files and executing the Python code generated from Blockly. Additionally, Mason transitioned the backend over from PyScript, since the original PyScript was not able to open connections to the SQL server. 
 
-- Max Starreveld: Worked on designing and creating the tables for the ROMSly table as well as designing the main query used in the Flask application as part of ROMSly Order Viewer. Max was primarily placed in designing the tables for the SQL database and tables.
+- Max Starreveld: Worked on designing and creating the tables for the ROMSly database as well as designing the main query used in the Flask application as part of ROMSly Order Viewer. Max was primarily placed in designing the tables for the SQL database and tables.

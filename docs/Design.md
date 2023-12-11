@@ -70,7 +70,6 @@ The design of Blockly has changed drastically since starting. Initially we wante
 
 - restartDB: This block will immediately restart the database system fresh by setting the SoftDeleted value of every entry in the OrderList table to one.
 
-### Buttons
 
 
 <details>
