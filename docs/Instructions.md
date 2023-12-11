@@ -33,7 +33,7 @@ These instructions are for running ROMSly with a localhost MySQL server on your 
 1. [Install DataGrip](https://www.jetbrains.com/datagrip/download/)
     - DataGrip is an IDE for Databases by Jetbrains. It will help you connect to and configure the localhost server if you would like to run your MySQL server locally.
     - Account & Usage of DataGrip is free with any Chapman Email
-2. [Install Docker](https://docs.docker.com/get-docker/){width = 300}
+2. [Install Docker](https://docs.docker.com/get-docker/)
     - You can use a personal Docker account, which is free!
     - Run the following command to download and run the MySQL Community Docker image configured for ROMSly.
     - `docker run --name mysql -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=change-me --restart unless-stopped mysql:8`
