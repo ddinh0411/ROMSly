@@ -23,7 +23,7 @@ ROMSly (Restaurant Order Management System) is a way for restaurants to easily c
 This project involves the topic of parsing as we are taking syntax from the user and parsing them into syntax that will be stored into the database to store and organize. The inputs would be start as simple clicks representing both the menu item and where the item was ordered from and need to be parsed into what needs to be cooked by the kitchen staff in the back. The DSL will also abstract complex tasks away from users, allowing users to chain together simple blocks to execute multi-layered, recursive based operations on the database. ROMSly will also perform work unseen to end users to ensure the system runs as smoothly as possible at all times.
 
 
-![ROMSly Order Manager](docs/img/ROMSly_Order_Manager){width=600}
+![ROMSly Order Manager](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/ROMSly_Order_Manager.png){width=600}
 
 
 ------------
@@ -72,7 +72,7 @@ ROMSly works by connecting a SQL server and allowing users to quickly interact a
 With these blocks, users are able to create orders by taking in pre-defined menuItems and then adding them either solo or in combination with other items to an Order by a customer of certain ID. This order can then be added to the tables, modified to meet new specifications (quantity only), or removed entirely if need be. For the manager/owner of the restaurant the menu can be defined and altered to their liking, items can be either added, removed, or changed as time moves on and specifications and supplies change for the restaurant. Finally orders can be seen easily with the ROMSly Order Viewer which allows for users to quickly see what orders there are and for which ID.
 
 
-![ROMSly Order Viewer](docs/img/ROMSly_Order_Viewer){width=600}
+![ROMSly Order Viewer](https://github.com/ddinh0411/ROMSly/blob/main/docs/img/ROMSly_Order_Viewer.png){width=600}
 
 -------------
 
